@@ -2,9 +2,10 @@
 .DS_Store
 Thumbs.db
 
-# Editor
+# Editor / local tooling
 .vscode/
 .idea/
+.claude/
 
 # Vercel
 .vercel

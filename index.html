@@ -7,6 +7,12 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sometype+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<!-- Nested case-study animation faces -->
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  @font-face { font-family: 'Clash Display'; font-weight: 500; font-style: normal; font-display: swap; src: url('https://cdn.fontshare.com/wf/2GQIT54GKQY3JRFTSHS4ARTRNRQISSAA/3CIP5EBHRRHE5FVQU3VFROPUERNDSTDF/JTSL5QESUXATU47LCPUNHZQBDDIWDOSW.woff2') format('woff2'); }
+  @font-face { font-family: 'Clash Display'; font-weight: 600; font-style: normal; font-display: swap; src: url('https://cdn.fontshare.com/wf/FPDAZ2S6SW4QMSRIIKNNGTPM6VIXYMKO/5HNPQ453FRLIQWV2FNOBUU3FKTDZQVSG/Z3MGHFHX6DCTLQ55LJYRJ5MDCZPMFZU6.woff2') format('woff2'); }
+</style>
 
 <style>
   /* THEME TOKENS — one class flip on <body> drives everything. */
@@ -310,7 +316,7 @@
       </a>
 
       <a class="case-card" href="#" data-cursor="progress">
-        <div class="case-media"><!-- drop your <img src="..."> or <video> here --></div>
+        <div class="case-media" id="nested-media"><!-- Nested case-study animation renders here --></div>
         <div class="case-title">Nested</div>
         <div class="case-meta">Founding Designer — 2026</div>
         <p class="case-desc">Senior care cost comparison platform. Building the design system, IA, and product flows from zero.</p>
@@ -795,6 +801,295 @@
     a.addEventListener('click', function () { set(false); });
   });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') set(false); });
+})();
+</script>
+
+<!-- ===== Nested case-study animation (vanilla port of the Claude Design handoff) ===== -->
+<style>
+  #nested-media { background: #F5F3EE; }
+  #nested-media::after { display: none; }        /* drop the noise grain so the animation reads crisp */
+  .nested-stage {
+    position: absolute; top: 0; left: 0;
+    width: 1920px; height: 1080px;
+    transform-origin: top left; background: #F5F3EE;
+    will-change: contents;
+  }
+</style>
+<script>
+(function () {
+  'use strict';
+  var media = document.getElementById('nested-media');
+  if (!media) return;
+
+  // ── easing + math ──────────────────────────────────────────────────────────
+  var clamp = function (v, a, b) { return Math.max(a, Math.min(b, v)); };
+  var easeOutCubic   = function (t) { return (--t) * t * t + 1; };
+  var easeInCubic    = function (t) { return t * t * t; };
+  var easeInOutCubic = function (t) { return t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1; };
+
+  // ── brand tokens ───────────────────────────────────────────────────────────
+  var C = { cream: '#F5F3EE', paper: '#FFFFFF', ink: '#1A1A1A', teal: '#025355', taupe: '#A89E90', mute: '#6B6860' };
+  var CLASH = "'Clash Display', sans-serif";
+  var FIG   = "'Figtree', sans-serif";
+
+  var NEST_PATHS = [
+    "M17.4499 28.6123C20.2362 28.4318 21.8646 30.1097 21.7174 32.8721C21.707 33.0653 21.7185 33.2817 21.7761 33.4672C22.7446 33.3005 23.8628 32.2404 24.7727 31.8285C28.7858 30.0291 32.9641 29.218 37.3365 28.9293C39.7215 28.7719 41.9515 28.5382 44.3577 28.5848C53.8881 28.7695 65.6594 29.4896 71.6034 38.132C74.5171 42.3681 74.2892 47.4853 74.2786 52.2873L74.2729 63.1182L74.275 76.0669C74.276 78.2629 74.3238 80.4586 74.25 82.6527C74.3557 83.0404 73.6034 84.1506 73.9711 84.376C75.6243 85.3901 78.7787 85.6184 79.9235 87.2244C80.5534 92.064 74.0797 87.8598 72.0251 87.4008L71.9434 87.3835C65.9021 85.4737 60.9652 84.1098 54.6605 83.3028C46.3999 82.1702 38.0114 82.3668 29.813 83.8852C28.687 84.0839 27.4565 84.4637 26.326 84.7223C25.4588 84.9207 24.5682 85.0691 23.7144 85.2806C22.8892 85.485 21.9781 85.8737 21.1556 86.1014C19.5344 86.5159 17.95 87.0375 16.3585 87.5529C15.7336 87.7555 15.0923 88.071 14.4737 88.3117C13.48 88.682 12.5081 89.0949 11.4818 89.3782C10.2761 89.7128 9.41825 89.818 8.81993 88.5273C8.66731 88.1979 8.61639 87.7763 8.77535 87.4399C9.4518 86.0087 11.2806 85.7765 12.5959 85.2428C13.4415 84.9053 14.2136 84.5842 15.0215 84.2454C14.4737 82.9714 14.6627 79.5568 14.6639 78.0282L14.6658 67.6101L14.6686 43.8581C14.668 39.9652 14.6527 36.059 14.6595 32.1655C14.6605 31.6116 14.7324 30.7612 15.0144 30.2978C15.5676 29.3887 16.4568 28.8805 17.4499 28.6123ZM21.7283 82.2517C25.7431 81.0379 30.0336 80.2851 34.2041 79.7275C35.3272 79.5774 36.5184 79.5623 37.6481 79.4457C39.906 79.2126 42.2519 79.3609 44.4984 79.1872C48.1003 79.4029 51.3454 79.3299 55.0276 79.7931C59.4269 80.3464 62.842 81.1746 67.0999 82.2166C67.2658 80.4281 67.1767 77.2914 67.1768 75.3914L67.1766 63.0547L67.1816 52.6088C67.1837 49.2018 67.5432 43.7865 65.0394 41.171C60.3297 36.2513 50.8055 35.5494 44.3926 35.5921C37.5307 35.6728 23.8447 36.1721 21.906 44.9536C21.6275 46.2149 21.7074 48.6112 21.7082 49.9771L21.7133 56.8216L21.7283 82.2517Z",
+    "M44.0044 0.374109C45.6768 0.241395 47.6412 1.48489 49.1571 2.22678C51.4144 3.31047 53.656 4.42641 55.8814 5.57427C56.7471 6.01006 57.6452 6.35525 58.5013 6.77476L67.7803 11.3416C73.8931 14.3185 80.0497 17.2189 86.1423 20.2402C90.322 22.3127 87.5859 27.9175 83.5042 26.2002C81.5152 25.3633 79.6207 24.3095 77.6751 23.3821L62.3328 15.9196L51.162 10.4786L47.2233 8.59617C46.5094 8.25562 45.4471 7.78665 44.8141 7.39314C44.6117 7.309 44.3874 7.23904 44.1815 7.32926C42.8713 7.90323 41.5446 8.55662 40.2702 9.19676L33.9152 12.349L19.7464 19.1727C16.1206 20.9274 12.5455 22.8113 8.8615 24.4491C6.83345 25.3507 4.28354 27.4986 2.03241 26.0179C1.31264 25.5423 0.814126 24.7975 0.648877 23.9508C0.34326 22.4399 0.915621 21.2522 2.1971 20.4907C3.47958 19.7286 4.77237 19.2109 6.10615 18.5693L13.9507 14.7755L28.4856 7.71087L39.4071 2.39344C40.7134 1.77209 42.6998 0.562295 44.0044 0.374109Z",
+    "M42.3313 88.0075C42.5163 88.0014 42.7014 87.9953 42.8864 87.991C52.5117 87.7424 62.3129 89.5529 71.1994 93.2582C72.3009 93.7745 73.8438 94.1022 74.8024 94.821C75.5973 95.3877 74.7294 96.9357 73.9971 96.721C70.554 95.7101 67.325 94.1917 63.8398 93.2008C62.3841 92.7871 61.3797 92.502 59.9125 92.1717C57.7051 91.6737 55.711 91.0183 53.4083 90.9227C50.8595 90.5698 48.7899 90.3708 46.2166 90.3013C39.4908 90.1335 32.7769 90.954 26.2895 92.7367C24.8101 93.1435 23.2635 93.7754 21.7167 94.1978C19.4419 94.8201 17.1427 96.3855 14.7318 96.6697C13.6618 96.7957 13.3243 95.6241 13.9102 94.8723C14.5855 94.2256 16.0585 93.8866 16.9438 93.5155C24.9768 90.0753 33.5946 88.2048 42.3313 88.0075Z"
+  ];
+
+  function nestMark(size, color) {
+    var h = size * 97 / 89;
+    var paths = NEST_PATHS.map(function (d) { return '<path d="' + d + '" fill="' + color + '"/>'; }).join('');
+    return '<svg width="' + size + '" height="' + h + '" viewBox="0 0 89 97" fill="none"><g>' + paths + '</g></svg>';
+  }
+  var it = function (s) { return '<span style="color:' + C.teal + '">' + s + '</span>'; };
+
+  // reveal: opacity / translateY / blur driven by a local clock
+  function rev(t, at, dur, opt) {
+    opt = opt || {};
+    var y = opt.y == null ? 18 : opt.y, blur = opt.blur == null ? 10 : opt.blur;
+    var outAt = opt.outAt == null ? null : opt.outAt, outDur = opt.outDur || 0.5;
+    var p = clamp((t - at) / dur, 0, 1), e = easeOutCubic(p);
+    var opacity = e, ty = (1 - e) * y, bl = (1 - e) * blur;
+    if (outAt != null && t > outAt) {
+      var op = easeInCubic(clamp((t - outAt) / outDur, 0, 1));
+      opacity *= (1 - op); ty -= op * 12; bl += op * 6;
+    }
+    return { o: opacity, ty: ty, bl: bl };
+  }
+  function rs(r) {
+    return 'opacity:' + r.o + ';transform:translateY(' + r.ty + 'px);filter:' + (r.bl > 0.06 ? 'blur(' + r.bl + 'px)' : 'none') + ';';
+  }
+  function blurOnly(bl) { return bl > 0.06 ? 'blur(' + bl + 'px)' : 'none'; }
+
+  // scene gate: cross-fade at the seams
+  function scene(t, start, end, inner) {
+    if (t < start || t > end) return '';
+    var lt = t - start, dur = end - start;
+    var fin = easeOutCubic(clamp(lt / 0.45, 0, 1));
+    var fout = easeInOutCubic(clamp((dur - lt) / 0.45, 0, 1));
+    var op = Math.min(fin, fout);
+    return '<div style="position:absolute;inset:0;opacity:' + op + '">' + inner(lt, dur) + '</div>';
+  }
+
+  // ── shared product chrome ────────────────────────────────────────────────────
+  function productHeading(lt, step, childrenHTML) {
+    var lab = rev(lt, 0.08, 0.55, { y: 12, blur: 5 });
+    var head = rev(lt, 0.24, 0.7, { y: 26, blur: 12 });
+    var names = { 1: 'Tell us about your loved one', 2: 'Location-specific estimates', 3: 'A clear breakdown' };
+    return '<div style="position:absolute;left:140px;top:332px;width:820px">'
+      + '<div style="' + rs(lab) + 'font-family:' + FIG + ';font-size:17px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:' + C.taupe + ';margin-bottom:26px;display:flex;align-items:center;gap:16px">'
+      + '<span style="color:' + C.teal + ';font-variant-numeric:tabular-nums">0' + step + '</span><span>' + names[step] + '</span></div>'
+      + '<h2 style="' + rs(head) + 'font-family:' + CLASH + ';font-size:70px;font-weight:500;color:' + C.ink + ';letter-spacing:-0.03em;line-height:1.05;margin:0">' + childrenHTML + '</h2>'
+      + '</div>';
+  }
+  function productCard(lt, childrenHTML) {
+    var inP = easeOutCubic(clamp(lt / 0.7, 0, 1));
+    var scale = 0.955 + 0.045 * inP, tx = (1 - inP) * 46, drift = Math.sin(lt * 0.55) * 3;
+    return '<div style="position:absolute;left:1006px;top:222px;width:728px;background:' + C.paper + ';border-radius:30px;padding:40px;box-shadow:0 50px 100px -34px rgba(3,61,63,0.30),0 10px 34px rgba(0,0,0,0.05);border:1px solid rgba(26,26,26,0.05);opacity:' + inP + ';transform:translate(' + tx + 'px,' + drift + 'px) scale(' + scale + ');transform-origin:center right">' + childrenHTML + '</div>';
+  }
+  function cursor(x, y, clicking) {
+    return '<div style="position:absolute;left:' + x + 'px;top:' + y + 'px;z-index:60;transform:scale(' + (clicking ? 0.82 : 1) + ');transform-origin:top left;filter:drop-shadow(0 5px 9px rgba(0,0,0,0.28));pointer-events:none">'
+      + '<svg width="36" height="36" viewBox="0 0 24 24" fill="#fff" stroke="#1A1A1A" stroke-width="1.4" stroke-linejoin="round"><path d="M5 2.5 L19.5 10 L12.8 12.2 L10.2 19.5 Z"/></svg></div>';
+  }
+
+  // ── Scene 1: brand open ──────────────────────────────────────────────────────
+  function brandOpen(t) {
+    return scene(t, 0, 2.9, function (lt) {
+      var m = rev(lt, 0.15, 0.85, { y: 0, blur: 16, outAt: 2.35, outDur: 0.55 });
+      var w = rev(lt, 0.62, 0.7, { y: 22, blur: 8, outAt: 2.35, outDur: 0.55 });
+      var e = rev(lt, 0.98, 0.7, { y: 16, blur: 6, outAt: 2.35, outDur: 0.55 });
+      var markScale = 0.84 + 0.16 * easeOutCubic(clamp(lt / 0.85, 0, 1));
+      var groupOut = 1 + 0.07 * easeInCubic(clamp((lt - 2.35) / 0.55, 0, 1));
+      return '<div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(' + groupOut + ');display:flex;flex-direction:column;align-items:center;gap:34px">'
+        + '<div style="opacity:' + m.o + ';filter:' + blurOnly(m.bl) + ';transform:scale(' + markScale + ')">' + nestMark(124, C.teal) + '</div>'
+        + '<span style="' + rs(w) + 'font-family:' + CLASH + ';font-size:88px;font-weight:500;color:' + C.ink + ';letter-spacing:-0.03em">nested</span>'
+        + '<span style="' + rs(e) + 'font-family:' + FIG + ';font-size:21px;font-weight:600;letter-spacing:0.3em;text-transform:uppercase;color:' + C.taupe + '">Senior care, made clear</span>'
+        + '</div>';
+    });
+  }
+
+  // ── Scene 2: step 1 — answer questions ───────────────────────────────────────
+  function stepper(active) {
+    var html = '';
+    for (var n = 1; n <= 5; n++) {
+      html += '<div style="width:36px;height:36px;border-radius:36px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:' + FIG + ';font-size:15px;font-weight:600;background:' + (n <= active ? C.teal : 'transparent') + ';color:' + (n <= active ? '#fff' : C.taupe) + ';border:' + (n <= active ? 'none' : '1.5px solid rgba(168,158,144,0.7)') + '">' + n + '</div>';
+      if (n < 5) html += '<div style="flex:1;height:2px;background:' + (n < active ? C.teal : 'rgba(26,26,26,0.10)') + ';margin:0 9px"></div>';
+    }
+    return '<div style="display:flex;align-items:center;margin-bottom:32px">' + html + '</div>';
+  }
+  function optionRow(label, selected) {
+    var dot = selected ? '<div style="width:12px;height:12px;border-radius:12px;background:' + C.teal + '"></div>' : '';
+    return '<div style="display:flex;align-items:center;gap:18px;height:70px;padding:0 24px;border-radius:16px;border:1.5px solid ' + (selected ? C.teal : 'rgba(26,26,26,0.12)') + ';background:' + (selected ? 'rgba(2,83,85,0.05)' : '#fff') + '">'
+      + '<div style="width:24px;height:24px;border-radius:24px;flex-shrink:0;border:2px solid ' + (selected ? C.teal : C.taupe) + ';display:flex;align-items:center;justify-content:center">' + dot + '</div>'
+      + '<span style="font-family:' + FIG + ';font-size:22px;font-weight:500;color:' + C.ink + '">' + label + '</span></div>';
+  }
+  function stepOne(t) {
+    return scene(t, 2.6, 5.6, function (lt) {
+      var sel = lt > 1.55;
+      var moveP = easeInOutCubic(clamp((lt - 0.95) / 0.55, 0, 1));
+      var cx = 1560 + (1108 - 1560) * moveP;
+      var cy = 800 + (470 - 800) * moveP;
+      var clicking = lt > 1.48 && lt < 1.64;
+      var opts = ['A parent or in-law', 'A spouse or partner', 'Myself'];
+      var rows = opts.map(function (o, i) {
+        return '<div style="' + rs(rev(lt, 0.7 + i * 0.13, 0.5, { y: 16, blur: 4 })) + '">' + optionRow(o, i === 0 && sel) + '</div>';
+      }).join('');
+      var card = stepper(1)
+        + '<div style="' + rs(rev(lt, 0.5, 0.5, { y: 10, blur: 4 })) + '">'
+        + '<div style="font-family:' + FIG + ';font-size:15px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:' + C.taupe + ';margin-bottom:14px">Step 1 of 5</div>'
+        + '<div style="font-family:' + CLASH + ';font-size:36px;font-weight:500;color:' + C.ink + ';letter-spacing:-0.02em;margin-bottom:30px">Who are you <span style="color:' + C.teal + '">planning for?</span></div></div>'
+        + '<div style="display:flex;flex-direction:column;gap:14px">' + rows + '</div>';
+      return productHeading(lt, 1, 'Answer a few ' + it('questions.'))
+        + productCard(lt, card)
+        + cursor(cx, cy, clicking);
+    });
+  }
+
+  // ── Scene 3: step 2 — cost ranges ────────────────────────────────────────────
+  function countUp(t, at, dur, target) { return Math.round(target * easeOutCubic(clamp((t - at) / dur, 0, 1))); }
+  function money(n) { return '$' + n.toLocaleString('en-US'); }
+  function resultRow(icon, name, sub, amount, badge, hi, amountColor) {
+    var badgeHTML = badge ? '<span style="font-family:' + FIG + ';font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:' + C.teal + ';background:rgba(2,83,85,0.12);padding:3px 9px;border-radius:100px">' + badge + '</span>' : '';
+    return '<div style="display:flex;align-items:center;justify-content:space-between;padding:20px 22px;border-radius:18px;background:' + (hi ? 'rgba(2,83,85,0.05)' : '#fff') + ';border:1.5px solid ' + (hi ? 'rgba(2,83,85,0.32)' : 'rgba(26,26,26,0.10)') + '">'
+      + '<div style="display:flex;align-items:center;gap:16px">'
+      + '<div style="width:52px;height:52px;border-radius:14px;background:' + C.cream + ';display:flex;align-items:center;justify-content:center;font-size:26px">' + icon + '</div>'
+      + '<div><div style="display:flex;align-items:center;gap:10px;font-family:' + FIG + ';font-size:21px;font-weight:600;color:' + C.ink + '">' + name + badgeHTML + '</div>'
+      + '<div style="font-family:' + FIG + ';font-size:15px;color:' + C.mute + ';margin-top:3px">' + sub + '</div></div></div>'
+      + '<div style="text-align:right"><div style="font-family:' + CLASH + ';font-size:30px;font-weight:600;color:' + (amountColor || C.ink) + ';letter-spacing:-0.01em;font-variant-numeric:tabular-nums">' + amount + '</div>'
+      + '<div style="font-family:' + FIG + ';font-size:14px;color:' + C.mute + '">/ month</div></div></div>';
+  }
+  function stepTwo(t) {
+    return scene(t, 5.4, 8.6, function (lt) {
+      var v1 = countUp(lt, 0.6, 1.15, 3633), v2 = countUp(lt, 0.72, 1.15, 5513), v3 = countUp(lt, 0.84, 1.15, 7200);
+      var card = '<div style="' + rs(rev(lt, 0.4, 0.5, { y: 8, blur: 3 })) + 'font-family:' + FIG + ';font-size:15px;font-weight:600;letter-spacing:0.02em;color:' + C.mute + ';margin-bottom:22px;display:flex;align-items:center;gap:9px">'
+        + '<span style="width:7px;height:7px;border-radius:7px;background:' + C.teal + '"></span> Your cost estimates · Seattle, WA</div>'
+        + '<div style="display:flex;flex-direction:column;gap:12px">'
+        + '<div style="' + rs(rev(lt, 0.5, 0.55, { y: 18, blur: 4 })) + '">' + resultRow('🏡', 'In-Home Care', '20 hrs/week · part-time', money(v1), 'Lowest', true, C.teal) + '</div>'
+        + '<div style="' + rs(rev(lt, 0.66, 0.55, { y: 18, blur: 4 })) + '">' + resultRow('🏢', 'Assisted Living', 'Residential community', money(v2), null, false, null) + '</div>'
+        + '<div style="' + rs(rev(lt, 0.82, 0.55, { y: 18, blur: 4 })) + '">' + resultRow('🌿', 'Memory Care', 'Specialized cognitive care', money(v3), null, false, null) + '</div>'
+        + '</div>';
+      return productHeading(lt, 2, 'See ' + it('real cost') + ' ranges for your area.') + productCard(lt, card);
+    });
+  }
+
+  // ── Scene 4: step 3 — compare ────────────────────────────────────────────────
+  function mark(yes) {
+    return yes
+      ? '<svg width="22" height="22" viewBox="0 0 12 12" fill="none" stroke="' + C.teal + '" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6.2 5 9 10 3"/></svg>'
+      : '<svg width="18" height="18" viewBox="0 0 12 12" fill="none" stroke="#C2BEB5" stroke-width="2.2" stroke-linecap="round"><line x1="3" y1="3" x2="9" y2="9"/><line x1="9" y1="3" x2="3" y2="9"/></svg>';
+  }
+  function cmpRow(label, a, b, first) {
+    var cell = function (v, tint) {
+      return (typeof v === 'boolean')
+        ? '<div style="display:flex;justify-content:center">' + mark(v) + '</div>'
+        : '<div style="text-align:center;font-family:' + CLASH + ';font-size:23px;font-weight:600;color:' + (tint ? C.teal : C.ink) + ';font-variant-numeric:tabular-nums">' + v + '</div>';
+    };
+    return '<div style="display:grid;grid-template-columns:1.5fr 1fr 1fr;align-items:center;padding:19px 4px;border-top:' + (first ? 'none' : '1px solid rgba(26,26,26,0.08)') + '">'
+      + '<div style="font-family:' + FIG + ';font-size:19px;font-weight:500;color:' + C.mute + '">' + label + '</div>'
+      + cell(a, true) + cell(b, false) + '</div>';
+  }
+  function stepThree(t) {
+    return scene(t, 8.4, 11.2, function (lt) {
+      var rows = [
+        { l: 'Monthly cost', a: '$3,633', b: '$5,513' },
+        { l: '5-year total', a: '$218k', b: '$331k' },
+        { l: '24/7 staffing', a: false, b: true },
+        { l: 'Meals included', a: false, b: true },
+        { l: 'Stay at home', a: true, b: false }
+      ];
+      var head = '<div style="display:grid;grid-template-columns:1.5fr 1fr 1fr;margin-bottom:8px;' + rs(rev(lt, 0.4, 0.5, { y: 8, blur: 3 })) + '">'
+        + '<div></div>'
+        + '<div style="text-align:center;font-family:' + FIG + ';font-size:18px;font-weight:700;color:' + C.teal + '">In-Home</div>'
+        + '<div style="text-align:center;font-family:' + FIG + ';font-size:18px;font-weight:700;color:' + C.ink + '">Assisted</div></div>';
+      var body = rows.map(function (r, i) {
+        return '<div style="' + rs(rev(lt, 0.55 + i * 0.12, 0.5, { y: 14, blur: 3 })) + '">' + cmpRow(r.l, r.a, r.b, i === 0) + '</div>';
+      }).join('');
+      return productHeading(lt, 3, 'Compare every option, ' + it('side by side.')) + productCard(lt, head + body);
+    });
+  }
+
+  // ── Scene 5: brand close ─────────────────────────────────────────────────────
+  function brandClose(t) {
+    return scene(t, 11.0, 14, function (lt) {
+      var m = rev(lt, 0.1, 0.7, { y: 0, blur: 12 });
+      var h1 = rev(lt, 0.45, 0.7, { y: 26, blur: 10 });
+      var h2 = rev(lt, 0.68, 0.7, { y: 26, blur: 10 });
+      var cr = rev(lt, 1.05, 0.7, { y: 14, blur: 6 });
+      return '<div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:26px;text-align:center">'
+        + '<div style="opacity:' + m.o + ';filter:' + blurOnly(m.bl) + ';margin-bottom:4px">' + nestMark(66, C.teal) + '</div>'
+        + '<div style="display:flex;flex-direction:column;gap:0">'
+        + '<span style="' + rs(h1) + 'font-family:' + CLASH + ';font-size:104px;font-weight:500;color:' + C.ink + ';letter-spacing:-0.035em;line-height:1.0">Find care.</span>'
+        + '<span style="' + rs(h2) + 'font-family:' + CLASH + ';font-weight:500;font-size:104px;color:' + C.teal + ';letter-spacing:-0.035em;line-height:1.04">Get clarity.</span></div>'
+        + '<div style="' + rs(cr) + 'margin-top:18px;display:flex;align-items:center;justify-content:center">'
+        + '<span style="font-family:' + FIG + ';font-size:19px;font-weight:500;letter-spacing:0.04em;color:' + C.mute + '">Product &amp; brand design · Case study</span></div>'
+        + '</div>';
+    });
+  }
+
+  // ── persistent chrome across the product scenes ──────────────────────────────
+  function stepDots(t) {
+    var active = t < 5.4 ? 0 : t < 8.4 ? 1 : 2;
+    var labels = ['Questions', 'Costs', 'Compare'];
+    var dots = labels.map(function (l, i) {
+      var on = i === active;
+      return '<div style="display:flex;align-items:center;gap:10px;padding:10px 20px;border-radius:100px;background:' + (on ? C.teal : 'rgba(26,26,26,0.05)') + '">'
+        + '<span style="width:8px;height:8px;border-radius:8px;background:' + (on ? '#fff' : C.taupe) + '"></span>'
+        + '<span style="font-family:' + FIG + ';font-size:17px;font-weight:600;color:' + (on ? '#fff' : C.mute) + '">' + l + '</span></div>';
+    }).join('');
+    return '<div style="position:absolute;left:0;right:0;bottom:80px;display:flex;justify-content:center;gap:12px">' + dots + '</div>';
+  }
+  function persistent(t) {
+    if (t < 2.4 || t > 11.5) return '';
+    var lt = t - 2.4, dur = 9.1;
+    var op = Math.min(easeOutCubic(clamp(lt / 0.5, 0, 1)), easeInOutCubic(clamp((dur - lt) / 0.5, 0, 1)));
+    return '<div style="position:absolute;inset:0;opacity:' + op + ';pointer-events:none">'
+      + '<div style="position:absolute;left:142px;top:86px;display:flex;align-items:center;gap:13px">'
+      + nestMark(32, C.teal)
+      + '<span style="font-family:' + CLASH + ';font-size:30px;font-weight:500;color:' + C.ink + ';letter-spacing:-0.02em">nested</span></div>'
+      + stepDots(t) + '</div>';
+  }
+
+  // ── compose one frame ────────────────────────────────────────────────────────
+  function frame(t) {
+    return brandOpen(t) + persistent(t) + stepOne(t) + stepTwo(t) + stepThree(t) + brandClose(t);
+  }
+
+  // ── mount + drive ────────────────────────────────────────────────────────────
+  var DURATION = 14;
+  var stage = document.createElement('div');
+  stage.className = 'nested-stage';
+  stage.setAttribute('aria-hidden', 'true');
+  media.appendChild(stage);
+
+  function fit() { stage.style.transform = 'scale(' + (media.clientWidth / 1920) + ')'; }
+  fit();
+  if (window.ResizeObserver) { new ResizeObserver(fit).observe(media); }
+  window.addEventListener('resize', fit);
+
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduceMotion) { stage.innerHTML = frame(12.3); return; }   // static end card
+
+  var raf = null, started = 0, last = '';
+  function tick(now) {
+    if (!started) started = now;
+    var t = ((now - started) / 1000) % DURATION;
+    var html = frame(t);
+    if (html !== last) { stage.innerHTML = html; last = html; }
+    raf = requestAnimationFrame(tick);
+  }
+  function play() { if (!raf) { started = 0; raf = requestAnimationFrame(tick); } }
+  function stop() { if (raf) { cancelAnimationFrame(raf); raf = null; } }
+
+  // only animate while the card is on-screen
+  if (window.IntersectionObserver) {
+    new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { e.isIntersecting ? play() : stop(); });
+    }, { threshold: 0.05 }).observe(media);
+  } else {
+    play();
+  }
 })();
 </script>
 </body>
