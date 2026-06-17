@@ -54,19 +54,19 @@
   .bio em { font-style: normal; color: var(--ink); border-bottom: 1px dotted var(--muted); padding-bottom: 1px; }
   /* glimm-style prism band — flashes once on hover, text stays ink otherwise */
   .bio em.glimm:hover {
-    background-image: linear-gradient(100deg,
-      var(--ink) 0 40%,
-      rgb(255,11,172) 45%, rgb(218,151,82) 49%, rgb(140,229,88) 53%, rgb(119,200,188) 57%, rgb(167,81,255) 61%,
-      var(--ink) 66% 100%);
-    background-size: 220% 100%;
+    background-image: linear-gradient(90deg,
+      var(--ink) 0 35%,
+      rgb(255,11,172) 44%, rgb(218,151,82) 47%, rgb(140,229,88) 50%, rgb(119,200,188) 53%, rgb(167,81,255) 56%,
+      var(--ink) 65% 100%);
+    background-size: 300% 100%;
     background-repeat: no-repeat;
     -webkit-background-clip: text; background-clip: text;
     -webkit-text-fill-color: transparent; color: transparent;
     animation: glimmSweep 0.9s ease forwards;
   }
   @keyframes glimmSweep {
-    from { background-position: 130% 0; }
-    to   { background-position: -130% 0; }
+    from { background-position: 0% 0; }
+    to   { background-position: 100% 0; }
   }
   @media (prefers-reduced-motion: reduce) {
     .bio em.glimm:hover { animation: none; -webkit-text-fill-color: var(--ink); color: var(--ink); }
