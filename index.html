@@ -52,6 +52,25 @@
   .role { font-size: 15px; color: var(--muted); letter-spacing: .01em; }
   .bio { font-size: 15px; line-height: 1.8; color: var(--muted); max-width: 46ch; margin-top: 26px; }
   .bio em { font-style: normal; color: var(--ink); border-bottom: 1px dotted var(--muted); padding-bottom: 1px; }
+  /* glimm-style prism band — flashes once on hover, text stays ink otherwise */
+  .bio em.glimm:hover {
+    background-image: linear-gradient(100deg,
+      var(--ink) 0 40%,
+      rgb(255,11,172) 45%, rgb(218,151,82) 49%, rgb(140,229,88) 53%, rgb(119,200,188) 57%, rgb(167,81,255) 61%,
+      var(--ink) 66% 100%);
+    background-size: 220% 100%;
+    background-repeat: no-repeat;
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; color: transparent;
+    animation: glimmSweep 0.9s ease forwards;
+  }
+  @keyframes glimmSweep {
+    from { background-position: 130% 0; }
+    to   { background-position: -130% 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .bio em.glimm:hover { animation: none; -webkit-text-fill-color: var(--ink); color: var(--ink); }
+  }
   .seattle { position: relative; }
   .seattle .rain {
     position: absolute; left: 50%; bottom: 100%; transform: translateX(-50%);
@@ -253,7 +272,7 @@
     <div class="side-head">
       <div class="wordmark">Amelia Simpson</div>
     </div>
-    <p class="bio">Amelia is a <span class="seattle"><em>Seattle</em><span class="rain" aria-hidden="true"><svg class="cloud" viewBox="0 0 64 42"><defs><linearGradient id="cloudgrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d6dee8"/><stop offset="1" stop-color="#a7b4c4"/></linearGradient></defs><path d="M14 36 C7 36 2 31 2 25 C2 19 7 15 13 15 C15 7 22 3 30 3 C38 3 45 8 47 16 C55 16 62 21 62 28 C62 33 58 36 52 36 Z" fill="url(#cloudgrad)"/></svg><i style="--l:34%;--d:0s"></i><i style="--l:44%;--d:.3s"></i><i style="--l:50%;--d:.14s"></i><i style="--l:58%;--d:.46s"></i><i style="--l:40%;--d:.6s"></i></span></span> based product designer who builds the interfaces she designs. She's currently <em>open to work</em> and is drawn to AI tooling, consumer products, and making things accessible by default. She is probably making her 10th matcha latte of the day.</p>
+    <p class="bio">Amelia is a <span class="seattle"><em>Seattle</em><span class="rain" aria-hidden="true"><svg class="cloud" viewBox="0 0 64 42"><defs><linearGradient id="cloudgrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d6dee8"/><stop offset="1" stop-color="#a7b4c4"/></linearGradient></defs><path d="M14 36 C7 36 2 31 2 25 C2 19 7 15 13 15 C15 7 22 3 30 3 C38 3 45 8 47 16 C55 16 62 21 62 28 C62 33 58 36 52 36 Z" fill="url(#cloudgrad)"/></svg><i style="--l:34%;--d:0s"></i><i style="--l:44%;--d:.3s"></i><i style="--l:50%;--d:.14s"></i><i style="--l:58%;--d:.46s"></i><i style="--l:40%;--d:.6s"></i></span></span> based product designer who builds the interfaces she designs. She's currently <em class="glimm">open to work</em> and is drawn to AI tooling, consumer products, and making things accessible by default. She is probably making her 10th matcha latte of the day.</p>
 
     <hr class="divider">
 
