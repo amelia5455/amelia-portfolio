@@ -218,6 +218,23 @@
     max-width: none; margin: 0 0 64px; padding-bottom: 16px; border-bottom: 1px solid rgba(30,40,60,.13); }
   .work-label { font-size: 13px; letter-spacing: .28em; text-transform: uppercase; color: var(--muted); }
   .work-years { font-size: 13px; letter-spacing: .12em; color: var(--muted); opacity: .65; font-variant-numeric: tabular-nums; }
+
+  /* ---- Gallery "coming soon" view (toggled from the Index nav) ---- */
+  #view-gallery[hidden] { display: none; }
+  #view-gallery {
+    min-height: 64vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; text-align: center; gap: 22px;
+  }
+  .cs-eyebrow { font-size: 12px; letter-spacing: .28em; text-transform: uppercase; color: var(--cursor); opacity: .85; }
+  .cs-title { font-size: clamp(22px, 2.6vw, 30px); font-weight: 500; color: var(--ink); letter-spacing: -0.005em; line-height: 1.3; margin: 0; }
+  .cs-sub { font-size: 15px; color: var(--muted); }
+  /* When gallery is active, center it in the viewport instead of the work layout's deep top padding */
+  body.gallery-on #view-work { display: none; }
+  body.gallery-on main { min-height: 100vh; padding-top: 0; padding-bottom: 0;
+    display: flex; flex-direction: column; justify-content: center; }
+  @media (max-width: 720px) {
+    body.gallery-on main { min-height: 70vh; padding-top: 6vh; }
+  }
   .status { display: flex; align-items: center; gap: 9px; font-size: 14px; color: var(--ink); }
   .status .dot { position: relative; width: 8px; height: 8px; border-radius: 50%; background: #79c07e; }
   .status .dot::before, .status .dot::after { content: ''; position: absolute; inset: 0; border-radius: 50%; animation: statusEcho 3.4s ease-out infinite; }
@@ -279,8 +296,8 @@
     <div class="nav-group">
       <div class="group-label">Index</div>
       <nav class="side-nav">
-        <a class="active" href="#">Work</a>
-        <a href="#">Gallery</a>
+        <a class="active" href="#" data-view="work">Work</a>
+        <a href="#" data-view="gallery">Gallery</a>
         <a href="#">About</a>
       </nav>
     </div>
@@ -305,6 +322,7 @@
   </aside>
 
   <main>
+    <div id="view-work">
     <div class="worktop">
       <span class="work-label">Selected Work</span>
     </div>
@@ -338,6 +356,13 @@
         <p class="case-desc">Senior care cost comparison platform. Building the design system, IA, and product flows from zero.</p>
       </a>
       </div>
+    </div>
+    </div><!-- /#view-work -->
+
+    <div id="view-gallery" hidden>
+      <span class="cs-eyebrow">Coming Soon</span>
+      <h1 class="cs-title">amelia is still working on this.</h1>
+      <p class="cs-sub">be sure to check back soon :)</p>
     </div>
   </main>
 
@@ -817,6 +842,29 @@
     a.addEventListener('click', function () { set(false); });
   });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') set(false); });
+})();
+</script>
+
+<!-- ===== Index view switcher (Work / Gallery) ===== -->
+<script>
+(function () {
+  'use strict';
+  var navLinks = document.querySelectorAll('.side-nav a[data-view]');
+  if (!navLinks.length) return;
+
+  function showView(view) {
+    document.body.classList.toggle('gallery-on', view === 'gallery');
+    document.getElementById('view-gallery').hidden = (view !== 'gallery');
+    navLinks.forEach(function (a) { a.classList.toggle('active', a.dataset.view === view); });
+    window.scrollTo(0, 0);
+  }
+
+  navLinks.forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      e.preventDefault();
+      showView(a.dataset.view);
+    });
+  });
 })();
 </script>
 
