@@ -238,9 +238,6 @@
 
   /* ---- About view ---- */
   body.about-on main { padding-top: 13vh; padding-bottom: 14vh; }
-  .about-head { margin: 0 0 34px; padding-bottom: 16px; border-bottom: 1px solid rgba(30,40,60,.13); }
-  .about-title { font-size: clamp(30px, 4vw, 50px); font-weight: 500; color: var(--ink); letter-spacing: -0.02em; line-height: 1.04; margin: 0 0 14px; }
-  .about-tagline { font-size: 15px; color: var(--muted); margin: 0 0 48px; max-width: 50ch; }
 
   /* shared placeholder tile */
   .about-photo {
@@ -254,15 +251,17 @@
   .about-photo > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
   .about-photo > span { position: relative; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: #8a83a8; opacity: .85; padding: 9px 11px; }
 
-  .about-hero { display: grid; grid-template-columns: 1.5fr .85fr; gap: 52px; align-items: start; }
-  .about-narrative p { font-size: 15px; line-height: 1.85; color: var(--muted); margin-bottom: 18px; }
-  .about-narrative em { font-style: normal; color: var(--ink); border-bottom: 1px dotted var(--muted); padding-bottom: 1px; }
-  .about-contact { font-size: 15px; line-height: 1.85; }
-  .about-contact a { color: var(--ink); text-decoration: none; border-bottom: 1px dotted var(--muted); padding-bottom: 1px; transition: opacity .2s ease; }
-  .about-contact a:hover { opacity: .55; }
-  .about-portrait { aspect-ratio: 3 / 4; }
+  /* top photo strip */
+  .about-strip { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-bottom: 48px; }
+  .about-strip .about-photo { aspect-ratio: 4 / 5; }
 
-  .about-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 52px; margin-top: 60px; padding-top: 40px; border-top: 1px dotted var(--muted); }
+  .about-title { font-size: clamp(30px, 4vw, 50px); font-weight: 500; color: var(--ink); letter-spacing: -0.02em; line-height: 1.04; margin: 0 0 30px; }
+
+  /* full-width bio */
+  .about-intro p { font-size: 15px; line-height: 1.85; color: var(--muted); margin-bottom: 18px; }
+  .about-intro em { font-style: normal; color: var(--ink); border-bottom: 1px dotted var(--muted); padding-bottom: 1px; }
+
+  .about-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 52px; margin-top: 56px; padding-top: 40px; border-top: 1px dotted var(--muted); }
   .about-list { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-top: 18px; }
   .about-list li { font-size: 15px; line-height: 1.55; color: var(--muted); display: flex; gap: 13px; }
   .about-list li::before { content: '\2192'; color: var(--cursor); flex: none; }
@@ -284,11 +283,8 @@
 
   @media (max-width: 720px) {
     body.about-on main { padding-top: 4vh; }
-    .about-head { margin-bottom: 26px; }
-    .about-tagline { margin-bottom: 32px; }
-    .about-hero { grid-template-columns: 1fr; gap: 28px; }
-    .about-portrait { aspect-ratio: 4 / 3; }
-    .about-cols { grid-template-columns: 1fr; gap: 32px; margin-top: 44px; }
+    .about-strip { grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 32px; }
+    .about-cols { grid-template-columns: 1fr; gap: 32px; }
     .cover-row { grid-template-columns: repeat(3, 1fr); }
   }
   .status { display: flex; align-items: center; gap: 9px; font-size: 14px; color: var(--ink); }
@@ -422,17 +418,20 @@
     </div>
 
     <div id="view-about" hidden>
-      <h1 class="about-title">Designing to delight.</h1>
-      <p class="about-tagline">Product designer in Seattle, building the interfaces she designs.</p>
+      <!-- Top photo strip — drop a <img src="..."> into each tile -->
+      <div class="about-strip">
+        <div class="about-photo"><span>photo</span></div>
+        <div class="about-photo"><span>photo</span></div>
+        <div class="about-photo"><span>photo</span></div>
+        <div class="about-photo"><span>photo</span></div>
+        <div class="about-photo"><span>photo</span></div>
+      </div>
 
-      <div class="about-hero">
-        <div class="about-narrative">
-          <p>Hi, I&rsquo;m Amelia. I care about software that feels calm, clear, and a little bit <em>delightful</em>, and I love being close enough to the code to build what I draw. I&rsquo;m drawn to AI tooling, consumer products, and accessibility by default.</p>
-          <p>I just wrapped my capstone and I&rsquo;m <em>open to work</em>, currently shaping a senior-care product from zero as a founding designer. I see design as a way to make hard things feel human.</p>
-          <p class="about-contact">Say hi at <a href="mailto:amelia.r.simpson123@gmail.com">amelia.r.simpson123@gmail.com</a> or take a peek at my <a href="#">resume</a>.</p>
-        </div>
-        <!-- drop a portrait <img src="..."> inside this tile -->
-        <div class="about-photo about-portrait"><span>portrait</span></div>
+      <h1 class="about-title">Designing to delight.</h1>
+
+      <div class="about-intro">
+        <p>Hi, I&rsquo;m Amelia. I care about software that feels calm, clear, and a little bit <em>delightful</em>, and I love being close enough to the code to build what I draw. I&rsquo;m drawn to AI tooling, consumer products, and accessibility by default.</p>
+        <p>I just wrapped my capstone and I&rsquo;m <em>open to work</em>, currently shaping a senior-care product from zero as a founding designer. I see design as a way to make hard things feel human.</p>
       </div>
 
       <div class="about-cols">
