@@ -283,8 +283,9 @@
 
   @media (max-width: 720px) {
     body.about-on main { padding-top: 4vh; }
-    /* photos: 2-column grid */
+    /* photos: 2-column grid — show a clean 2x2 (hide the 5th on mobile) */
     .about-strip { grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 38px; }
+    .about-strip .about-photo:nth-child(n+5) { display: none; }
     .about-cols { grid-template-columns: 1fr; gap: 32px; }
     /* cover rows: swipeable horizontal scroll */
     .cover-row { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 6px;
