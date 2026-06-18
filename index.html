@@ -229,11 +229,67 @@
   .cs-title { font-size: clamp(22px, 2.6vw, 30px); font-weight: 500; color: var(--ink); letter-spacing: -0.005em; line-height: 1.3; margin: 0; }
   .cs-sub { font-size: 15px; color: var(--muted); }
   /* When gallery is active, center it in the viewport instead of the work layout's deep top padding */
-  body.gallery-on #view-work { display: none; }
+  body.gallery-on #view-work, body.about-on #view-work { display: none; }
   body.gallery-on main { min-height: 100vh; padding-top: 0; padding-bottom: 0;
     display: flex; flex-direction: column; justify-content: center; }
   @media (max-width: 720px) {
     body.gallery-on main { min-height: 70vh; padding-top: 6vh; }
+  }
+
+  /* ---- About view ---- */
+  body.about-on main { padding-top: 13vh; padding-bottom: 14vh; }
+  .about-head { margin: 0 0 34px; padding-bottom: 16px; border-bottom: 1px solid rgba(30,40,60,.13); }
+  .about-title { font-size: clamp(30px, 4vw, 50px); font-weight: 500; color: var(--ink); letter-spacing: -0.02em; line-height: 1.04; margin: 0 0 14px; }
+  .about-tagline { font-size: 15px; color: var(--muted); margin: 0 0 48px; max-width: 50ch; }
+
+  /* shared placeholder tile */
+  .about-photo {
+    border-radius: 12px; overflow: hidden; position: relative;
+    border: 1px solid rgba(30,40,60,.10); display: flex; align-items: flex-end;
+    background:
+      radial-gradient(110% 80% at 18% 108%, rgba(178,234,210,.75), transparent 62%),
+      radial-gradient(120% 92% at 82% 116%, rgba(202,182,240,.78), transparent 60%),
+      linear-gradient(180deg, #e4e3ee, #ece8f3);
+  }
+  .about-photo > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .about-photo > span { position: relative; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: #8a83a8; opacity: .85; padding: 9px 11px; }
+
+  .about-hero { display: grid; grid-template-columns: 1.5fr .85fr; gap: 52px; align-items: start; }
+  .about-narrative p { font-size: 15px; line-height: 1.85; color: var(--muted); margin-bottom: 18px; }
+  .about-narrative em { font-style: normal; color: var(--ink); border-bottom: 1px dotted var(--muted); padding-bottom: 1px; }
+  .about-contact { font-size: 15px; line-height: 1.85; }
+  .about-contact a { color: var(--ink); text-decoration: none; border-bottom: 1px dotted var(--muted); padding-bottom: 1px; transition: opacity .2s ease; }
+  .about-contact a:hover { opacity: .55; }
+  .about-portrait { aspect-ratio: 3 / 4; }
+
+  .about-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 52px; margin-top: 60px; padding-top: 40px; border-top: 1px dotted var(--muted); }
+  .about-list { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-top: 18px; }
+  .about-list li { font-size: 15px; line-height: 1.55; color: var(--muted); display: flex; gap: 13px; }
+  .about-list li::before { content: '\2192'; color: var(--cursor); flex: none; }
+  .exp-list { margin-top: 18px; }
+  .exp-row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 16px 0; border-top: 1px solid rgba(26,26,26,0.08); }
+  .exp-row:first-child { border-top: none; padding-top: 0; }
+  .exp-role { font-size: 16px; color: var(--ink); }
+  .exp-role span { color: var(--muted); }
+  .exp-date { font-size: 12px; letter-spacing: .08em; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+  /* favorite things — cover grids (books / movies / songs) */
+  .about-faves-rich { margin-top: 56px; padding-top: 40px; border-top: 1px dotted var(--muted); }
+  .faves-head { margin-bottom: 6px; }
+  .fave-group { margin-top: 34px; }
+  .cover-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-top: 16px; }
+  .cover-row.tall .about-photo { aspect-ratio: 2 / 3; }
+  .cover-row.square .about-photo { aspect-ratio: 1 / 1; }
+  .about-photo.cover > span { opacity: .7; }
+
+  @media (max-width: 720px) {
+    body.about-on main { padding-top: 4vh; }
+    .about-head { margin-bottom: 26px; }
+    .about-tagline { margin-bottom: 32px; }
+    .about-hero { grid-template-columns: 1fr; gap: 28px; }
+    .about-portrait { aspect-ratio: 4 / 3; }
+    .about-cols { grid-template-columns: 1fr; gap: 32px; margin-top: 44px; }
+    .cover-row { grid-template-columns: repeat(3, 1fr); }
   }
   .status { display: flex; align-items: center; gap: 9px; font-size: 14px; color: var(--ink); }
   .status .dot { position: relative; width: 8px; height: 8px; border-radius: 50%; background: #79c07e; }
@@ -298,7 +354,7 @@
       <nav class="side-nav">
         <a class="active" href="#" data-view="work">Work</a>
         <a href="#" data-view="gallery">Gallery</a>
-        <a href="#">About</a>
+        <a href="#" data-view="about">About</a>
       </nav>
     </div>
 
@@ -363,6 +419,79 @@
       <span class="cs-eyebrow">Coming Soon</span>
       <h1 class="cs-title">amelia is still working on this.</h1>
       <p class="cs-sub">be sure to check back soon :)</p>
+    </div>
+
+    <div id="view-about" hidden>
+      <h1 class="about-title">Designing to delight.</h1>
+      <p class="about-tagline">Product designer in Seattle, building the interfaces she designs.</p>
+
+      <div class="about-hero">
+        <div class="about-narrative">
+          <p>Hi, I&rsquo;m Amelia. I care about software that feels calm, clear, and a little bit <em>delightful</em>, and I love being close enough to the code to build what I draw. I&rsquo;m drawn to AI tooling, consumer products, and accessibility by default.</p>
+          <p>I just wrapped my capstone and I&rsquo;m <em>open to work</em>, currently shaping a senior-care product from zero as a founding designer. I see design as a way to make hard things feel human.</p>
+          <p class="about-contact">Say hi at <a href="mailto:amelia.r.simpson123@gmail.com">amelia.r.simpson123@gmail.com</a> or take a peek at my <a href="#">resume</a>.</p>
+        </div>
+        <!-- drop a portrait <img src="..."> inside this tile -->
+        <div class="about-photo about-portrait"><span>portrait</span></div>
+      </div>
+
+      <div class="about-cols">
+        <div>
+          <span class="group-label">Off the clock</span>
+          <ul class="about-list">
+            <li>Making my 10th matcha latte of the day</li>
+            <li>Falling down a rabbit hole over a new typeface</li>
+            <li>Watching the Seattle rain (and pretending to mind it)</li>
+            <li>Hunting for a new favorite color</li>
+          </ul>
+        </div>
+        <div>
+          <span class="group-label">Experience</span>
+          <div class="exp-list">
+            <div class="exp-row"><div class="exp-role">Nested <span>&middot; Founding Designer</span></div><div class="exp-date">2026 &mdash; Present</div></div>
+            <div class="exp-row"><div class="exp-role">Freelance <span>&middot; Product Designer</span></div><div class="exp-date">2026</div></div>
+            <div class="exp-row"><div class="exp-role">Besties <span>&middot; Capstone, UX</span></div><div class="exp-date">2025</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Favorite things — drop a cover <img src="..."> into each tile -->
+      <div class="about-faves-rich">
+        <div class="faves-head"><span class="work-label">A few of my favorite things</span></div>
+
+        <div class="fave-group">
+          <span class="group-label">On my shelf</span>
+          <div class="cover-row tall">
+            <div class="about-photo cover"><span>book</span></div>
+            <div class="about-photo cover"><span>book</span></div>
+            <div class="about-photo cover"><span>book</span></div>
+            <div class="about-photo cover"><span>book</span></div>
+            <div class="about-photo cover"><span>book</span></div>
+          </div>
+        </div>
+
+        <div class="fave-group">
+          <span class="group-label">Comfort rewatches</span>
+          <div class="cover-row tall">
+            <div class="about-photo cover"><span>film</span></div>
+            <div class="about-photo cover"><span>film</span></div>
+            <div class="about-photo cover"><span>film</span></div>
+            <div class="about-photo cover"><span>film</span></div>
+            <div class="about-photo cover"><span>film</span></div>
+          </div>
+        </div>
+
+        <div class="fave-group">
+          <span class="group-label">On repeat</span>
+          <div class="cover-row square">
+            <div class="about-photo cover"><span>song</span></div>
+            <div class="about-photo cover"><span>song</span></div>
+            <div class="about-photo cover"><span>song</span></div>
+            <div class="about-photo cover"><span>song</span></div>
+            <div class="about-photo cover"><span>song</span></div>
+          </div>
+        </div>
+      </div>
     </div>
   </main>
 
@@ -854,7 +983,9 @@
 
   function showView(view) {
     document.body.classList.toggle('gallery-on', view === 'gallery');
+    document.body.classList.toggle('about-on', view === 'about');
     document.getElementById('view-gallery').hidden = (view !== 'gallery');
+    document.getElementById('view-about').hidden = (view !== 'about');
     navLinks.forEach(function (a) { a.classList.toggle('active', a.dataset.view === view); });
     window.scrollTo(0, 0);
   }
