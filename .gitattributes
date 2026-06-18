@@ -1,0 +1,6 @@
+# Force GitHub Linguist to count app.js as JavaScript.
+# It otherwise flags the file as "generated" because of a few very long
+# single-line strings (inline SVG paths / canvas data).
+app.js linguist-generated=false
+app.js linguist-detectable=true
+*.js linguist-language=JavaScript

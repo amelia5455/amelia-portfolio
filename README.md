@@ -8,12 +8,18 @@ on and pop with your cursor — alongside a mono / terminal-style case study lay
 
 ## Stack
 
-Plain static HTML/CSS/JS. No build step, no dependencies. Everything lives in
-[`index.html`](index.html).
+Plain static HTML/CSS/JS — no build step, no dependencies, no framework. Three files:
+
+- [`index.html`](index.html) — markup and structure
+- [`styles.css`](styles.css) — all styling (theme tokens, layout, animations)
+- [`app.js`](app.js) — ~780 lines of vanilla JavaScript: the `<canvas>` bubble
+  simulation, a custom cursor follower, the Nested case-study canvas animation
+  (with `requestAnimationFrame`, `IntersectionObserver`, `ResizeObserver`), and
+  the Work / Gallery / About view switcher.
 
 ## Local preview
 
-Just open the file in a browser:
+Open the file in a browser:
 
 ```bash
 open index.html
