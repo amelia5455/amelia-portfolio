@@ -252,7 +252,7 @@
   .about-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 52px; margin-top: 56px; padding-top: 40px; border-top: 1px dotted var(--muted); }
   .about-list { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-top: 18px; }
   .about-list li { font-size: 15px; line-height: 1.55; color: var(--muted); display: flex; gap: 13px; }
-  .about-list li::before { content: '\2192'; color: var(--cursor); flex: none; }
+  .about-list li::before { content: '\2192'; color: var(--muted); flex: none; }
   .exp-list { margin-top: 18px; }
   .exp-row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 16px 0; border-top: 1px solid rgba(26,26,26,0.08); }
   .exp-row:first-child { border-top: none; padding-top: 0; }
@@ -275,11 +275,8 @@
     .about-strip { grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 38px; }
     .about-strip .about-photo:nth-child(n+5) { display: none; }
     .about-cols { grid-template-columns: 1fr; gap: 32px; }
-    /* cover rows: swipeable horizontal scroll */
-    .cover-row { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 6px;
-      scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
-    .cover-row::-webkit-scrollbar { display: none; }
-    .cover-row .about-photo { flex: 0 0 30%; scroll-snap-align: start; }
+    /* cover rows: all covers shown in a row (no scroll) */
+    .cover-row { gap: 8px; }
   }
   .status { display: flex; align-items: center; gap: 9px; font-size: 14px; color: var(--ink); }
   .status .dot { position: relative; width: 8px; height: 8px; border-radius: 50%; background: #79c07e; }
