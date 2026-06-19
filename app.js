@@ -444,7 +444,8 @@
   var ICONS = {
     try: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>',
     'case': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>',
-    progress: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>'
+    progress: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+    photo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L8 6H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-4l-1.5-2Z"/><circle cx="12" cy="13" r="3"/></svg>'
   };
   var LABELS = { try: 'View website', 'case': 'View case study', progress: 'In progress' };
   var root = document.documentElement;
@@ -452,8 +453,9 @@
     var card = e.target.closest && e.target.closest('[data-cursor]');
     if (!card || !pill) return;
     var typ = card.getAttribute('data-cursor');
-    if (!ICONS[typ]) return;
-    pill.innerHTML = ICONS[typ] + '<span>' + LABELS[typ] + '</span>';
+    var label = card.getAttribute('data-label') || LABELS[typ];
+    if (!label) return;
+    pill.innerHTML = (ICONS[typ] || '') + '<span>' + label + '</span>';
     root.classList.add('pill-on');
   });
   document.addEventListener('mouseout', function (e) {
