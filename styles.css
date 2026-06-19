@@ -39,7 +39,7 @@
   .wordmark { font-size: 22px; color: var(--ink); letter-spacing: .01em; }
   .role { font-size: 15px; color: var(--muted); letter-spacing: .01em; }
   .bio { font-size: 15px; line-height: 1.8; color: var(--muted); max-width: 46ch; margin-top: 26px; }
-  .bio em { font-style: normal; color: var(--ink); border-bottom: 1px dotted var(--muted); padding-bottom: 1px; }
+  .bio em { font-style: normal; color: var(--ink); border-bottom: 1px solid var(--muted); padding-bottom: 1px; }
   /* glimm-style prism band — flashes once on hover, text stays ink otherwise */
   .bio em.glimm:hover {
     background-image: linear-gradient(90deg,
@@ -90,7 +90,7 @@
   .side-nav a:hover { opacity: .55; }
   .side-nav a.active { color: var(--ink); }
 
-  .divider { border: none; border-top: 1px dotted var(--muted); opacity: .45; margin: 0; width: 100%; }
+  .divider { border: none; border-top: 1px solid var(--muted); opacity: .45; margin: 0; width: 100%; }
   .side-bottom { display: flex; flex-direction: column; gap: 16px; padding-top: 10px; margin-top: auto; }
   #toggle {
     background: none; border: none; cursor: pointer; padding: 0;
@@ -152,7 +152,7 @@
     .mobile-bar {
       display: flex; align-items: center; gap: 14px;
       position: sticky; top: 0; z-index: 65;
-      padding: 15px 20px; background: var(--bg); border-bottom: 1px dotted var(--muted);
+      padding: 15px 20px; background: var(--bg); border-bottom: 1px solid var(--muted);
     }
     .mobile-wordmark { font-size: 15px; color: var(--ink); letter-spacing: .01em; }
     .menu-btn { background: none; border: none; padding: 0; cursor: pointer; color: var(--ink); display: flex; }
@@ -249,7 +249,7 @@
   .about-intro p { font-size: 15px; line-height: 1.85; color: var(--muted); margin-bottom: 18px; }
   .about-intro em { font-style: normal; color: var(--ink); }
 
-  .about-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 52px; margin-top: 56px; padding-top: 40px; border-top: 1px dotted var(--muted); }
+  .about-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 52px; margin-top: 56px; padding-top: 40px; border-top: 1px solid var(--muted); }
   .about-list { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-top: 18px; }
   .about-list li { font-size: 15px; line-height: 1.55; color: var(--muted); display: flex; gap: 13px; }
   .about-list li::before { content: '\2192'; color: var(--muted); flex: none; }
@@ -261,7 +261,7 @@
   .exp-date { font-size: 12px; letter-spacing: .08em; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
 
   /* favorite things — cover grids (books / movies / songs) */
-  .about-faves-rich { margin-top: 56px; padding-top: 40px; border-top: 1px dotted var(--muted); }
+  .about-faves-rich { margin-top: 56px; padding-top: 40px; border-top: 1px solid var(--muted); }
   .faves-head { margin-bottom: 6px; }
   .fave-group { margin-top: 34px; }
   .cover-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-top: 16px; }
