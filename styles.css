@@ -240,7 +240,7 @@
   .about-photo > span { position: relative; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: #8a83a8; opacity: .85; padding: 9px 11px; }
 
   /* top photo strip */
-  .about-strip { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-bottom: 48px; }
+  .about-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 48px; }
   .about-strip .about-photo { aspect-ratio: 4 / 5; }
 
   .about-title { font-size: clamp(30px, 4vw, 50px); font-weight: 500; color: var(--ink); letter-spacing: -0.02em; line-height: 1.04; margin: 0 0 30px; }
@@ -271,9 +271,8 @@
 
   @media (max-width: 720px) {
     body.about-on main { padding-top: 4vh; }
-    /* photos: 2-column grid — show a clean 2x2 (hide the 5th on mobile) */
+    /* photos: clean 2x2 grid */
     .about-strip { grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 38px; }
-    .about-strip .about-photo:nth-child(n+5) { display: none; }
     .about-cols { grid-template-columns: 1fr; gap: 32px; }
     /* cover rows: all covers shown in a row (no scroll) */
     .cover-row { gap: 8px; }
