@@ -491,16 +491,26 @@
     document.getElementById('view-gallery').hidden = (view !== 'gallery');
     document.getElementById('view-about').hidden = (view !== 'about');
     navLinks.forEach(function (a) { a.classList.toggle('active', a.dataset.view === view); });
+    try { localStorage.setItem('view', view); } catch (e) {}
   }
 
-  function viewFromHash() {
+  function valid(v) { return v === 'work' || v === 'gallery' || v === 'about'; }
+  function hashView() {
     var h = (location.hash || '').replace(/^#/, '');
-    return (h === 'gallery' || h === 'about') ? h : 'work';
+    return valid(h) ? h : null;
+  }
+  function storedView() {
+    try { var s = localStorage.getItem('view'); return valid(s) ? s : null; } catch (e) { return null; }
   }
 
-  // the URL hash drives the view, so a refresh keeps you on the same page
-  window.addEventListener('hashchange', function () { showView(viewFromHash()); window.scrollTo(0, 0); });
-  showView(viewFromHash());
+  // hash drives the view; falls back to the last view if the URL has no hash
+  window.addEventListener('hashchange', function () { showView(hashView() || 'work'); window.scrollTo(0, 0); });
+
+  var initial = hashView() || storedView() || 'work';
+  if (initial !== 'work' && !hashView()) {        // reflect a remembered view in the URL so refreshes stay consistent
+    try { history.replaceState(null, '', '#' + initial); } catch (e) {}
+  }
+  showView(initial);
 })();
 
 /* ---- block 3 ---- */
