@@ -485,13 +485,14 @@
   var navLinks = document.querySelectorAll('.side-nav a[data-view]');
   if (!navLinks.length) return;
 
-  function showView(view) {
+  function showView(view, opts) {
     document.body.classList.toggle('gallery-on', view === 'gallery');
     document.body.classList.toggle('about-on', view === 'about');
     document.getElementById('view-gallery').hidden = (view !== 'gallery');
     document.getElementById('view-about').hidden = (view !== 'about');
     navLinks.forEach(function (a) { a.classList.toggle('active', a.dataset.view === view); });
-    window.scrollTo(0, 0);
+    try { localStorage.setItem('view', view); } catch (e) {}
+    if (!opts || !opts.restore) window.scrollTo(0, 0);
   }
 
   navLinks.forEach(function (a) {
@@ -500,6 +501,12 @@
       showView(a.dataset.view);
     });
   });
+
+  // keep the current view across reloads
+  try {
+    var saved = localStorage.getItem('view');
+    if (saved === 'gallery' || saved === 'about') showView(saved, { restore: true });
+  } catch (e) {}
 })();
 
 /* ---- block 3 ---- */
