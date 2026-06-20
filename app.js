@@ -486,10 +486,7 @@
   if (!navLinks.length) return;
 
   function showView(view) {
-    document.body.classList.toggle('gallery-on', view === 'gallery');
-    document.body.classList.toggle('about-on', view === 'about');
-    document.getElementById('view-gallery').hidden = (view !== 'gallery');
-    document.getElementById('view-about').hidden = (view !== 'about');
+    document.documentElement.setAttribute('data-view', view);
     navLinks.forEach(function (a) { a.classList.toggle('active', a.dataset.view === view); });
     try { localStorage.setItem('view', view); } catch (e) {}
   }

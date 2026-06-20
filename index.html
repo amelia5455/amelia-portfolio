@@ -10,7 +10,16 @@
 <link href="https://fonts.googleapis.com/css2?family=Sometype+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <!-- Nested case-study animation faces -->
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=2">
+<link rel="stylesheet" href="styles.css?v=3">
+<script>
+  /* set the view before first paint so a refresh doesn't flash the Work page */
+  (function () {
+    function ok(v) { return v === 'work' || v === 'gallery' || v === 'about'; }
+    var h = (location.hash || '').replace(/^#/, ''), v = ok(h) ? h : null;
+    if (!v) { try { var s = localStorage.getItem('view'); if (ok(s)) v = s; } catch (e) {} }
+    document.documentElement.setAttribute('data-view', v || 'work');
+  })();
+</script>
 
 </head>
 <body>
@@ -109,13 +118,13 @@
     </div>
     </div><!-- /#view-work -->
 
-    <div id="view-gallery" hidden>
+    <div id="view-gallery">
       <span class="cs-eyebrow">Coming Soon</span>
       <h1 class="cs-title">amelia is still working on this.</h1>
       <p class="cs-sub">be sure to check back soon :)</p>
     </div>
 
-    <div id="view-about" hidden>
+    <div id="view-about">
       <!-- Top photo strip -->
       <div class="about-strip">
         <div class="about-photo" data-cursor="photo" data-label="Me!"><img src="images/p1.jpg?v=4" alt="Amelia at her university graduation"></div>
@@ -187,6 +196,6 @@
 <!-- ===== Index view switcher (Work / Gallery) ===== -->
 
 <!-- ===== Nested case-study animation (vanilla port of the Claude Design handoff) ===== -->
-<script src="app.js?v=4"></script>
+<script src="app.js?v=5"></script>
 </body>
 </html>
