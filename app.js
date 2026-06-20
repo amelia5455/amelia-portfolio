@@ -485,28 +485,22 @@
   var navLinks = document.querySelectorAll('.side-nav a[data-view]');
   if (!navLinks.length) return;
 
-  function showView(view, opts) {
+  function showView(view) {
     document.body.classList.toggle('gallery-on', view === 'gallery');
     document.body.classList.toggle('about-on', view === 'about');
     document.getElementById('view-gallery').hidden = (view !== 'gallery');
     document.getElementById('view-about').hidden = (view !== 'about');
     navLinks.forEach(function (a) { a.classList.toggle('active', a.dataset.view === view); });
-    try { localStorage.setItem('view', view); } catch (e) {}
-    if (!opts || !opts.restore) window.scrollTo(0, 0);
   }
 
-  navLinks.forEach(function (a) {
-    a.addEventListener('click', function (e) {
-      e.preventDefault();
-      showView(a.dataset.view);
-    });
-  });
+  function viewFromHash() {
+    var h = (location.hash || '').replace(/^#/, '');
+    return (h === 'gallery' || h === 'about') ? h : 'work';
+  }
 
-  // keep the current view across reloads
-  try {
-    var saved = localStorage.getItem('view');
-    if (saved === 'gallery' || saved === 'about') showView(saved, { restore: true });
-  } catch (e) {}
+  // the URL hash drives the view, so a refresh keeps you on the same page
+  window.addEventListener('hashchange', function () { showView(viewFromHash()); window.scrollTo(0, 0); });
+  showView(viewFromHash());
 })();
 
 /* ---- block 3 ---- */
