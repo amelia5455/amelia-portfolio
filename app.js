@@ -802,18 +802,24 @@
   });
 })();
 
-/* ---- now-playing pill: toggle the Spotify player popover ---- */
+/* ---- now-playing pill: play / pause the track ---- */
 (function () {
   var pill = document.getElementById('np-toggle');
-  var panel = document.getElementById('np-panel');
-  if (!pill || !panel) return;
-  function set(open) {
-    panel.hidden = !open;
-    pill.setAttribute('aria-expanded', String(open));
-  }
-  pill.addEventListener('click', function (e) { e.stopPropagation(); set(panel.hidden); });
-  document.addEventListener('click', function (e) {
-    if (!panel.hidden && !pill.contains(e.target) && !panel.contains(e.target)) set(false);
+  var audio = document.getElementById('np-audio');
+  if (!pill || !audio) return;
+  var status = pill.querySelector('.np-status');
+  pill.addEventListener('click', function () {
+    if (audio.paused) { audio.play().catch(function () {}); }
+    else { audio.pause(); }
   });
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') set(false); });
+  audio.addEventListener('play', function () {
+    pill.classList.add('playing');
+    pill.setAttribute('aria-pressed', 'true');
+    if (status) status.textContent = 'Playing';
+  });
+  audio.addEventListener('pause', function () {
+    pill.classList.remove('playing');
+    pill.setAttribute('aria-pressed', 'false');
+    if (status) status.textContent = 'Paused';
+  });
 })();
