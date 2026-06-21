@@ -809,13 +809,16 @@
   if (!pill || !embed) return;
 
   var PLAYLIST = 'spotify:playlist:6nlzJtxnF856m9hhzwh3v4';
+  var panel = document.getElementById('np-panel');
   var nowEl = pill.querySelector('.np-now');
   var controller = null;
+  var pendingPlay = false;
   var currentURI = null;
   var currentName = null;
   var isPlaying = false;
   var nameCache = {};
 
+  function showPanel(open) { if (panel) panel.hidden = !open; }
   function render() {
     if (nowEl) nowEl.textContent = isPlaying ? (currentName || 'Playing') : 'Paused';
   }
@@ -845,17 +848,25 @@
 
   /* The Spotify iFrame API calls this once its script has loaded. */
   window.onSpotifyIframeApiReady = function (IFrameAPI) {
-    IFrameAPI.createController(embed, { uri: PLAYLIST, width: '100%', height: 352 }, function (EmbedController) {
+    IFrameAPI.createController(embed, { uri: PLAYLIST, width: '100%', height: 152 }, function (EmbedController) {
       controller = EmbedController;
       controller.addListener('playback_update', function (e) {
         if (!e || !e.data) return;
         if (e.data.playingURI) showTrack(e.data.playingURI);
         reflect(!e.data.isPaused);
       });
+      if (pendingPlay) { pendingPlay = false; controller.togglePlay(); }
     });
   };
 
-  pill.addEventListener('click', function () {
-    if (controller) controller.togglePlay();
+  pill.addEventListener('click', function (e) {
+    e.stopPropagation();
+    showPanel(true);                              // reveal the player so audio actually starts
+    if (controller) controller.togglePlay();      // play / pause
+    else pendingPlay = true;                       // controller still loading — play once ready
   });
+  document.addEventListener('click', function (e) {
+    if (panel && !panel.hidden && !pill.contains(e.target) && !panel.contains(e.target)) showPanel(false);
+  });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') showPanel(false); });
 })();

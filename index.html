@@ -10,7 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Sometype+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <!-- Nested case-study animation faces -->
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=20">
+<link rel="stylesheet" href="styles.css?v=21">
 <script>
   /* set the view before first paint so a refresh doesn't flash the Work page */
   (function () {
@@ -32,7 +32,7 @@
   <div class="topmeta">
     <div class="player">
       <!-- to change the playlist, swap the embed id below: open.spotify.com/embed/playlist/<id> -->
-      <div class="np-panel" id="np-panel" aria-hidden="true">
+      <div class="np-panel" id="np-panel" hidden>
         <div id="np-embed"></div>
       </div>
       <button class="np-pill" id="np-toggle" aria-pressed="false" aria-label="Play or pause music">
@@ -213,7 +213,7 @@
 <!-- ===== Index view switcher (Work / Gallery) ===== -->
 
 <!-- ===== Nested case-study animation (vanilla port of the Claude Design handoff) ===== -->
-<script src="app.js?v=20"></script>
+<script src="app.js?v=21"></script>
 <!-- Spotify iFrame API: lets the now-playing pill start playback on click -->
 <script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
 </body>
