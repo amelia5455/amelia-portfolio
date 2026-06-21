@@ -130,27 +130,34 @@
     main > div { animation: rise .75s cubic-bezier(.2, .7, .2, 1) both; animation-delay: .22s; }
   }
 
-  /* ---- now-playing pill: play / pause the Spotify playlist ---- */
+  /* ---- now-playing pill: circle = play/pause, body = open player ---- */
   .player { position: relative; margin-bottom: 0; }
-  .np-pill { display: inline-flex; align-items: center; gap: 7px; max-width: 100%; text-align: left;
-    font: inherit; color: var(--ink); cursor: pointer;
+  .np-pill { display: inline-flex; align-items: center; gap: 6px; max-width: 100%;
     background: rgba(255,255,255,.45); border: 1px solid rgba(30,40,60,.14); border-radius: 999px;
-    padding: 2px 11px 2px 2px; transition: border-color .2s ease, background .2s ease; }
+    padding: 2px 4px 2px 2px; transition: border-color .2s ease, background .2s ease; }
   .np-pill:hover { border-color: rgba(30,40,60,.30); background: rgba(255,255,255,.7); }
-  .np-disc { width: 18px; height: 18px; border-radius: 50%; flex: none; display: grid; place-items: center;
-    background: #efece4; border: 1px solid rgba(30,40,60,.12); }
-  .np-disc > span { width: 7px; height: 7px; border-radius: 50%; background: #d85a30;
-    transition: transform .25s ease; }
-  .np-pill.playing .np-disc > span { animation: np-pulse 1.5s ease-in-out infinite; }
-  @keyframes np-pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(.55); opacity: .55; } }
+  /* circle play/pause button */
+  .np-play { width: 19px; height: 19px; border-radius: 50%; flex: none; padding: 0; cursor: pointer;
+    display: grid; place-items: center; background: #efece4; border: 1px solid rgba(30,40,60,.12);
+    transition: background .15s ease; }
+  .np-play:hover { background: #e6e1d6; }
+  .np-play svg { width: 9px; height: 9px; fill: #d85a30; grid-area: 1 / 1; }
+  .np-play .ic-pause { display: none; }
+  .np-pill.playing .np-play .ic-play { display: none; }
+  .np-pill.playing .np-play .ic-pause { display: block; }
+  /* label + caret button opens the dropdown */
+  .np-open { display: inline-flex; align-items: center; gap: 5px; min-width: 0; padding: 2px 6px 2px 2px;
+    background: none; border: none; font: inherit; color: var(--ink); cursor: pointer; text-align: left; }
   .np-now { font-size: 11px; color: var(--ink); white-space: nowrap; overflow: hidden;
     text-overflow: ellipsis; min-width: 0; max-width: 170px; }
   .np-pill:not(.playing) .np-now { font-size: 9.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
-  /* compact Spotify player drops down while playing (audio needs it visible) */
-  .np-panel { position: absolute; right: 0; top: calc(100% + 9px); width: 380px; max-width: 86vw; z-index: 80;
+  .np-caret { width: 11px; height: 11px; flex: none; color: var(--muted); transition: transform .22s ease; }
+  .np-open[aria-expanded="true"] .np-caret { transform: rotate(180deg); }
+  /* dropdown: rendered off-screen when closed (so the circle can start audio), on-screen when open */
+  .np-panel { position: absolute; z-index: 80; width: 380px; max-width: 86vw;
     background: var(--bg); border: 1px solid rgba(30,40,60,.14); border-radius: 14px; padding: 6px;
-    box-shadow: 0 16px 44px rgba(20,30,50,.20); }
-  .np-panel[hidden] { display: none; }
+    box-shadow: 0 16px 44px rgba(20,30,50,.20); right: 0; top: calc(100% + 9px); }
+  .np-panel:not(.open) { left: -10000px; right: auto; top: 0; box-shadow: none; pointer-events: none; }
   .np-panel iframe { display: block; width: 100%; height: 152px; border: 0; border-radius: 10px; }
 
   /* ---- Main: intentionally open space to pop bubbles ---- */

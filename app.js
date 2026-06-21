@@ -802,15 +802,17 @@
   });
 })();
 
-/* ---- now-playing pill: play / pause + show the current song name ---- */
+/* ---- now-playing pill: circle = play/pause, body = open the player ---- */
 (function () {
-  var pill = document.getElementById('np-toggle');
+  var pillBox = document.querySelector('.np-pill');
+  var playBtn = document.getElementById('np-play');
+  var openBtn = document.getElementById('np-toggle');
+  var panel = document.getElementById('np-panel');
   var embed = document.getElementById('np-embed');
-  if (!pill || !embed) return;
+  if (!pillBox || !playBtn || !openBtn || !panel || !embed) return;
 
   var PLAYLIST = 'spotify:playlist:6nlzJtxnF856m9hhzwh3v4';
-  var panel = document.getElementById('np-panel');
-  var nowEl = pill.querySelector('.np-now');
+  var nowEl = openBtn.querySelector('.np-now');
   var controller = null;
   var pendingPlay = false;
   var currentURI = null;
@@ -818,14 +820,17 @@
   var isPlaying = false;
   var nameCache = {};
 
-  function showPanel(open) { if (panel) panel.hidden = !open; }
+  function showPanel(open) {
+    panel.classList.toggle('open', open);
+    openBtn.setAttribute('aria-expanded', String(open));
+  }
   function render() {
     if (nowEl) nowEl.textContent = isPlaying ? (currentName || 'Playing') : 'Paused';
   }
   function reflect(playing) {
     isPlaying = playing;
-    pill.classList.toggle('playing', playing);
-    pill.setAttribute('aria-pressed', String(playing));
+    pillBox.classList.toggle('playing', playing);
+    playBtn.setAttribute('aria-pressed', String(playing));
     render();
   }
 
@@ -859,14 +864,20 @@
     });
   };
 
-  pill.addEventListener('click', function (e) {
+  /* circle: play / pause only — never opens the dropdown */
+  playBtn.addEventListener('click', function (e) {
     e.stopPropagation();
-    showPanel(true);                              // reveal the player so audio actually starts
-    if (controller) controller.togglePlay();      // play / pause
-    else pendingPlay = true;                       // controller still loading — play once ready
+    if (controller) controller.togglePlay();
+    else pendingPlay = true;                        // controller still loading — play once ready
+  });
+
+  /* rest of the pill: open / close the Spotify dropdown */
+  openBtn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    showPanel(!panel.classList.contains('open'));
   });
   document.addEventListener('click', function (e) {
-    if (panel && !panel.hidden && !pill.contains(e.target) && !panel.contains(e.target)) showPanel(false);
+    if (panel.classList.contains('open') && !pillBox.contains(e.target) && !panel.contains(e.target)) showPanel(false);
   });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') showPanel(false); });
 })();
