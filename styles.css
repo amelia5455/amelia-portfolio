@@ -103,7 +103,12 @@
   body:not(.bubbles) .ico-off { display: flex; }
   body.bubbles .ico-bubble { display: flex; }
   .side-meta { font-size: 12px; color: var(--muted); line-height: 1.4; text-transform: uppercase; letter-spacing: .08em; margin-top: 18px; }
-  .side-meta .heart { color: #f2789f; }   /* filled pink heart */
+  .heart-btn { background: none; border: none; padding: 0; margin: 0; cursor: pointer;
+    display: inline-flex; align-items: center; vertical-align: -3px; line-height: 0; }
+  .heart-btn svg { width: 15px; height: 15px; display: block; transition: transform .6s cubic-bezier(.34, 1.4, .5, 1); }
+  .heart-btn svg path { fill: none; stroke: var(--muted); stroke-width: 1.8; stroke-linejoin: round;
+    transition: fill .25s ease, stroke .25s ease; }
+  .heart-btn.on svg path { fill: #d85a30; stroke: #d85a30; }   /* orange filled when toggled on */
   .side-count { font-size: 11px; color: var(--muted); opacity: .7; text-transform: uppercase; letter-spacing: .1em; margin-top: -10px; }
   .side-count #visitcount { font-variant-numeric: tabular-nums; }
 

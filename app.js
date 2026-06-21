@@ -786,3 +786,18 @@
     play();
   }
 })();
+
+/* ---- footer heart toggle (spin + fill on click) ---- */
+(function () {
+  var btn = document.getElementById('heart-toggle');
+  if (!btn) return;
+  var svg = btn.querySelector('svg');
+  var rot = 0, on = false;
+  btn.addEventListener('click', function () {
+    on = !on;
+    rot += 360;
+    btn.classList.toggle('on', on);
+    btn.setAttribute('aria-pressed', String(on));
+    if (svg) svg.style.transform = 'rotate(' + rot + 'deg)';
+  });
+})();
