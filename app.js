@@ -103,15 +103,15 @@
     // soft refraction edge: a faint cool darkening that fades in AND out (no line)
     let g2 = b.createRadialGradient(0,0, r*0.7, 0,0, r);
     g2.addColorStop(0,    'rgba(95,115,150,0)');
-    g2.addColorStop(0.90, 'rgba(95,115,150,0.10)');
+    g2.addColorStop(0.90, 'rgba(95,115,150,0.20)');
     g2.addColorStop(1,    'rgba(95,115,150,0)');
     b.fillStyle = g2; disc(b);
     // soft luminous rim: brightness peaks just inside the edge, feathers both ways
     let g3 = b.createRadialGradient(0,0, r*0.55, 0,0, r);
     g3.addColorStop(0,    'rgba(255,255,255,0)');
-    g3.addColorStop(0.80, 'rgba(255,255,255,0.05)');
-    g3.addColorStop(0.93, 'rgba(255,255,255,0.24)');
-    g3.addColorStop(0.99, 'rgba(255,255,255,0.06)');
+    g3.addColorStop(0.80, 'rgba(255,255,255,0.06)');
+    g3.addColorStop(0.93, 'rgba(255,255,255,0.45)');
+    g3.addColorStop(0.99, 'rgba(255,255,255,0.14)');
     g3.addColorStop(1,    'rgba(255,255,255,0)');
     b.fillStyle = g3; disc(b);
 
