@@ -809,31 +809,36 @@
   if (!pill || !embed) return;
 
   var PLAYLIST = 'spotify:playlist:6nlzJtxnF856m9hhzwh3v4';
-  var statusEl = pill.querySelector('.np-status');
-  var nameEl = pill.querySelector('.np-name');
+  var nowEl = pill.querySelector('.np-now');
   var controller = null;
   var currentURI = null;
+  var currentName = null;
+  var isPlaying = false;
   var nameCache = {};
 
+  function render() {
+    if (nowEl) nowEl.textContent = isPlaying ? (currentName || 'Playing') : 'Paused';
+  }
   function reflect(playing) {
+    isPlaying = playing;
     pill.classList.toggle('playing', playing);
     pill.setAttribute('aria-pressed', String(playing));
-    if (statusEl) statusEl.textContent = playing ? 'Playing' : 'Paused';
+    render();
   }
 
   /* Spotify only hands us the track's URI, so look up its name via oEmbed. */
   function showTrack(uri) {
-    if (!uri || uri === currentURI || !nameEl) return;
+    if (!uri || uri === currentURI) return;
     currentURI = uri;
     var id = uri.split(':').pop();
-    if (nameCache[id]) { nameEl.textContent = nameCache[id]; return; }
+    if (nameCache[id]) { currentName = nameCache[id]; render(); return; }
     fetch('https://open.spotify.com/oembed?url=https://open.spotify.com/track/' + id)
       .then(function (r) { return r.json(); })
       .then(function (d) {
         if (!d || !d.title) return;
         var name = d.title.replace(/\s*-\s*(Remastered|Remaster|.*Version|.*Edit|.*Mix).*$/i, '').trim() || d.title;
         nameCache[id] = name;
-        if (currentURI === uri) nameEl.textContent = name;
+        if (currentURI === uri) { currentName = name; render(); }
       })
       .catch(function () {});
   }
@@ -844,8 +849,8 @@
       controller = EmbedController;
       controller.addListener('playback_update', function (e) {
         if (!e || !e.data) return;
-        reflect(!e.data.isPaused);
         if (e.data.playingURI) showTrack(e.data.playingURI);
+        reflect(!e.data.isPaused);
       });
     });
   };
