@@ -103,6 +103,9 @@
   body:not(.bubbles) .ico-off { display: flex; }
   body.bubbles .ico-bubble { display: flex; }
   .side-meta { font-size: 12px; color: var(--muted); line-height: 1.4; text-transform: uppercase; letter-spacing: .08em; margin-top: 0; }
+  .side-bottom .metabits { display: flex; align-items: center; gap: 8px; font-size: 12px;
+    color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+  .side-bottom #clock { color: var(--ink); font-variant-numeric: tabular-nums; }
   .heart-btn { background: none; border: none; padding: 0; margin: 0; cursor: pointer;
     display: inline-flex; align-items: center; vertical-align: -3px; line-height: 0; }
   .heart-btn svg { width: 15px; height: 15px; display: block; transform-origin: 50% 50%;
@@ -147,7 +150,7 @@
   .np-caret { width: 11px; height: 11px; margin-left: 1px; flex: none; color: var(--muted);
     transition: transform .25s ease; }
   .np-pill[aria-expanded="true"] .np-caret { transform: rotate(180deg); }
-  .np-panel { position: absolute; left: 0; bottom: calc(100% + 9px); width: 300px; max-width: 80vw; z-index: 80;
+  .np-panel { position: absolute; right: 0; top: calc(100% + 9px); width: 300px; max-width: 80vw; z-index: 80;
     background: var(--bg); border: 1px solid rgba(30,40,60,.14); border-radius: 16px; padding: 8px;
     box-shadow: 0 16px 44px rgba(20,30,50,.20); }
   .np-panel[hidden] { display: none; }
@@ -351,6 +354,7 @@
     .topline { display: none; }
     .topmeta { left: auto; right: 0; height: 52px; padding: 0 16px; z-index: 71; }
     .topmeta .metabits { display: none; }
+    .topmeta .player { display: none; }
     .topmeta .meta-sep { display: none; }
     .sidebar { border-right: none; }
     .worktop { max-width: none; margin-bottom: 40px; }
