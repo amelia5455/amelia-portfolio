@@ -165,9 +165,9 @@
   .besties-media::after { opacity: .22; }            /* calmer grain under the phone */
   .besties-media > .besties-vid {
     position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    width: auto; height: 96%; z-index: 1;   /* float above the grain */
-    /* crop the recording's white margins so only the phone shows on the gradient */
-    clip-path: inset(1.5% 10% 7% 10.5% round 22px);
+    width: auto; height: 94%; z-index: 1;   /* float above the grain */
+    /* video is pre-cropped to the device; round the phone's own corners */
+    border-radius: 13% / 6.2%;
     filter: drop-shadow(0 16px 36px rgba(60,70,110,.20));
   }
   .case-title {
