@@ -801,3 +801,19 @@
     if (svg) svg.style.transform = 'rotate(' + rot + 'deg)';
   });
 })();
+
+/* ---- now-playing pill: toggle the Spotify player popover ---- */
+(function () {
+  var pill = document.getElementById('np-toggle');
+  var panel = document.getElementById('np-panel');
+  if (!pill || !panel) return;
+  function set(open) {
+    panel.hidden = !open;
+    pill.setAttribute('aria-expanded', String(open));
+  }
+  pill.addEventListener('click', function (e) { e.stopPropagation(); set(panel.hidden); });
+  document.addEventListener('click', function (e) {
+    if (!panel.hidden && !pill.contains(e.target) && !panel.contains(e.target)) set(false);
+  });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') set(false); });
+})();
