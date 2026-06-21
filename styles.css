@@ -129,20 +129,20 @@
 
   /* ---- now-playing pill: compact play / pause mini-player ---- */
   .player { margin-bottom: 14px; }
-  .np-pill { display: inline-flex; align-items: center; gap: 6px; max-width: 100%; text-align: left;
+  .np-pill { display: inline-flex; align-items: center; gap: 5px; max-width: 100%; text-align: left;
     font: inherit; color: var(--ink); cursor: pointer;
     background: rgba(255,255,255,.45); border: 1px solid rgba(30,40,60,.14); border-radius: 999px;
-    padding: 3px 10px 3px 3px; transition: border-color .2s ease, background .2s ease; }
+    padding: 2px 9px 2px 2px; transition: border-color .2s ease, background .2s ease; }
   .np-pill:hover { border-color: rgba(30,40,60,.30); background: rgba(255,255,255,.7); }
-  .np-disc { width: 21px; height: 21px; border-radius: 50%; flex: none; display: grid; place-items: center;
+  .np-disc { width: 18px; height: 18px; border-radius: 50%; flex: none; display: grid; place-items: center;
     background: #efece4; border: 1px solid rgba(30,40,60,.12); }
-  .np-disc > span { width: 8px; height: 8px; border-radius: 50%; background: #d85a30;
+  .np-disc > span { width: 7px; height: 7px; border-radius: 50%; background: #d85a30;
     transition: transform .25s ease; }
   .np-pill.playing .np-disc > span { animation: np-pulse 1.5s ease-in-out infinite; }
   @keyframes np-pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(.55); opacity: .55; } }
-  .np-status { font-size: 9.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); flex: none; }
-  .np-div { width: 1px; height: 12px; flex: none; background: rgba(30,40,60,.18); }
-  .np-track { font-size: 11px; color: var(--ink); white-space: nowrap; overflow: hidden;
+  .np-status { font-size: 9px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); flex: none; }
+  .np-div { width: 1px; height: 10px; flex: none; background: rgba(30,40,60,.18); }
+  .np-track { font-size: 10.5px; color: var(--ink); white-space: nowrap; overflow: hidden;
     text-overflow: ellipsis; min-width: 0; }
   .np-by { color: var(--muted); }
 
