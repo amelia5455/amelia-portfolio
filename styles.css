@@ -147,7 +147,7 @@
     text-overflow: ellipsis; min-width: 0; max-width: 170px; }
   .np-pill:not(.playing) .np-now { font-size: 9.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
   /* compact Spotify player drops down while playing (audio needs it visible) */
-  .np-panel { position: absolute; right: 0; top: calc(100% + 9px); width: 300px; max-width: 80vw; z-index: 80;
+  .np-panel { position: absolute; right: 0; top: calc(100% + 9px); width: 380px; max-width: 86vw; z-index: 80;
     background: var(--bg); border: 1px solid rgba(30,40,60,.14); border-radius: 14px; padding: 6px;
     box-shadow: 0 16px 44px rgba(20,30,50,.20); }
   .np-panel[hidden] { display: none; }
