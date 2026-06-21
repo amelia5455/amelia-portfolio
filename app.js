@@ -802,18 +802,35 @@
   });
 })();
 
-/* ---- now-playing pill: toggle the Spotify playlist popover ---- */
+/* ---- now-playing pill: opens + plays the Spotify playlist on click ---- */
 (function () {
   var pill = document.getElementById('np-toggle');
   var panel = document.getElementById('np-panel');
-  if (!pill || !panel) return;
-  function set(open) {
-    panel.hidden = !open;
-    pill.setAttribute('aria-expanded', String(open));
-  }
-  pill.addEventListener('click', function (e) { e.stopPropagation(); set(panel.hidden); });
-  document.addEventListener('click', function (e) {
-    if (!panel.hidden && !pill.contains(e.target) && !panel.contains(e.target)) set(false);
+  var embed = document.getElementById('np-embed');
+  if (!pill || !panel || !embed) return;
+
+  var PLAYLIST = 'spotify:playlist:6nlzJtxnF856m9hhzwh3v4';
+  var controller = null;
+
+  function open(o) { panel.hidden = !o; pill.setAttribute('aria-expanded', String(o)); }
+
+  /* The Spotify iFrame API calls this once its script has loaded. */
+  window.onSpotifyIframeApiReady = function (IFrameAPI) {
+    IFrameAPI.createController(embed, { uri: PLAYLIST, width: '100%', height: 352 }, function (EmbedController) {
+      controller = EmbedController;
+      controller.addListener('playback_update', function (e) {
+        if (e && e.data) pill.classList.toggle('playing', !e.data.isPaused);
+      });
+    });
+  };
+
+  pill.addEventListener('click', function (e) {
+    e.stopPropagation();
+    open(true);                          // show the player
+    if (controller) controller.togglePlay();   // play (or pause if already playing)
   });
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') set(false); });
+  document.addEventListener('click', function (e) {
+    if (!panel.hidden && !pill.contains(e.target) && !panel.contains(e.target)) open(false);
+  });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') open(false); });
 })();
