@@ -798,7 +798,7 @@
     rot += 360;
     btn.classList.toggle('on', on);
     btn.setAttribute('aria-pressed', String(on));
-    if (svg) svg.style.transform = 'rotate(' + rot + 'deg)';
+    if (svg) svg.style.transform = 'perspective(220px) rotateY(' + rot + 'deg)';
   });
 })();
 

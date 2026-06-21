@@ -105,10 +105,27 @@
   .side-meta { font-size: 12px; color: var(--muted); line-height: 1.4; text-transform: uppercase; letter-spacing: .08em; margin-top: 18px; }
   .heart-btn { background: none; border: none; padding: 0; margin: 0; cursor: pointer;
     display: inline-flex; align-items: center; vertical-align: -3px; line-height: 0; }
-  .heart-btn svg { width: 15px; height: 15px; display: block; transition: transform .6s cubic-bezier(.34, 1.4, .5, 1); }
+  .heart-btn svg { width: 15px; height: 15px; display: block; transform-origin: 50% 50%;
+    transition: transform .8s cubic-bezier(.22, .61, .36, 1); }
   .heart-btn svg path { fill: none; stroke: var(--muted); stroke-width: 1.8; stroke-linejoin: round;
     transition: fill .25s ease, stroke .25s ease; }
   .heart-btn.on svg path { fill: #d85a30; stroke: #d85a30; }   /* orange filled when toggled on */
+
+  /* ---- page-load entrance: staggered fade-up ---- */
+  @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: no-preference) {
+    .topmeta { animation: rise .7s cubic-bezier(.2, .7, .2, 1) both; animation-delay: .05s; }
+    .sidebar > * { animation: rise .7s cubic-bezier(.2, .7, .2, 1) both; }
+    .sidebar > *:nth-child(2) { animation-delay: .10s; }
+    .sidebar > *:nth-child(3) { animation-delay: .16s; }
+    .sidebar > *:nth-child(4) { animation-delay: .22s; }
+    .sidebar > *:nth-child(5) { animation-delay: .28s; }
+    .sidebar > *:nth-child(6) { animation-delay: .34s; }
+    .sidebar > *:nth-child(7) { animation-delay: .40s; }
+    .sidebar > *:nth-child(8) { animation-delay: .46s; }
+    .sidebar > *:nth-child(9) { animation-delay: .52s; }
+    main > div { animation: rise .75s cubic-bezier(.2, .7, .2, 1) both; animation-delay: .22s; }
+  }
 
   /* ---- now-playing pill -> Spotify player popover ---- */
   .player { position: relative; margin-bottom: 14px; }
