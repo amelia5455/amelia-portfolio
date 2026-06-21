@@ -165,8 +165,10 @@
   .besties-media::after { opacity: .22; }            /* calmer grain under the phone */
   .besties-media > .besties-vid {
     position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    width: auto; height: 90%; object-fit: contain; z-index: 1;   /* float above the grain */
-    mix-blend-mode: darken;   /* drop the white video background into the gradient */
+    width: auto; height: 96%; z-index: 1;   /* float above the grain */
+    /* crop the recording's white margins so only the phone shows on the gradient */
+    clip-path: inset(1.5% 10% 7% 10.5% round 22px);
+    filter: drop-shadow(0 16px 36px rgba(60,70,110,.20));
   }
   .case-title {
     margin-top: 22px; font-size: 20px; letter-spacing: .03em; text-transform: uppercase; color: var(--ink);
