@@ -802,7 +802,7 @@
   });
 })();
 
-/* ---- now-playing pill: play / pause the Spotify playlist ---- */
+/* ---- now-playing pill: play / pause + show the current song name ---- */
 (function () {
   var pill = document.getElementById('np-toggle');
   var embed = document.getElementById('np-embed');
@@ -810,7 +810,10 @@
 
   var PLAYLIST = 'spotify:playlist:6nlzJtxnF856m9hhzwh3v4';
   var statusEl = pill.querySelector('.np-status');
+  var nameEl = pill.querySelector('.np-name');
   var controller = null;
+  var currentURI = null;
+  var nameCache = {};
 
   function reflect(playing) {
     pill.classList.toggle('playing', playing);
@@ -818,12 +821,31 @@
     if (statusEl) statusEl.textContent = playing ? 'Playing' : 'Paused';
   }
 
+  /* Spotify only hands us the track's URI, so look up its name via oEmbed. */
+  function showTrack(uri) {
+    if (!uri || uri === currentURI || !nameEl) return;
+    currentURI = uri;
+    var id = uri.split(':').pop();
+    if (nameCache[id]) { nameEl.textContent = nameCache[id]; return; }
+    fetch('https://open.spotify.com/oembed?url=https://open.spotify.com/track/' + id)
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d || !d.title) return;
+        var name = d.title.replace(/\s*-\s*(Remastered|Remaster|.*Version|.*Edit|.*Mix).*$/i, '').trim() || d.title;
+        nameCache[id] = name;
+        if (currentURI === uri) nameEl.textContent = name;
+      })
+      .catch(function () {});
+  }
+
   /* The Spotify iFrame API calls this once its script has loaded. */
   window.onSpotifyIframeApiReady = function (IFrameAPI) {
     IFrameAPI.createController(embed, { uri: PLAYLIST, width: '100%', height: 352 }, function (EmbedController) {
       controller = EmbedController;
       controller.addListener('playback_update', function (e) {
-        if (e && e.data) reflect(!e.data.isPaused);
+        if (!e || !e.data) return;
+        reflect(!e.data.isPaused);
+        if (e.data.playingURI) showTrack(e.data.playingURI);
       });
     });
   };
