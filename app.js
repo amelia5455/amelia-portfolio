@@ -183,14 +183,14 @@
   let active = false, raf = null;
   let mouseX = -9999, mouseY = -9999;
 
-  const caps = () => window.innerWidth <= 768 ? { total: 5, falling: 2 } : { total: 10, falling: 3 };
+  const caps = () => window.innerWidth <= 768 ? { total: 4, falling: 1 } : { total: 7, falling: 2 };
   const aliveCount   = () => bubbles.filter(b => !b.done).length;
   const fallingCount = () => bubbles.filter(b => !b.done && b.phase === 'FALLING').length;
 
   function createBubble(opts) {
     opts = opts || {};
     const def = DEFS[(Math.random()*DEFS.length) | 0];
-    const maxOp = 0.55 + Math.random()*0.35;
+    const maxOp = 0.62 + Math.random()*0.34;
     const x = (0.06 + Math.random()*0.88) * W;
     const isStatic = opts.phase === 'STATIC';
     return {
@@ -216,7 +216,7 @@
   function spawnTick() {
     if (!active || reduceMotion) return;
     trySpawn();
-    setTimeout(spawnTick, 1500 + Math.random()*1800);
+    setTimeout(spawnTick, 2600 + Math.random()*2400);
   }
 
   /* ── Render loop (self-stopping) ─────────────────────────────────────── */
@@ -367,9 +367,9 @@
       for (let i = 0; i < n; i++) bubbles.push(createBubble({ phase: 'STATIC' }));
       ensureRaf();
     } else {
-      const n = window.innerWidth <= 768 ? 3 : 6;
+      const n = window.innerWidth <= 768 ? 2 : 4;
       bubbles.push(createBubble());                                  // one bubble appears first
-      for (let i = 0; i < n - 1; i++) setTimeout(() => bubbles.push(createBubble()), 900 + i*340);
+      for (let i = 0; i < n - 1; i++) setTimeout(() => bubbles.push(createBubble()), 1000 + i*650);
       setTimeout(spawnTick, 1800);
       ensureRaf();
     }
