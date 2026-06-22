@@ -189,8 +189,14 @@
     background: #0f1014; border-radius: 13px; box-shadow: 0 22px 48px rgba(40,45,70,.22);
   }
   .salon-inner { position: absolute; inset: 7px; border-radius: 5px; overflow: hidden; background: #fff; }
-  .salon-frame { display: block; width: 1440px; height: 900px; border: 0;
-    transform-origin: top left; pointer-events: none; }   /* scaled to fit by JS */
+  .salon-shot { display: block; width: 100%; height: auto;
+    animation: salon-scroll 26s ease-in-out infinite; will-change: transform; }
+  @keyframes salon-scroll {
+    0%, 8%   { transform: translateY(0); }
+    50%, 58% { transform: translateY(-78%); }
+    100%     { transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) { .salon-shot { animation: none; } }
   .laptop-base {
     position: relative; width: 112%; height: 11px;
     background: linear-gradient(#e6e7eb, #c6c7cd 55%, #a9abb2);

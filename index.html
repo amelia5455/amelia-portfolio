@@ -10,7 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Sometype+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <!-- Nested case-study animation faces -->
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=31">
+<link rel="stylesheet" href="styles.css?v=32">
 <script>
   /* set the view before first paint so a refresh doesn't flash the Work page */
   (function () {
@@ -97,8 +97,8 @@
           <div class="laptop">
             <div class="laptop-screen">
               <div class="salon-inner">
-                <!-- live homepage as a placeholder; swap for a <video> of the prototype when ready -->
-                <iframe class="salon-frame" src="https://salon-matarazzo-new-design.vercel.app/" title="Salon Matarazzo homepage" scrolling="no" loading="lazy" tabindex="-1" aria-hidden="true"></iframe>
+                <!-- captured homepage; auto-scrolls via CSS. re-run /tmp/shot_salon.py to refresh -->
+                <img class="salon-shot" src="images/salon-home.jpg?v=1" alt="Salon Matarazzo homepage" loading="lazy">
               </div>
             </div>
             <div class="laptop-base"></div>
@@ -215,6 +215,6 @@
 <!-- ===== Index view switcher (Work / Gallery) ===== -->
 
 <!-- ===== Nested case-study animation (vanilla port of the Claude Design handoff) ===== -->
-<script src="app.js?v=31"></script>
+<script src="app.js?v=32"></script>
 </body>
 </html>
