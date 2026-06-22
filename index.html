@@ -10,7 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Sometype+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <!-- Nested case-study animation faces -->
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=30">
+<link rel="stylesheet" href="styles.css?v=31">
 <script>
   /* set the view before first paint so a refresh doesn't flash the Work page */
   (function () {
@@ -93,7 +93,17 @@
       </a>
 
       <a class="case-card" href="#" data-cursor="try">
-        <div class="case-media"><!-- drop your <img src="..."> or <video> here --></div>
+        <div class="case-media salon-media">
+          <div class="laptop">
+            <div class="laptop-screen">
+              <div class="salon-inner">
+                <!-- live homepage as a placeholder; swap for a <video> of the prototype when ready -->
+                <iframe class="salon-frame" src="https://salon-matarazzo-new-design.vercel.app/" title="Salon Matarazzo homepage" scrolling="no" loading="lazy" tabindex="-1" aria-hidden="true"></iframe>
+              </div>
+            </div>
+            <div class="laptop-base"></div>
+          </div>
+        </div>
         <div class="case-title">Salon Matarazzo</div>
         <div class="case-meta">Freelance — 2026</div>
         <p class="case-desc">A website for a Bellevue salon — a clean service menu, a booking-ready layout, and a warm local identity.</p>
@@ -205,6 +215,6 @@
 <!-- ===== Index view switcher (Work / Gallery) ===== -->
 
 <!-- ===== Nested case-study animation (vanilla port of the Claude Design handoff) ===== -->
-<script src="app.js?v=26"></script>
+<script src="app.js?v=31"></script>
 </body>
 </html>

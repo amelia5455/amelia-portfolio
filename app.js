@@ -801,3 +801,18 @@
     if (svg) svg.style.transform = 'perspective(220px) rotateY(' + rot + 'deg)';
   });
 })();
+
+/* ---- Salon Matarazzo card: scale the live homepage iframe into the laptop ---- */
+(function () {
+  var inner = document.querySelector('.salon-inner');
+  var frame = document.querySelector('.salon-frame');
+  if (!inner || !frame) return;
+  function fit() {
+    var w = inner.clientWidth;
+    if (w) frame.style.transform = 'scale(' + (w / 1440) + ')';
+  }
+  if (window.ResizeObserver) new ResizeObserver(fit).observe(inner);
+  window.addEventListener('resize', fit);
+  window.addEventListener('load', fit);
+  fit();
+})();
