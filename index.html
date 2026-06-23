@@ -10,7 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Sometype+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <!-- Nested case-study animation faces -->
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=35">
+<link rel="stylesheet" href="styles.css?v=36">
 <script>
   /* set the view before first paint so a refresh doesn't flash the Work page */
   (function () {
@@ -53,9 +53,9 @@
     <div class="nav-group">
       <div class="group-label">Index</div>
       <nav class="side-nav">
-        <a class="active" href="#work" data-view="work">Work</a>
-        <a href="#gallery" data-view="gallery">Gallery</a>
-        <a href="#about" data-view="about">About</a>
+        <a class="active" data-view="work" role="link" tabindex="0">Work</a>
+        <a data-view="gallery" role="link" tabindex="0">Gallery</a>
+        <a data-view="about" role="link" tabindex="0">About</a>
       </nav>
     </div>
 
@@ -64,9 +64,9 @@
     <div class="nav-group">
       <div class="group-label">Find me</div>
       <nav class="side-nav">
-        <a href="https://www.linkedin.com/in/amelia-simpson-b00031272/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-        <a href="https://github.com/amelia5455" target="_blank" rel="noopener noreferrer">GitHub</a>
-        <a href="#">Resume</a>
+        <a data-href="https://www.linkedin.com/in/amelia-simpson-b00031272/" role="link" tabindex="0">LinkedIn</a>
+        <a data-href="https://github.com/amelia5455" role="link" tabindex="0">GitHub</a>
+        <a role="link" tabindex="0">Resume</a>
       </nav>
     </div>
 
@@ -225,6 +225,6 @@
 <!-- ===== Index view switcher (Work / Gallery) ===== -->
 
 <!-- ===== Nested case-study animation (vanilla port of the Claude Design handoff) ===== -->
-<script src="app.js?v=33"></script>
+<script src="app.js?v=34"></script>
 </body>
 </html>

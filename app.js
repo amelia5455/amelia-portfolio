@@ -500,6 +500,13 @@
     try { var s = localStorage.getItem('view'); return valid(s) ? s : null; } catch (e) { return null; }
   }
 
+  // nav links carry no href (so no URL tooltip on hover) — set the hash on click/Enter
+  navLinks.forEach(function (a) {
+    function go() { var v = a.dataset.view; if (location.hash.replace(/^#/, '') === v) showView(v); else location.hash = '#' + v; }
+    a.addEventListener('click', go);
+    a.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
+  });
+
   // hash drives the view; falls back to the last view if the URL has no hash
   window.addEventListener('hashchange', function () { showView(hashView() || 'work'); window.scrollTo(0, 0); });
 
@@ -803,14 +810,12 @@
 })();
 
 
-/* ---- case cards open their link via JS so no URL tooltip shows on hover ---- */
+/* ---- links open via JS (data-href) so no URL tooltip shows on hover ---- */
 (function () {
-  document.querySelectorAll('.case-card[data-href]').forEach(function (card) {
-    var href = card.getAttribute('data-href');
-    card.setAttribute('role', 'link');
-    card.setAttribute('tabindex', '0');
-    card.addEventListener('click', function () { window.open(href, '_blank', 'noopener'); });
-    card.addEventListener('keydown', function (e) {
+  document.querySelectorAll('[data-href]').forEach(function (el) {
+    var href = el.getAttribute('data-href');
+    el.addEventListener('click', function () { window.open(href, '_blank', 'noopener'); });
+    el.addEventListener('keydown', function (e) {
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); window.open(href, '_blank', 'noopener'); }
     });
   });
