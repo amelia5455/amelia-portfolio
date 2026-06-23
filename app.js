@@ -802,3 +802,16 @@
   });
 })();
 
+
+/* ---- case cards open their link via JS so no URL tooltip shows on hover ---- */
+(function () {
+  document.querySelectorAll('.case-card[data-href]').forEach(function (card) {
+    var href = card.getAttribute('data-href');
+    card.setAttribute('role', 'link');
+    card.setAttribute('tabindex', '0');
+    card.addEventListener('click', function () { window.open(href, '_blank', 'noopener'); });
+    card.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); window.open(href, '_blank', 'noopener'); }
+    });
+  });
+})();
