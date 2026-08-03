@@ -158,7 +158,9 @@
   /* animated film grain as light speckle over the dark background */
   .booth-media::after {
     display: block; top: -50%; left: -50%; width: 200%; height: 200%;
-    opacity: .5; mix-blend-mode: screen; will-change: transform;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.085' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+    background-size: 260px 260px; background-repeat: repeat;
+    opacity: .28; mix-blend-mode: normal; will-change: transform;
     animation: booth-grain .5s steps(1) infinite;
   }
   @keyframes booth-grain {
@@ -174,7 +176,7 @@
   @media (prefers-reduced-motion: reduce) { .booth-media::after { animation: none; } }
   .booth-media > .booth-art {
     position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    width: auto; height: 58%; z-index: 1;
+    width: auto; height: 76%; z-index: 1;
     filter: invert(1);   /* black line art -> white */
   }
   /* Besties: soft mesh-gradient glow with the app flow floating on it */
