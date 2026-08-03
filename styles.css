@@ -153,12 +153,12 @@
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); background-size: 140px 140px;
   }
   .case-card:hover .case-media { filter: brightness(.97); }
-  /* Booth: exact paper background from the illustration, line art centered */
-  .booth-media { background: #F3F3EA; }
-  /* animated film grain over the paper so the card breathes (line art stays crisp) */
+  /* Booth: white line art on a dark, grainy brand background */
+  .booth-media { background: #1B1A16; }
+  /* animated film grain as light speckle over the dark background */
   .booth-media::after {
     display: block; top: -50%; left: -50%; width: 200%; height: 200%;
-    opacity: .6; mix-blend-mode: multiply; will-change: transform;
+    opacity: .5; mix-blend-mode: screen; will-change: transform;
     animation: booth-grain .5s steps(1) infinite;
   }
   @keyframes booth-grain {
@@ -175,6 +175,7 @@
   .booth-media > .booth-art {
     position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
     width: auto; height: 58%; z-index: 1;
+    filter: invert(1);   /* black line art -> white */
   }
   /* Besties: soft mesh-gradient glow with the app flow floating on it */
   .besties-media {
