@@ -177,7 +177,6 @@
   .booth-media > .booth-art {
     position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
     width: auto; height: 76%; z-index: 1;
-    filter: invert(1);   /* black line art -> white */
   }
   /* Besties: soft mesh-gradient glow with the app flow floating on it */
   .besties-media {
