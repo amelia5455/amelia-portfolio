@@ -794,18 +794,21 @@
   }
 })();
 
-/* ---- footer heart toggle (spin + fill on click) ---- */
+/* ---- footer heart toggle (spin + fill + sound on click) ---- */
 (function () {
   var btn = document.getElementById('heart-toggle');
   if (!btn) return;
   var svg = btn.querySelector('svg');
   var rot = 0, on = false;
+  var snd = new Audio('audio/heart.mp3?v=1');
+  snd.preload = 'auto';
   btn.addEventListener('click', function () {
     on = !on;
     rot += 360;
     btn.classList.toggle('on', on);
     btn.setAttribute('aria-pressed', String(on));
     if (svg) svg.style.transform = 'perspective(220px) rotateY(' + rot + 'deg)';
+    try { snd.currentTime = 0; snd.play().catch(function () {}); } catch (e) {}
   });
 })();
 
