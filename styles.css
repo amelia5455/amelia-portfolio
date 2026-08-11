@@ -4,7 +4,7 @@
   @font-face { font-family: 'Clash Display'; font-weight: 600; font-style: normal; font-display: swap; src: url('https://cdn.fontshare.com/wf/FPDAZ2S6SW4QMSRIIKNNGTPM6VIXYMKO/5HNPQ453FRLIQWV2FNOBUU3FKTDZQVSG/Z3MGHFHX6DCTLQ55LJYRJ5MDCZPMFZU6.woff2') format('woff2'); }
 
   /* THEME TOKENS — one class flip on <body> drives everything. */
-  :root { --bg: #FAF9F5; --ink: #1a1a1a; --muted: #9C9C9C; --cursor: #6a5fc4; }
+  :root { --bg: #FAF9F5; --ink: #1a1a1a; --muted: #9C9C9C; --cursor: #6a5fc4; --rail: 320px; }
   body.bubbles { --bg: #ECF1F6; }   /* original soft cool wash; cursor stays ink */
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -31,7 +31,7 @@
   /* ---- Left sidebar nav (Amelia's content, kept in the current light style) ---- */
   .sidebar {
     position: fixed; top: 0; left: 0; z-index: 10;
-    width: clamp(340px, 34vw, 500px); height: 100vh; overflow-y: auto;
+    width: var(--rail); height: 100vh; overflow-y: auto;
     display: flex; flex-direction: column; gap: 26px;
     padding: 18px 40px 30px;
     border-right: 1px solid rgba(30,40,60,.13);
@@ -132,7 +132,7 @@
 
 
   /* ---- Main: intentionally open space to pop bubbles ---- */
-  main { position: relative; z-index: 5; margin-left: clamp(340px, 34vw, 500px); padding: 72vh 56px 16vh; min-height: 100vh; }
+  main { position: relative; z-index: 5; margin-left: var(--rail); padding: 72vh 56px 16vh; min-height: 100vh; }
 
   /* ---- Case study cards (mono / terminal style) ---- */
   .case-grid { display: flex; flex-direction: column; gap: 96px; align-items: stretch; max-width: none; margin: 0; }
@@ -291,7 +291,7 @@
   /* ===== structured grid (Akash-style frame, kept in the existing UI) ===== */
   .side-head { display: flex; flex-direction: column; gap: 5px; position: relative; top: 6px; }
   .topline { position: fixed; top: 72px; left: 0; right: 0; border-top: 1px solid rgba(30,40,60,.13); z-index: 12; pointer-events: none; }
-  .topmeta { position: fixed; top: 0; left: clamp(340px, 34vw, 500px); right: 0; height: 72px; z-index: 11;
+  .topmeta { position: fixed; top: 0; left: var(--rail); right: 0; height: 72px; z-index: 11;
     display: flex; align-items: center; justify-content: flex-end; gap: 8px; padding: 0 56px;
     font-size: 12px; letter-spacing: .04em; color: var(--muted);
     background: var(--bg); transition: background-color .55s ease; }
