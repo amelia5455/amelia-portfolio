@@ -29,7 +29,7 @@ body {
 }
 
 .wrap { max-width: 1500px; margin-left: 260px; padding: 0 clamp(48px, 6vw, 96px) 0 64px; }
-.measure { max-width: 68ch; }   /* keep prose at a readable line length even full-width */
+.measure { max-width: none; }   /* prose runs full-width, aligned with the figures */
 
 a { color: inherit; }
 
