@@ -89,7 +89,7 @@ a { color: inherit; }
 }
 .hero .lede {
   font-size: clamp(16px, 2.2vw, 19px); color: var(--body); line-height: 1.6;
-  margin-top: 20px; max-width: 40ch;
+  margin-top: 20px;
 }
 
 .hero-banner {
