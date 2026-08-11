@@ -39,7 +39,7 @@
   .wordmark { font-size: 22px; color: var(--ink); letter-spacing: .01em; }
   .role { font-size: 15px; color: var(--muted); letter-spacing: .01em; }
   .bio { font-size: 15px; line-height: 1.8; color: var(--muted); max-width: 46ch; margin-top: 26px; }
-  .bio em { font-style: normal; color: var(--ink); border-bottom: 1px solid var(--muted); padding-bottom: 1px; }
+  .bio em { font-style: normal; color: var(--ink); border-bottom: 1px solid var(--muted); padding-bottom: 1px; white-space: nowrap; }
   /* glimm-style prism band — flashes once on hover, text stays ink otherwise */
   .bio em.glimm:hover {
     background-image: linear-gradient(90deg,
