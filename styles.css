@@ -4,7 +4,7 @@
   @font-face { font-family: 'Clash Display'; font-weight: 600; font-style: normal; font-display: swap; src: url('https://cdn.fontshare.com/wf/FPDAZ2S6SW4QMSRIIKNNGTPM6VIXYMKO/5HNPQ453FRLIQWV2FNOBUU3FKTDZQVSG/Z3MGHFHX6DCTLQ55LJYRJ5MDCZPMFZU6.woff2') format('woff2'); }
 
   /* THEME TOKENS — one class flip on <body> drives everything. */
-  :root { --bg: #FAF9F5; --ink: #1a1a1a; --muted: #9C9C9C; --cursor: #6a5fc4; --rail: 320px; }
+  :root { --bg: #FAF9F5; --ink: #1a1a1a; --muted: #9C9C9C; --cursor: #6a5fc4; --rail: 380px; }
   body.bubbles { --bg: #ECF1F6; }   /* original soft cool wash; cursor stays ink */
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
