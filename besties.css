@@ -28,7 +28,7 @@ body {
   line-height: 1.5;
 }
 
-.wrap { max-width: 1500px; margin-left: 380px; padding: 0 clamp(48px, 6vw, 96px) 0 64px; }
+.wrap { max-width: 1500px; margin-left: 380px; padding: 0 clamp(48px, 6vw, 96px) 128px 64px; }
 .measure { max-width: none; }   /* prose runs full-width, aligned with the figures */
 
 a { color: inherit; }
@@ -216,22 +216,6 @@ figcaption { font-size: 12.5px; color: var(--muted); margin-top: 10px; line-heig
 .learn .item p { font-size: 14.5px; line-height: 1.75; color: var(--body); }
 @media (max-width: 680px) { .learn { grid-template-columns: 1fr; gap: 22px; } }
 
-/* ---------- Footer / next work ---------- */
-.foot { margin: 96px 0 80px; padding-top: 40px; border-top: 1px solid var(--line); }
-.foot .fk { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
-.nextgrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 18px; }
-.nextcard {
-  display: block; text-decoration: none; cursor: pointer;
-  background: #fff; border: 1px solid var(--line); border-radius: 14px;
-  padding: 22px 24px; transition: border-color .2s ease, transform .2s ease;
-}
-.nextcard:hover { border-color: var(--coral); transform: translateY(-2px); }
-.nextcard:focus { outline: none; }
-.nextcard:focus-visible { outline: none; border-color: var(--coral); box-shadow: 0 0 0 3px rgba(255,99,71,.28); }
-.nextcard .np { font-size: 12px; color: var(--muted); }
-.nextcard .nt { font-size: 19px; font-weight: 500; color: var(--ink); margin-top: 6px; }
-.nextcard .nd { font-size: 13px; color: var(--muted); margin-top: 6px; line-height: 1.6; }
-@media (max-width: 680px) { .nextgrid { grid-template-columns: 1fr; } }
 
 /* entrance */
 @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
