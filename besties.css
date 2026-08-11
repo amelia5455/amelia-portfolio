@@ -28,48 +28,62 @@ body {
   line-height: 1.5;
 }
 
-.wrap { max-width: 960px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 40px); }
+.wrap { max-width: 880px; margin-left: 260px; padding: 0 48px 0 64px; }
 .measure { max-width: 68ch; }
 
 a { color: inherit; }
 
-/* ---------- Sticky top bar: back link + wordmark + inline TOC ---------- */
-.topbar {
-  position: sticky; top: 0; z-index: 20;
-  background: rgba(250, 249, 245, .82);
-  backdrop-filter: saturate(140%) blur(10px);
-  -webkit-backdrop-filter: saturate(140%) blur(10px);
-  border-bottom: 1px solid var(--line);
-}
-.topbar-inner {
-  max-width: 960px; margin: 0 auto; padding: 14px clamp(20px, 5vw, 40px);
-  display: flex; align-items: center; gap: 22px;
+/* ---------- Fixed left nav: back link + vertical section list ---------- */
+.sidenav {
+  position: fixed; top: 0; left: 0; z-index: 20;
+  width: 260px; height: 100vh; overflow-y: auto;
+  display: flex; flex-direction: column;
+  padding: 40px 30px 30px;
+  border-right: 1px solid var(--line);
+  background: var(--bg);
 }
 .back-link {
   display: inline-flex; align-items: center; gap: 8px;
-  font-size: 13px; color: var(--ink); text-decoration: none; white-space: nowrap;
+  font-size: 14px; color: var(--ink); text-decoration: none;
   cursor: pointer; transition: color .2s ease;
 }
 .back-link svg { width: 15px; height: 15px; }
 .back-link:hover { color: var(--coral-ink); }
-.topbar .wordmark { font-size: 13px; color: var(--muted); white-space: nowrap; }
 
-.toc {
-  margin-left: auto;
-  display: flex; gap: 18px; overflow-x: auto; scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-}
-.toc::-webkit-scrollbar { display: none; }
+.toc { margin-top: 42px; display: flex; flex-direction: column; gap: 3px; }
 .toc a {
-  font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
-  color: var(--muted); text-decoration: none; white-space: nowrap;
-  padding: 4px 0; border-bottom: 1.5px solid transparent; transition: color .2s ease, border-color .2s ease;
+  font-size: 14px; color: var(--muted); text-decoration: none;
+  padding: 6px 0; transition: color .2s ease;
 }
 .toc a:hover { color: var(--ink); }
-.toc a.active { color: var(--coral-ink); border-bottom-color: var(--coral); }
+.toc a.active { color: var(--coral-ink); }
 
-@media (max-width: 720px) {
-  .topbar .wordmark { display: none; }
+.sidenav .wordmark { margin-top: auto; padding-top: 30px; font-size: 12px; color: var(--muted); }
+
+/* below tablet: collapse the sidebar into a sticky top bar */
+@media (max-width: 900px) {
+  .sidenav {
+    position: sticky; top: 0; width: auto; height: auto; overflow: visible;
+    flex-direction: row; align-items: center; gap: 22px;
+    padding: 13px clamp(20px, 5vw, 40px);
+    border-right: none; border-bottom: 1px solid var(--line);
+    background: rgba(250, 249, 245, .85);
+    backdrop-filter: saturate(140%) blur(10px);
+    -webkit-backdrop-filter: saturate(140%) blur(10px);
+  }
+  .back-link { font-size: 13px; white-space: nowrap; }
+  .toc {
+    margin-top: 0; margin-left: auto; flex-direction: row; gap: 18px;
+    overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+  }
+  .toc::-webkit-scrollbar { display: none; }
+  .toc a {
+    font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+    white-space: nowrap; padding: 4px 0; border-bottom: 1.5px solid transparent;
+  }
+  .toc a.active { color: var(--coral-ink); border-bottom-color: var(--coral); }
+  .sidenav .wordmark { display: none; }
+  .wrap { margin-left: auto; margin-right: auto; max-width: 960px; padding: 0 clamp(20px, 5vw, 40px); }
 }
 
 /* ---------- Hero ---------- */
@@ -119,7 +133,8 @@ a { color: inherit; }
 @media (max-width: 680px) { .meta { grid-template-columns: repeat(2, 1fr); gap: 22px; } }
 
 /* ---------- Sections ---------- */
-.section { padding: 74px 0 0; scroll-margin-top: 80px; }
+.section { padding: 74px 0 0; scroll-margin-top: 36px; }
+@media (max-width: 900px) { .section { scroll-margin-top: 76px; } }
 .section > .eyebrow { display: block; }
 .section h2 {
   font-size: clamp(26px, 4vw, 33px); font-weight: 500; letter-spacing: -.01em;
