@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Besties · Amelia Simpson</title>
+<meta name="description" content="Besties — a women-only friendship app connecting people through shared interests and authentic values. A case study by Amelia Simpson." />
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sometype+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="besties.css?v=2">
+</head>
+<body>
+
+<!-- ===== Sticky top bar: back + wordmark + section TOC ===== -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="back-link" href="index.html#work">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+      Back to work
+    </a>
+    <span class="wordmark">Amelia Simpson</span>
+    <nav class="toc" aria-label="Sections">
+      <a href="#overview">Overview</a>
+      <a href="#problem">Problem</a>
+      <a href="#research">Research</a>
+      <a href="#ideation">Ideation</a>
+      <a href="#final-touches">Final touches</a>
+      <a href="#solution">Solution</a>
+      <a href="#learnings">Learnings</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ===== Hero ===== -->
+  <section class="hero">
+    <span class="eyebrow">Case study</span>
+    <h1>Besties</h1>
+    <p class="lede">A women-only friendship app that connects people through shared interests and authentic values.</p>
+    <div class="hero-banner">
+      <img src="images/besties/phones.png" alt="Three Besties app screens: a Get Started welcome, an events feed, and a connections list." loading="eager">
+    </div>
+  </section>
+
+  <!-- ===== Meta ===== -->
+  <div class="meta">
+    <div>
+      <div class="label">Role</div>
+      <div class="val">Product Designer</div>
+    </div>
+    <div>
+      <div class="label">Timeline</div>
+      <div class="val">Jan &ndash; May 2025</div>
+    </div>
+    <div>
+      <div class="label">Tools</div>
+      <div class="val">Figma</div>
+      <div class="val">FigJam</div>
+    </div>
+    <div>
+      <div class="label">Skills</div>
+      <div class="val">User research</div>
+      <div class="val">Wireframing</div>
+      <div class="val">Prototyping</div>
+    </div>
+  </div>
+
+  <!-- ===== Overview ===== -->
+  <section class="section" id="overview">
+    <span class="eyebrow">Overview</span>
+    <h2>About the project</h2>
+    <p class="lead measure">I designed Besties, a women-only friendship app that connects users through shared interests and authentic values. As the solo product designer, I owned the onboarding experience, the event browsing and RSVP features, and the post-event connection flows. I also spearheaded user research and created the Besties design system.</p>
+  </section>
+
+  <!-- ===== Problem ===== -->
+  <section class="section" id="problem">
+    <span class="eyebrow">Problem</span>
+    <h2>Background</h2>
+    <div class="split">
+      <p class="lead">Making friends as an adult is hard. And lonely. After college, career changes, and moves to new cities, women struggle to build genuine friendships. Existing apps don&rsquo;t provide the safety and intentionality women need to form lasting bonds.</p>
+      <figure>
+        <div class="fig"><img src="images/besties/problem-map.png" alt="A Find My style map with friends scattered across the continent."></div>
+        <figcaption>Existing tools treated friendship like logistics: dots on a map, not people to belong to.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ===== Research ===== -->
+  <section class="section" id="research">
+    <span class="eyebrow">Research</span>
+    <h2>Understanding the problem</h2>
+
+    <div class="sub">
+      <div class="kicker">Target users</div>
+      <p class="measure">Young women (roughly 22 to 35) seeking platonic friendships consistently prioritized authentic connection, so I focused on this segment throughout research.</p>
+      <figure>
+        <div class="fig"><img src="images/besties/target-users.png" alt="A collage of women, with the label: Women ages 22 to 35 seeking platonic friendships."></div>
+      </figure>
+    </div>
+
+    <div class="sub">
+      <div class="kicker">User interviews</div>
+      <p class="measure">I launched a survey and ran interviews to learn what made women feel socially isolated, and what they looked for when making friends as an adult. Three themes came up again and again.</p>
+      <div class="cards">
+        <div class="card">
+          <div class="ct">Physical distance</div>
+          <p>Distance from established friends left many women feeling lonely and cut off.</p>
+        </div>
+        <div class="card">
+          <div class="ct">Hard to meet people</div>
+          <p>Without school or work as a natural setting, meeting like-minded people felt daunting.</p>
+        </div>
+        <div class="card">
+          <div class="ct">Safety concerns</div>
+          <p>Women wanted to know who they were meeting, and to do it on their own terms.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub">
+      <div class="kicker">In their words</div>
+      <p class="measure">The same needs surfaced across surveys, interviews, and community threads.</p>
+      <figure>
+        <div class="fig"><img src="images/besties/target-users2.png" alt="Survey charts, community posts, and user quotes about wanting activity-based, safe, genuine friendships."></div>
+        <figcaption>Survey results and community posts pointed to three needs: shared activities, genuine belonging, and safety.</figcaption>
+      </figure>
+      <div class="callout">
+        <span class="bulb" aria-hidden="true">&#128161;</span>
+        <p><span class="hmw">How might we</span> build a community for women navigating adult friendships through shared interests and experiences?</p>
+      </div>
+    </div>
+
+    <div class="sub">
+      <div class="kicker">Competitive landscape</div>
+      <p class="measure">I looked at the tools women already reach for, and where each one falls short.</p>
+      <div class="cards">
+        <div class="card">
+          <span class="tag">Bumble BFF</span>
+          <p>Making friends through 1:1 matching based on swipe decisions.</p>
+        </div>
+        <div class="card">
+          <span class="tag">Meetup</span>
+          <p>Attend local events around shared interests, across all demographics.</p>
+        </div>
+        <div class="card">
+          <span class="tag">RealRoots</span>
+          <p>Builds deep community through structured, 4 to 6 week paid programs.</p>
+        </div>
+      </div>
+      <div class="takes">
+        <div class="take">
+          <div class="who">Bumble BFF</div>
+          <p>Swipe-based matching felt transactional and didn&rsquo;t build natural community. Quick connections read as superficial rather than intentional.</p>
+        </div>
+        <div class="take">
+          <div class="who">Meetup</div>
+          <p>Event-based connection was promising, but the platform lacked the safety and intentionality women want, and the broad demographic wasn&rsquo;t optimal for their connection building.</p>
+        </div>
+        <div class="take">
+          <div class="who">RealRoots</div>
+          <p>Structured commitment created meaningful connections, but 4 to 6 week programs felt intimidating and blocked the spontaneous connections that fit busy schedules.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Ideation ===== -->
+  <section class="section" id="ideation">
+    <span class="eyebrow">Ideation</span>
+    <h2>Narrowing down the solution</h2>
+    <p class="lead measure">Through interviews and journey mapping, I found that women valued both activity-based connection and intentional matching. That pointed to a friendship app built around safety and authentic connection, made for women.</p>
+    <figure>
+      <div class="fig"><img src="images/besties/venn.png" alt="A venn diagram: need to socialize overlapping with shared interests and values, pointing to a women-only app."></div>
+      <figcaption>Where the need to socialize meets shared interests and values: a women-only space.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ===== Final touches ===== -->
+  <section class="section" id="final-touches">
+    <span class="eyebrow">Final touches</span>
+    <h2>Testing and iterating</h2>
+    <p class="lead measure">I put early screens in front of users and refined each flow, sharpening copy, visual hierarchy, and the emotional payoff with every pass.</p>
+    <figure>
+      <div class="fig"><img src="images/besties/iteration-1.png" alt="Iteration 1: profile-complete and welcome screens, before and after adding warm microcopy."></div>
+      <figcaption>Iteration 1 &middot; warmer microcopy and clearer community norms at the finish line.</figcaption>
+    </figure>
+    <figure>
+      <div class="fig"><img src="images/besties/iteration-2.png" alt="Iteration 2 of the Besties flows with annotations."></div>
+      <figcaption>Iteration 2 &middot; tightening the event browsing and RSVP experience.</figcaption>
+    </figure>
+    <figure>
+      <div class="fig"><img src="images/besties/iteration-3.png" alt="Iteration 3 of the Besties flows with annotations."></div>
+      <figcaption>Iteration 3 &middot; sharpening post-event connection.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ===== Solution ===== -->
+  <section class="section" id="solution">
+    <span class="eyebrow">Solution</span>
+    <h2>How Besties works</h2>
+
+    <div class="flow">
+      <div class="shot"><img src="images/besties/flow-onboarding.png" alt="Besties onboarding screens."></div>
+      <div class="txt">
+        <h3>Onboarding</h3>
+        <p>A warm, phone-first welcome that sets community norms up front, so safety feels built in from the very first screen.</p>
+      </div>
+    </div>
+
+    <div class="flow rev">
+      <div class="shot"><img src="images/besties/flow-activities.png" alt="Besties event browsing and RSVP screens."></div>
+      <div class="txt">
+        <h3>Find activities</h3>
+        <p>Browse events by week, interest, and proximity, then RSVP in a tap. Connection starts with something real to do together.</p>
+      </div>
+    </div>
+
+    <div class="flow">
+      <div class="shot"><img src="images/besties/flow-connection.png" alt="Besties post-event connection screens."></div>
+      <div class="txt">
+        <h3>Post-event connection</h3>
+        <p>After an event, Besties surfaces the people you actually met and the interests you share, so a one-time hangout can grow into a friendship.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Learnings ===== -->
+  <section class="section" id="learnings">
+    <span class="eyebrow">Learnings</span>
+    <h2>Key takeaways</h2>
+    <div class="learn">
+      <div class="item">
+        <h3>Safety is a feature, not a constraint.</h3>
+        <p>Designing safety in from the start, through community norms, transparency, and women-only spaces, made the product feel more inviting rather than more restrictive.</p>
+      </div>
+      <div class="item">
+        <h3>Design is rarely linear.</h3>
+        <p>Research, ideation, and testing kept looping back into each other. The strongest ideas came from revisiting earlier findings with fresh eyes.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Footer / more work ===== -->
+  <footer class="foot">
+    <div class="fk">More work</div>
+    <div class="nextgrid">
+      <a class="nextcard" href="https://www.salonmatarazzo.com/" target="_blank" rel="noopener">
+        <div class="np">Freelance &middot; 2026</div>
+        <div class="nt">Salon Matarazzo</div>
+        <div class="nd">A warm, booking-ready website for a Bellevue salon.</div>
+      </a>
+      <a class="nextcard" href="https://gayle-site.vercel.app/" target="_blank" rel="noopener">
+        <div class="np">Freelance &middot; 2026</div>
+        <div class="nt">Gayle Wigglesworth</div>
+        <div class="nd">A multi-page editorial site for an author and her books.</div>
+      </a>
+    </div>
+  </footer>
+
+</main>
+
+<script>
+  /* Scrollspy: highlight the current section in the TOC. */
+  (function () {
+    var links = Array.prototype.slice.call(document.querySelectorAll('.toc a'));
+    var byId = {};
+    links.forEach(function (a) { byId[a.getAttribute('href').slice(1)] = a; });
+    var sections = links.map(function (a) { return document.getElementById(a.getAttribute('href').slice(1)); }).filter(Boolean);
+    if (!('IntersectionObserver' in window) || !sections.length) return;
+
+    var current = null;
+    function setActive(id) {
+      if (id === current) return;
+      current = id;
+      links.forEach(function (a) { a.classList.remove('active'); });
+      if (byId[id]) byId[id].classList.add('active');
+    }
+
+    var io = new IntersectionObserver(function (entries) {
+      /* choose the top-most section currently intersecting */
+      var visible = entries.filter(function (e) { return e.isIntersecting; });
+      if (visible.length) {
+        visible.sort(function (a, b) { return a.boundingClientRect.top - b.boundingClientRect.top; });
+        setActive(visible[0].target.id);
+      }
+    }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
+
+    sections.forEach(function (s) { io.observe(s); });
+  })();
+</script>
+</body>
+</html>

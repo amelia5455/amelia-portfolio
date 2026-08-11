@@ -817,9 +817,12 @@
 (function () {
   document.querySelectorAll('[data-href]').forEach(function (el) {
     var href = el.getAttribute('data-href');
-    el.addEventListener('click', function () { window.open(href, '_blank', 'noopener'); });
+    /* internal case-study pages open in the same tab so Back returns to the portfolio */
+    var sameTab = /\.html($|[?#])/.test(href);
+    function go() { if (sameTab) { location.assign(href); } else { window.open(href, '_blank', 'noopener'); } }
+    el.addEventListener('click', go);
     el.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); window.open(href, '_blank', 'noopener'); }
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); }
     });
   });
 })();
