@@ -178,14 +178,11 @@
     position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
     width: auto; height: 76%; z-index: 1;
   }
-  /* Besties: soft mesh-gradient glow with the app flow floating on it */
+  /* Besties: coral brand gradient to match the case-study hero */
   .besties-media {
     background:
-      radial-gradient(58% 60% at 16% 12%, rgba(150,192,236,.60), transparent 70%),
-      radial-gradient(54% 56% at 86% 16%, rgba(193,176,238,.55), transparent 70%),
-      radial-gradient(66% 64% at 84% 102%, rgba(248,206,182,.58), transparent 70%),
-      radial-gradient(60% 60% at 14% 96%, rgba(196,214,242,.48), transparent 72%),
-      linear-gradient(160deg, #eef2fa, #f4f1f7 55%, #f7f0ec);
+      radial-gradient(120% 120% at 18% 4%, #f7b9c2 0%, rgba(247,185,194,0) 58%),
+      linear-gradient(150deg, #f7a7b0 0%, #ff8a6d 48%, #ff6347 100%);
   }
   .besties-media::after { opacity: .22; }            /* calmer grain under the phone */
   .besties-media > .besties-vid {
