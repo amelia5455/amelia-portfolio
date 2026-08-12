@@ -818,7 +818,7 @@
   document.querySelectorAll('[data-href]').forEach(function (el) {
     var href = el.getAttribute('data-href');
     /* internal case-study pages open in the same tab so Back returns to the portfolio */
-    var sameTab = /\.html($|[?#])/.test(href);
+    var sameTab = /\.html($|[?#])/.test(href) || /^(mailto:|tel:)/i.test(href);
     function go() { if (sameTab) { location.assign(href); } else { window.open(href, '_blank', 'noopener'); } }
     el.addEventListener('click', go);
     el.addEventListener('keydown', function (e) {
