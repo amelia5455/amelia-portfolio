@@ -147,7 +147,6 @@ a { color: inherit; }
 /* ---------- Figures ---------- */
 figure { margin: 26px 0 0; }
 .fig {
-  background: var(--panel);
   border-radius: 16px; overflow: hidden;
 }
 .fig img { display: block; width: 100%; height: auto; }
