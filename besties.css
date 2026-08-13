@@ -111,8 +111,8 @@ a { color: inherit; }
 
 /* ---------- Meta block (role / timeline / tools / skills) ---------- */
 .meta {
-  margin-top: 40px; padding: 26px 0;
-  border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  margin-top: 40px; padding: 26px 30px;
+  background: var(--panel); border-radius: 18px;
   display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
 }
 .meta .label {
