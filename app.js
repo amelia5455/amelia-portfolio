@@ -507,6 +507,19 @@
     a.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
   });
 
+  // the wordmark acts as "home" — return to the default Work view
+  document.querySelectorAll('.wordmark, .mobile-wordmark').forEach(function (el) {
+    el.setAttribute('role', 'link');
+    el.setAttribute('tabindex', '0');
+    function home() {
+      document.body.classList.remove('menu-open');   // close the mobile drawer if open
+      if (location.hash.replace(/^#/, '') === 'work') showView('work');
+      else location.hash = '#work';
+    }
+    el.addEventListener('click', home);
+    el.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); home(); } });
+  });
+
   // hash drives the view; falls back to the last view if the URL has no hash
   window.addEventListener('hashchange', function () { showView(hashView() || 'work'); window.scrollTo(0, 0); });
 
