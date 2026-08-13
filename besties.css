@@ -98,8 +98,8 @@ a { color: inherit; }
   background:
     radial-gradient(120% 140% at 12% 0%, #f7b9c2 0%, rgba(247,185,194,0) 55%),
     linear-gradient(118deg, #f7a7b0 0%, #ff8a6d 46%, #ff6347 100%);
-  display: flex; justify-content: center; align-items: flex-end;
-  padding: 40px clamp(20px, 5vw, 56px) 0;
+  display: flex; justify-content: center; align-items: center;
+  padding: clamp(36px, 4.5vw, 52px) clamp(20px, 5vw, 56px);
   min-height: 300px;
 }
 .hero-banner::after {   /* faint grain to match the Figma texture */
