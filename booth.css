@@ -30,18 +30,6 @@
 @media (prefers-reduced-motion: reduce) { .hero-banner::after { animation: none; } }
 .hero-banner img { width: auto; max-width: 78%; height: clamp(190px, 26vw, 280px); }
 
-/* category chips under the hero title */
-.tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
-.tags span {
-  display: inline-flex; align-items: center; gap: 7px;
-  font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--coral);
-  border: 1px solid var(--panel-line); border-radius: 999px; padding: 5px 12px;
-}
-.tags .dot::before {
-  content: ""; width: 6px; height: 6px; border-radius: 50%;
-  background: #b8823f; display: inline-block;      /* status indicator */
-}
-
 /* TL;DR — a prominent plain intro paragraph */
 .tldr p { font-size: clamp(17px, 2vw, 20px); line-height: 1.65; color: var(--ink); margin-top: 12px; }
 
