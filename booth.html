@@ -154,8 +154,15 @@
       if (byId[id]) byId[id].classList.add('active');
     }
 
+    function atBottom() {
+      return window.innerHeight + Math.ceil(window.scrollY) >= document.documentElement.scrollHeight - 2;
+    }
+    var lastId = sections[sections.length - 1].id;
+
     var io = new IntersectionObserver(function (entries) {
-      /* choose the top-most section currently intersecting */
+      /* at the very bottom the last section sits below the observer band, so pin
+         it; otherwise highlight the top-most intersecting section */
+      if (atBottom()) { setActive(lastId); return; }
       var visible = entries.filter(function (e) { return e.isIntersecting; });
       if (visible.length) {
         visible.sort(function (a, b) { return a.boundingClientRect.top - b.boundingClientRect.top; });
@@ -164,6 +171,7 @@
     }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
 
     sections.forEach(function (s) { io.observe(s); });
+    window.addEventListener('scroll', function () { if (atBottom()) setActive(lastId); }, { passive: true });
   })();
 </script>
 </body>
