@@ -31,12 +31,12 @@
 .meta .label { color: var(--coral); }
 
 /* North star — highlighted panel */
-.northstar {
-  margin-top: 28px; background: var(--panel); border-radius: 18px;
-  padding: 24px 28px; display: flex; gap: 15px; align-items: flex-start;
+.northstar { margin-top: 28px; background: var(--panel); border-radius: 18px; padding: 24px 28px; }
+.northstar .lead-in {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--coral); margin-bottom: 12px;
 }
-.northstar svg { flex-shrink: 0; width: 22px; height: 22px; color: var(--coral); margin-top: 3px; }
-.northstar .lead-in { display: block; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--coral); margin-bottom: 8px; }
+.northstar .lead-in svg { width: 14px; height: 14px; }
 .northstar .ns-q { font-size: clamp(17px, 1.9vw, 21px); line-height: 1.5; color: var(--ink); max-width: 42ch; }
 
 /* concept-card icons */
