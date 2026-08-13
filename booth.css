@@ -11,15 +11,36 @@
 /* category chips under the hero title */
 .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
 .tags span {
+  display: inline-flex; align-items: center; gap: 7px;
   font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--coral);
   border: 1px solid var(--panel-line); border-radius: 999px; padding: 5px 12px;
 }
+.tags .dot::before {
+  content: ""; width: 6px; height: 6px; border-radius: 50%;
+  background: #b8823f; display: inline-block;      /* status indicator */
+}
 
-/* TL;DR — a quiet highlighted intro block */
-.tldr { margin-top: 40px; background: var(--panel); border-radius: 18px; padding: 28px 32px; }
-.tldr .eyebrow { display: block; margin-bottom: 12px; }
-.tldr p { font-size: 17px; line-height: 1.72; color: var(--ink); max-width: 66ch; }
+/* TL;DR — a prominent plain intro paragraph */
+.tldr p { font-size: clamp(17px, 2vw, 20px); line-height: 1.65; color: var(--ink); max-width: 62ch; margin-top: 12px; }
 
-/* North Star framing question */
-.northstar { margin-top: 26px; font-size: clamp(20px, 2.3vw, 26px); line-height: 1.5; color: var(--ink); max-width: 30ch; }
-.northstar .lead-in { display: block; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--coral); margin-bottom: 10px; }
+/* metadata as a quiet panel */
+.meta {
+  background: var(--panel); border: 0; border-radius: 18px;
+  padding: 26px 30px; margin-top: 40px;
+}
+.meta .label { color: var(--coral); }
+
+/* North star — highlighted panel */
+.northstar {
+  margin-top: 28px; background: var(--panel); border-radius: 18px;
+  padding: 24px 28px; display: flex; gap: 15px; align-items: flex-start;
+}
+.northstar svg { flex-shrink: 0; width: 22px; height: 22px; color: var(--coral); margin-top: 3px; }
+.northstar .lead-in { display: block; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--coral); margin-bottom: 8px; }
+.northstar .ns-q { font-size: clamp(17px, 1.9vw, 21px); line-height: 1.5; color: var(--ink); max-width: 42ch; }
+
+/* concept-card icons */
+.card .cicon { width: 20px; height: 20px; color: var(--coral); display: block; margin-bottom: 12px; }
+
+/* playful in-progress footer */
+.soon { margin-top: 84px; text-align: center; font-style: italic; color: var(--muted); font-size: 14px; letter-spacing: .02em; }

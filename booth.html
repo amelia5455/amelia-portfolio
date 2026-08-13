@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sometype+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="besties.css?v=15">
-<link rel="stylesheet" href="booth.css?v=1">
+<link rel="stylesheet" href="booth.css?v=2">
 </head>
 <body>
 
@@ -38,8 +38,8 @@
     <h1>Booth</h1>
     <p class="lede">A photobooth finder app. Find real booths near you, save the ones you love, and post the strips you shoot.</p>
     <div class="tags">
+      <span class="dot">In progress</span>
       <span>Personal project</span>
-      <span>In progress</span>
       <span>iOS</span>
       <span>Consumer</span>
     </div>
@@ -87,7 +87,13 @@
     <span class="eyebrow">Problem</span>
     <h2>Easy to love, hard to find</h2>
     <p class="lead measure">The catch is finding one. Booths appear and disappear, live in places you would never think to check, and rarely show up reliably in a map search. You usually only remember you want a strip when you are already out, with no easy way to know where the nearest booth is, or whether it still exists.</p>
-    <p class="northstar"><span class="lead-in">North star</span>How might we make finding, remembering, and sharing photobooths as effortless as taking the picture?</p>
+    <div class="northstar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5.6L20.5 9l-4.2 4.1 1 6-5.3-2.9L6.7 19l1-6L3.5 9l6-.4L12 3z"/></svg>
+      <div>
+        <span class="lead-in">North star</span>
+        <p class="ns-q">How might we make finding, remembering, and sharing photobooths as effortless as taking the picture?</p>
+      </div>
+    </div>
   </section>
 
   <!-- ===== Concept ===== -->
@@ -103,14 +109,17 @@
     <h2>What I&rsquo;m building</h2>
     <div class="cards">
       <div class="card">
+        <svg class="cicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-5.8-6.5-10.5a6.5 6.5 0 0 1 13 0C18.5 15.2 12 21 12 21z"/><circle cx="12" cy="10.5" r="2.3"/></svg>
         <div class="ct">Find</div>
         <p>A map-led view of booths near you, with the details that actually matter: where it is, whether it is working, and what it costs.</p>
       </div>
       <div class="card">
+        <svg class="cicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 4h11a1 1 0 0 1 1 1v15l-6.5-3.8L5.5 20V5a1 1 0 0 1 1-1z"/></svg>
         <div class="ct">Save</div>
         <p>Collect the booths you love into a personal list, so the good ones are one tap away the next time you are nearby.</p>
       </div>
       <div class="card">
+        <svg class="cicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5.5" width="16" height="13" rx="2"/><circle cx="9" cy="10.5" r="1.5"/><path d="M5 16.5l4.2-4 3.3 3.2 2.8-2.6L19 16"/></svg>
         <div class="ct">Post</div>
         <p>Every strip you shoot has somewhere to go. Post the ones you are proud of and see what people are shooting around town.</p>
       </div>
@@ -121,8 +130,10 @@
   <section class="section" id="whats-next">
     <span class="eyebrow">What&rsquo;s next</span>
     <h2>Where it&rsquo;s headed</h2>
-    <p class="lead measure">Booth is still in progress. I am designing the core map and save flows first, then building them out, with the posting layer and a community way to add and verify booths coming next. The goal is a small, focused app that makes an analog ritual easier to reach. More soon.</p>
+    <p class="lead measure">Booth is still in progress. I am designing the core map and save flows first, then building them out, with the posting layer and a community way to add and verify booths coming next. The goal is a small, focused app that makes an analog ritual easier to reach.</p>
   </section>
+
+  <p class="soon">more coming soon &#10022;</p>
 
 </main>
 
