@@ -21,7 +21,7 @@
 }
 
 /* TL;DR — a prominent plain intro paragraph */
-.tldr p { font-size: clamp(17px, 2vw, 20px); line-height: 1.65; color: var(--ink); max-width: 62ch; margin-top: 12px; }
+.tldr p { font-size: clamp(17px, 2vw, 20px); line-height: 1.65; color: var(--ink); margin-top: 12px; }
 
 /* metadata as a quiet panel */
 .meta {
@@ -37,7 +37,7 @@
   font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--coral); margin-bottom: 12px;
 }
 .northstar .lead-in svg { width: 14px; height: 14px; }
-.northstar .ns-q { font-size: clamp(17px, 1.9vw, 21px); line-height: 1.5; color: var(--ink); max-width: 42ch; }
+.northstar .ns-q { font-size: clamp(17px, 1.9vw, 21px); line-height: 1.5; color: var(--ink); }
 
 /* concept-card icons */
 .card .cicon { width: 20px; height: 20px; color: var(--coral); display: block; margin-bottom: 12px; }

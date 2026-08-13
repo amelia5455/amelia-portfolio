@@ -7,10 +7,10 @@
   --body: #33322e;
   --muted: #9C9C9C;
   --line: rgba(30, 40, 60, .13);
-  --coral: #ff6347;
-  --coral-ink: #e04a30;
-  --panel: #FBEAE4;          /* matches the pale-pink baked into the exported visuals */
-  --panel-line: rgba(255, 99, 71, .16);
+  --coral: #6b5f4e;          /* warm taupe accent (shared with the Booth case study) */
+  --coral-ink: #1a1a1a;      /* ink for active nav + emphasis */
+  --panel: #F1EEE7;          /* neutral warm panel */
+  --panel-line: rgba(60, 50, 40, .16);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -81,7 +81,7 @@ a { color: inherit; }
 .hero { padding: 64px 0 24px; }
 .eyebrow {
   font-size: 12px; letter-spacing: .14em; text-transform: uppercase;
-  color: var(--coral-ink); font-weight: 500;
+  color: var(--coral); font-weight: 500;
 }
 .hero h1 {
   font-size: clamp(38px, 7vw, 60px); font-weight: 500; letter-spacing: -.02em;
@@ -117,7 +117,7 @@ a { color: inherit; }
 }
 .meta .label {
   font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
-  color: var(--coral-ink); font-weight: 500; margin-bottom: 8px;
+  color: var(--coral); font-weight: 500; margin-bottom: 8px;
 }
 .meta .val { font-size: 15px; color: var(--ink); line-height: 1.5; }
 .meta .val + .val { margin-top: 3px; }
@@ -168,7 +168,7 @@ figcaption { font-size: 12.5px; color: var(--muted); margin-top: 10px; line-heig
 .card p { font-size: 13.5px; line-height: 1.65; color: var(--muted); }
 .card .tag {
   display: inline-block; font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase;
-  color: var(--coral-ink); margin-bottom: 10px;
+  color: var(--coral); margin-bottom: 10px;
 }
 @media (max-width: 720px) { .cards { grid-template-columns: 1fr; } }
 
@@ -182,7 +182,7 @@ figcaption { font-size: 12.5px; color: var(--muted); margin-top: 10px; line-heig
 .callout p {
   font-size: clamp(17px, 2.4vw, 21px); line-height: 1.45; color: var(--ink);
 }
-.callout .hmw { color: var(--coral-ink); }
+.callout .hmw { color: var(--coral); }
 
 /* ---------- Takeaway list (competitive analysis) ---------- */
 .takes { margin-top: 26px; display: flex; flex-direction: column; gap: 18px; }
