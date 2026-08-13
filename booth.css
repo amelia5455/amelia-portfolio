@@ -1,0 +1,25 @@
+/* Booth case study — reuses the shared besties.css shell, retuned to a warm
+   monochrome accent to match Booth's near-black + cream identity. */
+
+:root {
+  --coral: #6b5f4e;                    /* warm taupe for eyebrows / labels / tags */
+  --coral-ink: #1a1a1a;                /* ink for active nav + emphasis */
+  --panel: #F1EEE7;                    /* neutral warm panel (no pink) */
+  --panel-line: rgba(60, 50, 40, .16);
+}
+
+/* category chips under the hero title */
+.tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+.tags span {
+  font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--coral);
+  border: 1px solid var(--panel-line); border-radius: 999px; padding: 5px 12px;
+}
+
+/* TL;DR — a quiet highlighted intro block */
+.tldr { margin-top: 40px; background: var(--panel); border-radius: 18px; padding: 28px 32px; }
+.tldr .eyebrow { display: block; margin-bottom: 12px; }
+.tldr p { font-size: 17px; line-height: 1.72; color: var(--ink); max-width: 66ch; }
+
+/* North Star framing question */
+.northstar { margin-top: 26px; font-size: clamp(20px, 2.3vw, 26px); line-height: 1.5; color: var(--ink); max-width: 30ch; }
+.northstar .lead-in { display: block; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--coral); margin-bottom: 10px; }
