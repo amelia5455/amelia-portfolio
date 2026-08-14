@@ -252,7 +252,7 @@
     var byId = {};
     links.forEach(function (a) { byId[a.getAttribute('href').slice(1)] = a; });
     var sections = links.map(function (a) { return document.getElementById(a.getAttribute('href').slice(1)); }).filter(Boolean);
-    if (!('IntersectionObserver' in window) || !sections.length) return;
+    if (!sections.length) return;
 
     var current = null;
     function setActive(id) {
@@ -267,19 +267,28 @@
     }
     var lastId = sections[sections.length - 1].id;
 
-    var io = new IntersectionObserver(function (entries) {
-      /* at the very bottom the last section sits below the observer band, so pin
-         it; otherwise highlight the top-most intersecting section */
+    /* highlight the last section whose top has passed a line ~45% down the
+       viewport; pin the last section once scrolled to the very bottom */
+    function update() {
       if (atBottom()) { setActive(lastId); return; }
-      var visible = entries.filter(function (e) { return e.isIntersecting; });
-      if (visible.length) {
-        visible.sort(function (a, b) { return a.boundingClientRect.top - b.boundingClientRect.top; });
-        setActive(visible[0].target.id);
+      var line = window.innerHeight * 0.45;
+      var cur = sections[0].id;
+      for (var i = 0; i < sections.length; i++) {
+        if (sections[i].getBoundingClientRect().top <= line) cur = sections[i].id;
+        else break;
       }
-    }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
+      setActive(cur);
+    }
 
-    sections.forEach(function (s) { io.observe(s); });
-    window.addEventListener('scroll', function () { if (atBottom()) setActive(lastId); }, { passive: true });
+    var ticking = false;
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () { update(); ticking = false; });
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', update);
+    update();
   })();
 </script>
 </body>
