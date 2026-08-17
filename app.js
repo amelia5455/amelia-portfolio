@@ -984,7 +984,10 @@
   function load() {
     try {
       JSON.parse(localStorage.getItem(KEY) || '[]').forEach(function (d) {
-        if (STICKERS[d.i] != null) place(d.i, d.x, d.y, d.r);
+        if (STICKERS[d.i] == null) return;
+        place(d.i, d.x, d.y, d.r);
+        var b = tray && tray.querySelector('.tray-sticker[data-i="' + d.i + '"]');
+        if (b) b.classList.add('used');           // slot stays empty on reload
       });
     } catch (er) {}
   }
@@ -992,8 +995,10 @@
   var pack = document.getElementById('stickerPack');
   var tray = document.getElementById('stickerTray');
   function spawn(e) {
+    var btn = this;
+    if (btn.classList.contains('used')) return;   // one instance per sticker
     e.preventDefault();
-    var idx = +this.dataset.i;
+    var idx = +btn.dataset.i;
     var ghost = document.createElement('div');
     ghost.className = 'sticker-ghost'; ghost.innerHTML = html(STICKERS[idx]);
     document.body.appendChild(ghost);
@@ -1006,6 +1011,7 @@
       var r = vp.getBoundingClientRect();
       if (ev.clientX >= r.left && ev.clientX <= r.right && ev.clientY >= r.top && ev.clientY <= r.bottom) {
         place(idx, (ev.clientX - r.left - st.x) / st.s, (ev.clientY - r.top - st.y) / st.s);
+        btn.classList.add('used');                // empty its slot in the strip
         save();
       }
     }
@@ -1026,6 +1032,7 @@
   var reset = document.getElementById('stickerReset');
   if (reset) reset.addEventListener('click', function () {
     [].forEach.call(plane.querySelectorAll('.sticker'), function (el) { el.remove(); });
+    if (tray) [].forEach.call(tray.querySelectorAll('.tray-sticker.used'), function (b) { b.classList.remove('used'); });
     try { localStorage.removeItem(KEY); } catch (er) {}
   });
   load();
