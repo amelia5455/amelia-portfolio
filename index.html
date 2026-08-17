@@ -10,7 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Sometype+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <!-- Nested case-study animation faces -->
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=52">
+<link rel="stylesheet" href="styles.css?v=53">
 <script>
   /* set the view before first paint so a refresh doesn't flash the Work page */
   (function () {
@@ -145,18 +145,19 @@
       <div class="canvas-vp" id="galleryCanvas">
         <div class="canvas-plane" id="galleryPlane">
           <!--
-            Add a piece: set left/top (canvas coordinates) and a width on .art,
-            then set an aspect-ratio (or drop an <img>) inside .art-face.
-            The .art frame is a placeholder — swap it for your painting-canvas borders.
+            Gallery pieces go here. Add one with:
+            <figure class="art" style="left:0px; top:0px; width:300px;">
+              <div class="art-face"><img src="images/your-piece.jpg"></div>
+              <figcaption>Title</figcaption>
+            </figure>
+            left/top are free-form canvas coordinates; the .art-face frame is a placeholder.
           -->
-          <figure class="art" style="left:0px;    top:0px;   width:300px;"><div class="art-face" style="aspect-ratio:4/5"></div><figcaption>Untitled</figcaption></figure>
-          <figure class="art" style="left:400px;  top:150px; width:290px;"><div class="art-face" style="aspect-ratio:16/10"></div><figcaption>Side project</figcaption></figure>
-          <figure class="art" style="left:780px;  top:-40px; width:300px;"><div class="art-face" style="aspect-ratio:1/1"></div><figcaption>Study</figcaption></figure>
-          <figure class="art" style="left:-340px; top:220px; width:240px;"><div class="art-face" style="aspect-ratio:3/4"></div><figcaption>Sketch</figcaption></figure>
-          <figure class="art" style="left:190px;  top:560px; width:360px;"><div class="art-face" style="aspect-ratio:16/9"></div><figcaption>Experiment</figcaption></figure>
-          <figure class="art" style="left:740px;  top:480px; width:260px;"><div class="art-face" style="aspect-ratio:4/5"></div><figcaption>Untitled</figcaption></figure>
         </div>
-        <div class="canvas-hint" aria-hidden="true">drag to explore &middot; scroll to zoom</div>
+        <div class="canvas-note">
+          <span class="cn-eyebrow">Coming soon</span>
+          <h2 class="cn-title">amelia is still working on this.</h2>
+          <p class="cn-sub">be sure to check back soon :)</p>
+        </div>
       </div>
     </div>
 
