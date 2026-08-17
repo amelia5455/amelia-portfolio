@@ -839,3 +839,116 @@
     });
   });
 })();
+
+
+/* ---- Gallery: infinite canvas (drag-pan + momentum, wheel pan, ctrl/pinch zoom) ---- */
+(function () {
+  var vp = document.getElementById('galleryCanvas');
+  var plane = document.getElementById('galleryPlane');
+  if (!vp || !plane) return;
+
+  var GRID = 26, MIN_S = 0.35, MAX_S = 2.6;
+  var st = { x: 0, y: 0, s: 1 };
+
+  function apply() {
+    plane.style.transform = 'translate3d(' + st.x + 'px,' + st.y + 'px,0) scale(' + st.s + ')';
+    vp.style.backgroundPosition = st.x + 'px ' + st.y + 'px';
+    vp.style.backgroundSize = (GRID * st.s) + 'px ' + (GRID * st.s) + 'px';
+  }
+
+  /* frame the cluster of pieces in the middle of the viewport */
+  function center() {
+    var vw = vp.clientWidth, vh = vp.clientHeight;
+    if (!vw || !vh) return;
+    var kids = plane.children, minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    for (var i = 0; i < kids.length; i++) {
+      var k = kids[i];
+      minX = Math.min(minX, k.offsetLeft); minY = Math.min(minY, k.offsetTop);
+      maxX = Math.max(maxX, k.offsetLeft + k.offsetWidth); maxY = Math.max(maxY, k.offsetTop + k.offsetHeight);
+    }
+    if (minX === Infinity) { minX = minY = maxX = maxY = 0; }
+    st.s = 1;
+    st.x = vw / 2 - (minX + maxX) / 2;
+    st.y = vh / 2 - (minY + maxY) / 2;
+    apply();
+  }
+
+  /* ---- drag to pan, with release momentum ---- */
+  var drag = false, sx = 0, sy = 0, ox = 0, oy = 0;
+  var vX = 0, vY = 0, lx = 0, ly = 0, lt = 0, raf = 0;
+  var pts = {}, pinchD = 0;
+
+  vp.addEventListener('pointerdown', function (e) {
+    pts[e.pointerId] = e;
+    if (Object.keys(pts).length > 1) { drag = false; return; }   // second finger => pinch
+    if (e.button) return;
+    drag = true; vp.classList.add('grabbing', 'touched');
+    try { vp.setPointerCapture(e.pointerId); } catch (er) {}
+    sx = e.clientX; sy = e.clientY; ox = st.x; oy = st.y;
+    vX = vY = 0; lx = e.clientX; ly = e.clientY; lt = performance.now();
+    cancelAnimationFrame(raf);
+  });
+
+  vp.addEventListener('pointermove', function (e) {
+    if (e.pointerId in pts) pts[e.pointerId] = e;
+    var ids = Object.keys(pts);
+    if (ids.length === 2) {                                       // pinch zoom
+      var a = pts[ids[0]], b = pts[ids[1]], r = vp.getBoundingClientRect();
+      var d = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+      var mx = (a.clientX + b.clientX) / 2 - r.left, my = (a.clientY + b.clientY) / 2 - r.top;
+      if (pinchD) zoomAt(st.s * (d / pinchD), mx, my);
+      pinchD = d;
+      return;
+    }
+    if (!drag) return;
+    st.x = ox + (e.clientX - sx); st.y = oy + (e.clientY - sy);
+    var now = performance.now(), dt = (now - lt) || 16;
+    vX = (e.clientX - lx) / dt * 16; vY = (e.clientY - ly) / dt * 16;
+    lx = e.clientX; ly = e.clientY; lt = now;
+    apply();
+  });
+
+  function drop(e) {
+    delete pts[e.pointerId];
+    if (Object.keys(pts).length < 2) pinchD = 0;
+    if (!drag) return;
+    drag = false; vp.classList.remove('grabbing');
+    (function glide() {                                           // momentum
+      vX *= 0.93; vY *= 0.93;
+      if (Math.abs(vX) < 0.08 && Math.abs(vY) < 0.08) return;
+      st.x += vX; st.y += vY; apply();
+      raf = requestAnimationFrame(glide);
+    })();
+  }
+  vp.addEventListener('pointerup', drop);
+  vp.addEventListener('pointercancel', drop);
+
+  function zoomAt(target, cx, cy) {
+    var ns = Math.min(MAX_S, Math.max(MIN_S, target));
+    st.x = cx - (cx - st.x) * (ns / st.s);
+    st.y = cy - (cy - st.y) * (ns / st.s);
+    st.s = ns; apply();
+  }
+
+  /* ---- wheel/trackpad: pan; ctrl or cmd (and trackpad pinch) => zoom ---- */
+  vp.addEventListener('wheel', function (e) {
+    e.preventDefault(); vp.classList.add('touched'); cancelAnimationFrame(raf);
+    if (e.ctrlKey || e.metaKey) {
+      var r = vp.getBoundingClientRect();
+      zoomAt(st.s * Math.exp(-e.deltaY * 0.0016), e.clientX - r.left, e.clientY - r.top);
+    } else {
+      st.x -= e.deltaX; st.y -= e.deltaY; apply();
+    }
+  }, { passive: false });
+
+  vp.addEventListener('dblclick', function () { cancelAnimationFrame(raf); center(); });
+
+  /* re-frame when the gallery view opens or the window resizes */
+  function isGallery() { return document.documentElement.getAttribute('data-view') === 'gallery'; }
+  new MutationObserver(function () { if (isGallery()) requestAnimationFrame(center); })
+    .observe(document.documentElement, { attributes: true, attributeFilter: ['data-view'] });
+  window.addEventListener('resize', function () { if (isGallery()) center(); });
+
+  apply();
+  requestAnimationFrame(center);
+})();
