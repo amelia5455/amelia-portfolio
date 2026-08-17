@@ -881,6 +881,11 @@
     st.y = cy - (cy - st.y) * (ns / st.s);
     st.s = ns; apply();
   }
+  function overRect(ev, el) {
+    var r = el.getBoundingClientRect();
+    return ev.clientX >= r.left && ev.clientX <= r.right && ev.clientY >= r.top && ev.clientY <= r.bottom;
+  }
+  function slotFor(el) { return tray && tray.querySelector('.tray-sticker[data-i="' + el.dataset.i + '"]'); }
 
   /* ---- pan (empty canvas) or drag a placed sticker ---- */
   var drag = false, dragSticker = null, sx = 0, sy = 0, ox = 0, oy = 0;
@@ -921,6 +926,8 @@
     if (dragSticker) {
       dragSticker.style.left = (ox + (e.clientX - sx) / st.s) + 'px';
       dragSticker.style.top = (oy + (e.clientY - sy) / st.s) + 'px';
+      var mSlot = slotFor(dragSticker);           // highlight its slot when hovering the open tray
+      if (mSlot) mSlot.classList.toggle('snap', tray.classList.contains('open') && overRect(e, tray));
       return;
     }
     if (!drag) return;
@@ -934,7 +941,17 @@
   function drop(e) {
     delete pts[e.pointerId];
     if (Object.keys(pts).length < 2) pinchD = 0;
-    if (dragSticker) { dragSticker.classList.remove('lift'); dragSticker = null; save(); return; }
+    if (dragSticker) {
+      var dSlot = slotFor(dragSticker);
+      if (tray && tray.classList.contains('open') && overRect(e, tray)) {
+        dragSticker.remove();                     // snapped back into its strip slot
+        if (dSlot) dSlot.classList.remove('used');
+      } else {
+        dragSticker.classList.remove('lift');
+      }
+      if (dSlot) dSlot.classList.remove('snap');
+      dragSticker = null; save(); return;
+    }
     if (!drag) return;
     drag = false; vp.classList.remove('grabbing');
     (function glide() {
@@ -1026,7 +1043,9 @@
       tray.appendChild(b);
     });
     pack.addEventListener('click', function () {
-      tray.hidden = !tray.hidden; pack.classList.toggle('open', !tray.hidden);
+      var open = !tray.classList.contains('open');
+      tray.classList.toggle('open', open);
+      pack.classList.toggle('open', open);
     });
   }
   var reset = document.getElementById('stickerReset');
