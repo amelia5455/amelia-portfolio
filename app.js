@@ -888,7 +888,7 @@
   function slotFor(el) { return tray && tray.querySelector('.tray-sticker[data-i="' + el.dataset.i + '"]'); }
 
   /* ---- pan (empty canvas) or drag a placed sticker ---- */
-  var drag = false, dragSticker = null, sx = 0, sy = 0, ox = 0, oy = 0;
+  var drag = false, dragSticker = null, sx = 0, sy = 0, ox = 0, oy = 0, lmx = 0;
   var vX = 0, vY = 0, lx = 0, ly = 0, lt = 0, raf = 0;
   var pts = {}, pinchD = 0;
 
@@ -902,9 +902,9 @@
     cancelAnimationFrame(raf);
     if (s) {                                             // move that sticker
       dragSticker = s; drag = false;
-      sx = e.clientX; sy = e.clientY;
+      sx = e.clientX; sy = e.clientY; lmx = e.clientX;
       ox = parseFloat(s.style.left) || 0; oy = parseFloat(s.style.top) || 0;
-      s.classList.add('lift'); plane.appendChild(s);     // bring to front
+      s.classList.add('lift'); plane.appendChild(s);     // bring to front (and lift)
     } else {                                             // pan the canvas
       drag = true; dragSticker = null; vp.classList.add('grabbing', 'touched');
       sx = e.clientX; sy = e.clientY; ox = st.x; oy = st.y;
@@ -926,6 +926,8 @@
     if (dragSticker) {
       dragSticker.style.left = (ox + (e.clientX - sx) / st.s) + 'px';
       dragSticker.style.top = (oy + (e.clientY - sy) / st.s) + 'px';
+      var tilt = Math.max(-20, Math.min(20, (e.clientX - lmx) * 2)); lmx = e.clientX;
+      dragSticker.style.setProperty('--tilt', tilt + 'deg');     // lean into the drag
       var mSlot = slotFor(dragSticker);           // highlight its slot when hovering the open tray
       if (mSlot) mSlot.classList.toggle('snap', tray.classList.contains('open') && overRect(e, tray));
       return;
@@ -948,6 +950,7 @@
         if (dSlot) dSlot.classList.remove('used');
       } else {
         dragSticker.classList.remove('lift');
+        dragSticker.style.setProperty('--tilt', '0deg');       // settle upright
       }
       if (dSlot) dSlot.classList.remove('snap');
       dragSticker = null; save(); return;
