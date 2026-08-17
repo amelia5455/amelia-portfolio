@@ -841,11 +841,26 @@
 })();
 
 
-/* ---- Gallery: infinite canvas (drag-pan + momentum, wheel pan, ctrl/pinch zoom) ---- */
+/* ---- Gallery: infinite canvas + sticker pack ---- */
 (function () {
   var vp = document.getElementById('galleryCanvas');
   var plane = document.getElementById('galleryPlane');
   if (!vp || !plane) return;
+
+  /* Pixel stickers (emoji strings also work as entries). */
+  var STICKERS = [
+    { img: 'images/stickers/calcifer.png' },
+    { img: 'images/stickers/bow.png' },
+    { img: 'images/stickers/clover.png' },
+    { img: 'images/stickers/blossom.png' },
+    { img: 'images/stickers/watermelon.png' },
+    { img: 'images/stickers/lemon.png' }
+  ];
+  function html(entry) {
+    return (typeof entry === 'string')
+      ? '<span class="emoji">' + entry + '</span>'
+      : '<img src="' + entry.img + '" alt="">';
+  }
 
   var GRID = 26, MIN_S = 0.35, MAX_S = 2.6;
   var st = { x: 0, y: 0, s: 1 };
@@ -855,49 +870,57 @@
     vp.style.backgroundPosition = st.x + 'px ' + st.y + 'px';
     vp.style.backgroundSize = (GRID * st.s) + 'px ' + (GRID * st.s) + 'px';
   }
-
-  /* frame the cluster of pieces in the middle of the viewport */
   function center() {
     var vw = vp.clientWidth, vh = vp.clientHeight;
     if (!vw || !vh) return;
-    var kids = plane.children, minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-    for (var i = 0; i < kids.length; i++) {
-      var k = kids[i];
-      minX = Math.min(minX, k.offsetLeft); minY = Math.min(minY, k.offsetTop);
-      maxX = Math.max(maxX, k.offsetLeft + k.offsetWidth); maxY = Math.max(maxY, k.offsetTop + k.offsetHeight);
-    }
-    if (minX === Infinity) { minX = minY = maxX = maxY = 0; }
-    st.s = 1;
-    st.x = vw / 2 - (minX + maxX) / 2;
-    st.y = vh / 2 - (minY + maxY) / 2;
-    apply();
+    st.s = 1; st.x = vw / 2; st.y = vh / 2; apply();     // origin in the middle
+  }
+  function zoomAt(target, cx, cy) {
+    var ns = Math.min(MAX_S, Math.max(MIN_S, target));
+    st.x = cx - (cx - st.x) * (ns / st.s);
+    st.y = cy - (cy - st.y) * (ns / st.s);
+    st.s = ns; apply();
   }
 
-  /* ---- drag to pan, with release momentum ---- */
-  var drag = false, sx = 0, sy = 0, ox = 0, oy = 0;
+  /* ---- pan (empty canvas) or drag a placed sticker ---- */
+  var drag = false, dragSticker = null, sx = 0, sy = 0, ox = 0, oy = 0;
   var vX = 0, vY = 0, lx = 0, ly = 0, lt = 0, raf = 0;
   var pts = {}, pinchD = 0;
 
   vp.addEventListener('pointerdown', function (e) {
+    if (e.target.closest('.sticker-pack') || e.target.closest('.sticker-tray') || e.target.closest('.sticker-reset')) return;
     pts[e.pointerId] = e;
-    if (Object.keys(pts).length > 1) { drag = false; return; }   // second finger => pinch
+    if (Object.keys(pts).length > 1) { drag = false; dragSticker = null; return; }
     if (e.button) return;
-    drag = true; vp.classList.add('grabbing', 'touched');
+    var s = e.target.closest('.sticker');
     try { vp.setPointerCapture(e.pointerId); } catch (er) {}
-    sx = e.clientX; sy = e.clientY; ox = st.x; oy = st.y;
-    vX = vY = 0; lx = e.clientX; ly = e.clientY; lt = performance.now();
     cancelAnimationFrame(raf);
+    if (s) {                                             // move that sticker
+      dragSticker = s; drag = false;
+      sx = e.clientX; sy = e.clientY;
+      ox = parseFloat(s.style.left) || 0; oy = parseFloat(s.style.top) || 0;
+      s.classList.add('lift'); plane.appendChild(s);     // bring to front
+    } else {                                             // pan the canvas
+      drag = true; dragSticker = null; vp.classList.add('grabbing', 'touched');
+      sx = e.clientX; sy = e.clientY; ox = st.x; oy = st.y;
+      vX = vY = 0; lx = e.clientX; ly = e.clientY; lt = performance.now();
+    }
   });
 
   vp.addEventListener('pointermove', function (e) {
     if (e.pointerId in pts) pts[e.pointerId] = e;
     var ids = Object.keys(pts);
-    if (ids.length === 2) {                                       // pinch zoom
+    if (ids.length === 2) {                              // pinch zoom
       var a = pts[ids[0]], b = pts[ids[1]], r = vp.getBoundingClientRect();
       var d = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
       var mx = (a.clientX + b.clientX) / 2 - r.left, my = (a.clientY + b.clientY) / 2 - r.top;
       if (pinchD) zoomAt(st.s * (d / pinchD), mx, my);
       pinchD = d;
+      return;
+    }
+    if (dragSticker) {
+      dragSticker.style.left = (ox + (e.clientX - sx) / st.s) + 'px';
+      dragSticker.style.top = (oy + (e.clientY - sy) / st.s) + 'px';
       return;
     }
     if (!drag) return;
@@ -911,9 +934,10 @@
   function drop(e) {
     delete pts[e.pointerId];
     if (Object.keys(pts).length < 2) pinchD = 0;
+    if (dragSticker) { dragSticker.classList.remove('lift'); dragSticker = null; save(); return; }
     if (!drag) return;
     drag = false; vp.classList.remove('grabbing');
-    (function glide() {                                           // momentum
+    (function glide() {
       vX *= 0.93; vY *= 0.93;
       if (Math.abs(vX) < 0.08 && Math.abs(vY) < 0.08) return;
       st.x += vX; st.y += vY; apply();
@@ -923,14 +947,6 @@
   vp.addEventListener('pointerup', drop);
   vp.addEventListener('pointercancel', drop);
 
-  function zoomAt(target, cx, cy) {
-    var ns = Math.min(MAX_S, Math.max(MIN_S, target));
-    st.x = cx - (cx - st.x) * (ns / st.s);
-    st.y = cy - (cy - st.y) * (ns / st.s);
-    st.s = ns; apply();
-  }
-
-  /* ---- wheel/trackpad: pan; ctrl or cmd (and trackpad pinch) => zoom ---- */
   vp.addEventListener('wheel', function (e) {
     e.preventDefault(); vp.classList.add('touched'); cancelAnimationFrame(raf);
     if (e.ctrlKey || e.metaKey) {
@@ -941,9 +957,80 @@
     }
   }, { passive: false });
 
-  vp.addEventListener('dblclick', function () { cancelAnimationFrame(raf); center(); });
+  vp.addEventListener('dblclick', function (e) {
+    if (e.target.closest('.sticker')) return;
+    cancelAnimationFrame(raf); center();
+  });
 
-  /* re-frame when the gallery view opens or the window resizes */
+  /* ---- sticker pack: tray + drag-to-canvas + persistence ---- */
+  var KEY = 'gallery-stickers-v1';
+  function place(idx, x, y, rot) {
+    var el = document.createElement('div');
+    el.className = 'sticker'; el.dataset.i = idx;
+    el.style.left = x + 'px'; el.style.top = y + 'px';
+    el.style.setProperty('--rot', rot || (Math.round(Math.random() * 16 - 8) + 'deg'));
+    el.innerHTML = html(STICKERS[idx]);
+    plane.appendChild(el);
+    return el;
+  }
+  function save() {
+    try {
+      var arr = [].map.call(plane.querySelectorAll('.sticker'), function (el) {
+        return { i: +el.dataset.i, x: parseFloat(el.style.left) || 0, y: parseFloat(el.style.top) || 0, r: el.style.getPropertyValue('--rot') || '0deg' };
+      });
+      localStorage.setItem(KEY, JSON.stringify(arr));
+    } catch (er) {}
+  }
+  function load() {
+    try {
+      JSON.parse(localStorage.getItem(KEY) || '[]').forEach(function (d) {
+        if (STICKERS[d.i] != null) place(d.i, d.x, d.y, d.r);
+      });
+    } catch (er) {}
+  }
+
+  var pack = document.getElementById('stickerPack');
+  var tray = document.getElementById('stickerTray');
+  function spawn(e) {
+    e.preventDefault();
+    var idx = +this.dataset.i;
+    var ghost = document.createElement('div');
+    ghost.className = 'sticker-ghost'; ghost.innerHTML = html(STICKERS[idx]);
+    document.body.appendChild(ghost);
+    function mv(ev) { ghost.style.left = ev.clientX + 'px'; ghost.style.top = ev.clientY + 'px'; }
+    mv(e);
+    function up(ev) {
+      window.removeEventListener('pointermove', mv);
+      window.removeEventListener('pointerup', up);
+      ghost.remove();
+      var r = vp.getBoundingClientRect();
+      if (ev.clientX >= r.left && ev.clientX <= r.right && ev.clientY >= r.top && ev.clientY <= r.bottom) {
+        place(idx, (ev.clientX - r.left - st.x) / st.s, (ev.clientY - r.top - st.y) / st.s);
+        save();
+      }
+    }
+    window.addEventListener('pointermove', mv);
+    window.addEventListener('pointerup', up);
+  }
+  if (pack && tray) {
+    STICKERS.forEach(function (entry, i) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'tray-sticker'; b.dataset.i = i; b.innerHTML = html(entry);
+      b.addEventListener('pointerdown', spawn);
+      tray.appendChild(b);
+    });
+    pack.addEventListener('click', function () {
+      tray.hidden = !tray.hidden; pack.classList.toggle('open', !tray.hidden);
+    });
+  }
+  var reset = document.getElementById('stickerReset');
+  if (reset) reset.addEventListener('click', function () {
+    [].forEach.call(plane.querySelectorAll('.sticker'), function (el) { el.remove(); });
+    try { localStorage.removeItem(KEY); } catch (er) {}
+  });
+  load();
+
+  /* re-home when the gallery opens or the window resizes */
   function isGallery() { return document.documentElement.getAttribute('data-view') === 'gallery'; }
   new MutationObserver(function () { if (isGallery()) requestAnimationFrame(center); })
     .observe(document.documentElement, { attributes: true, attributeFilter: ['data-view'] });
