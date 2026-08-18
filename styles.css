@@ -329,6 +329,7 @@
   }
   .canvas-vp.grabbing { cursor: grabbing; }
   .canvas-plane { position: absolute; top: 0; left: 0; transform-origin: 0 0; will-change: transform; }
+  .canvas-plane.drag-lift { z-index: 40; }   /* a grabbed sticker rides above the tray strip */
   .canvas-plane img { -webkit-user-drag: none; user-drag: none; }
 
   /* framed piece — placeholder painting-canvas frame; swap for your own borders */
@@ -369,7 +370,7 @@
     position: absolute; inset: 0; display: flex; flex-direction: column;
     align-items: center; justify-content: center; text-align: center;
     font-size: 11px; letter-spacing: .02em; line-height: 1.25; color: #fdeeec;
-    padding-bottom: 8px; pointer-events: none;
+    padding-top: 16px; pointer-events: none;
   }
 
   .sticker-tray {
@@ -391,21 +392,22 @@
   }
   .sticker-reset:hover { background: rgba(60,50,40,.72); }
   .tray-sticker {
+    position: relative;
     width: 42px; height: 42px; border: none; background: none; padding: 0;
     cursor: grab; display: flex; align-items: center; justify-content: center;
     transition: transform .15s ease; touch-action: none;
   }
   .tray-sticker:hover { transform: translateY(-3px) scale(1.08); }
-  /* emptied slot: white, embossed silhouette left behind */
+  /* emptied slot: the sticker's silhouette pressed into the tray (baked inner shadow) */
   .tray-sticker.used { pointer-events: none; }
-  .tray-sticker.used img {
-    opacity: .92;
-    filter: brightness(0) invert(1)
-            drop-shadow(1px 1.5px .5px rgba(0,0,0,.22))
-            drop-shadow(-1px -1px .5px rgba(0,0,0,.06));
+  .tray-sticker.used img { opacity: 0; }
+  .tray-sticker.used::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: var(--ghost) center / contain no-repeat;
   }
   .tray-sticker.used.snap { transform: scale(1.12); }   /* preview the sticker returning */
-  .tray-sticker.used.snap img { filter: none; opacity: 1; }
+  .tray-sticker.used.snap img { opacity: 1; }
+  .tray-sticker.used.snap::before { opacity: 0; }
   .tray-sticker .emoji { font-size: 30px; line-height: 1; }
   .tray-sticker img { width: 100%; height: 100%; object-fit: contain; -webkit-user-drag: none; }
 

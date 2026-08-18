@@ -905,6 +905,7 @@
       sx = e.clientX; sy = e.clientY; lmx = e.clientX;
       ox = parseFloat(s.style.left) || 0; oy = parseFloat(s.style.top) || 0;
       s.classList.add('lift'); plane.appendChild(s);     // bring to front (and lift)
+      plane.classList.add('drag-lift');                  // float the plane above the tray strip
     } else {                                             // pan the canvas
       drag = true; dragSticker = null; vp.classList.add('grabbing', 'touched');
       sx = e.clientX; sy = e.clientY; ox = st.x; oy = st.y;
@@ -953,6 +954,7 @@
         dragSticker.style.setProperty('--tilt', '0deg');       // settle upright
       }
       if (dSlot) dSlot.classList.remove('snap');
+      plane.classList.remove('drag-lift');
       dragSticker = null; save(); return;
     }
     if (!drag) return;
@@ -1019,6 +1021,7 @@
     if (btn.classList.contains('used')) return;   // one instance per sticker
     e.preventDefault();
     var idx = +btn.dataset.i;
+    btn.classList.add('used');                    // empty the slot the moment it's lifted
     var ghost = document.createElement('div');
     ghost.className = 'sticker-ghost'; ghost.innerHTML = html(STICKERS[idx]);
     document.body.appendChild(ghost);
@@ -1031,8 +1034,9 @@
       var r = vp.getBoundingClientRect();
       if (ev.clientX >= r.left && ev.clientX <= r.right && ev.clientY >= r.top && ev.clientY <= r.bottom) {
         place(idx, (ev.clientX - r.left - st.x) / st.s, (ev.clientY - r.top - st.y) / st.s);
-        btn.classList.add('used');                // empty its slot in the strip
         save();
+      } else {
+        btn.classList.remove('used');             // dropped off-canvas: put it back in the strip
       }
     }
     window.addEventListener('pointermove', mv);
@@ -1042,6 +1046,7 @@
     STICKERS.forEach(function (entry, i) {
       var b = document.createElement('button');
       b.type = 'button'; b.className = 'tray-sticker'; b.dataset.i = i; b.innerHTML = html(entry);
+      if (entry && entry.img) b.style.setProperty('--ghost', 'url("' + entry.img.replace(/\.png$/, '-ghost.png') + '")');
       b.addEventListener('pointerdown', spawn);
       tray.appendChild(b);
     });
