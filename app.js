@@ -862,7 +862,7 @@
       : '<img src="' + entry.img + '" alt="">';
   }
 
-  var GRID = 26, MIN_S = 0.35, MAX_S = 2.6;
+  var GRID = 26, MIN_S = 0.35, MAX_S = 2.6, DEF_S = 0.75;
   var st = { x: 0, y: 0, s: 1 };
 
   function apply() {
@@ -873,7 +873,7 @@
   function center() {
     var vw = vp.clientWidth, vh = vp.clientHeight;
     if (!vw || !vh) return;
-    st.s = 1; st.x = vw / 2; st.y = vh / 2; apply();     // origin in the middle
+    st.s = DEF_S; st.x = vw / 2; st.y = vh / 2; apply();     // origin in the middle, zoomed out a touch
   }
   function zoomAt(target, cx, cy) {
     var ns = Math.min(MAX_S, Math.max(MIN_S, target));
