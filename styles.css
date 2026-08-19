@@ -334,7 +334,7 @@
 
   /* playground piece: an image with a caption + bio, sitting on the canvas */
   .piece { position: absolute; margin: 0; }
-  .piece > img {
+  .piece img {
     display: block; width: 100%; height: auto; border-radius: 2px;
     box-shadow: 0 2px 6px rgba(40,30,20,.06);
   }
