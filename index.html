@@ -10,7 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Sometype+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <!-- Nested case-study animation faces -->
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=67">
+<link rel="stylesheet" href="styles.css?v=68">
 <script>
   /* set the view before first paint so a refresh doesn't flash the Work page */
   (function () {
@@ -179,10 +179,13 @@
           <span>Scroll / drag to move</span>
         </div>
 
-        <!-- sticker pack: click the heart to open the tray, then drag stickers onto the canvas -->
+        <!-- sticker pack: click the speech bubble to open the tray, then drag stickers onto the canvas -->
         <button class="sticker-pack" id="stickerPack" type="button" aria-label="Open sticker pack">
-          <svg class="heart" viewBox="0 0 100 92" aria-hidden="true"><path d="M50 84 C 20 62, 8 44, 8 28 C 8 16, 18 8, 30 8 C 40 8, 47 15, 50 24 C 53 15, 60 8, 70 8 C 82 8, 92 16, 92 28 C 92 44, 80 62, 50 84 Z"/></svg>
-          <span>my<br>sticker<br>pack</span>
+          <svg class="bubble" viewBox="0 0 200 122" aria-hidden="true">
+            <path class="bubble-shape" d="M28 6 H172 A22 22 0 0 1 194 28 V70 A22 22 0 0 1 172 92 H122 L102 118 L90 92 H28 A22 22 0 0 1 6 70 V28 A22 22 0 0 1 28 6 Z"/>
+            <ellipse class="bubble-gloss" cx="82" cy="30" rx="72" ry="15"/>
+          </svg>
+          <span class="bubble-text"><span class="q" aria-hidden="true">&ldquo;</span>click me<span class="q" aria-hidden="true">&rdquo;</span></span>
         </button>
         <div class="sticker-tray" id="stickerTray"></div>
         <button class="sticker-reset" id="stickerReset" type="button">Reset</button>
