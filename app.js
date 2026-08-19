@@ -348,7 +348,10 @@
     return false;
   }
   window.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
-  window.addEventListener('click', e => { if (active && popAt(e.clientX, e.clientY, false)) e.preventDefault(); });
+  window.addEventListener('click', e => {
+    if (e.target.closest && e.target.closest('a[href]')) return;   // never swallow a real link
+    if (active && popAt(e.clientX, e.clientY, false)) e.preventDefault();
+  });
   window.addEventListener('touchend', e => {
     if (!active) return;
     const t = e.changedTouches[0]; if (t) popAt(t.clientX, t.clientY, true);
