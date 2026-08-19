@@ -339,6 +339,13 @@
     box-shadow: 0 2px 6px rgba(40,30,20,.06);
   }
   .piece figcaption { margin-top: 16px; display: block; }
+  /* a linked piece opens a project */
+  .piece-link { display: block; text-decoration: none; color: inherit; cursor: pointer; }
+  .piece-link > img { transition: transform .2s ease, box-shadow .2s ease; }
+  .piece-link:hover > img { transform: translateY(-3px); box-shadow: 0 14px 30px rgba(40,30,20,.16); }
+  .piece-arrow { display: inline-block; color: var(--muted); transition: transform .2s ease; }
+  .piece-link:hover .piece-title { text-decoration: underline; text-underline-offset: 2px; }
+  .piece-link:hover .piece-arrow { transform: translate(2px, -2px); color: var(--ink); }
   .piece .piece-title { display: block; font-size: 15px; font-weight: 700; color: var(--ink); letter-spacing: .01em; }
   .piece .piece-bio { display: block; margin-top: 4px; font-size: 15px; line-height: 1.5; color: var(--muted); max-width: 42ch; }
 

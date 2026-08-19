@@ -888,7 +888,7 @@
   function slotFor(el) { return tray && tray.querySelector('.tray-sticker[data-i="' + el.dataset.i + '"]'); }
 
   /* ---- pan (empty canvas) or drag a placed sticker ---- */
-  var drag = false, dragSticker = null, sx = 0, sy = 0, ox = 0, oy = 0, lmx = 0;
+  var drag = false, dragSticker = null, sx = 0, sy = 0, ox = 0, oy = 0, lmx = 0, panMoved = false;
   var vX = 0, vY = 0, lx = 0, ly = 0, lt = 0, raf = 0;
   var pts = {}, pinchD = 0;
 
@@ -958,6 +958,8 @@
       dragSticker = null; save(); return;
     }
     if (!drag) return;
+    // if this pan actually moved, swallow the click so a piece link doesn't fire
+    if (Math.hypot(e.clientX - sx, e.clientY - sy) > 6) panMoved = true;
     drag = false; vp.classList.remove('grabbing');
     (function glide() {
       vX *= 0.93; vY *= 0.93;
@@ -967,6 +969,9 @@
     })();
   }
   vp.addEventListener('pointerup', drop);
+  vp.addEventListener('click', function (e) {
+    if (panMoved) { e.preventDefault(); e.stopPropagation(); panMoved = false; }   // was a drag, not a click
+  }, true);
   vp.addEventListener('pointercancel', drop);
 
   vp.addEventListener('wheel', function (e) {
