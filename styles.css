@@ -359,25 +359,29 @@
 
   /* ---- sticker pack ---- */
   .sticker-pack {
-    position: absolute; top: 20px; left: 26px; width: 138px; height: 84px;
+    position: absolute; top: 20px; left: 26px; width: 140px; height: 90px;
     border: none; background: none; padding: 0; cursor: pointer; z-index: 31;
-    transform: rotate(-5deg); transition: transform .18s ease;
+    transform: rotate(-4deg); transition: transform .18s ease;
   }
-  .sticker-pack:hover { transform: rotate(-5deg) scale(1.05); }
-  .sticker-pack:active { transform: rotate(-5deg) scale(.96); }
+  .sticker-pack:hover { transform: rotate(-4deg) scale(1.05); }
+  .sticker-pack:active { transform: rotate(-4deg) scale(.96); }
   .sticker-pack .bubble {
     position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible;
     filter: drop-shadow(0 7px 11px rgba(30,30,70,.30));
   }
   .sticker-pack .bubble-shape { fill: #3a44a6; stroke: #fff; stroke-width: 7; paint-order: stroke; }
-  .sticker-pack .bubble-gloss { fill: #fff; opacity: .10; }
+  .sticker-pack .bubble-gloss { fill: #fff; opacity: .12; }
   .sticker-pack .bubble-text {
-    position: absolute; left: 0; right: 0; top: 34%; transform: translateY(-50%);
-    display: flex; align-items: center; justify-content: center; gap: 5px;
-    font-family: Georgia, 'Times New Roman', serif; font-weight: 700; font-size: 19px;
-    color: #fff; letter-spacing: .01em; pointer-events: none;
+    position: absolute; left: 0; right: 0; top: 36%; transform: translateY(-50%);
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    font-family: Georgia, 'Times New Roman', serif; color: #fff; pointer-events: none;
   }
-  .sticker-pack .bubble-text .q { font-size: 24px; line-height: 0; opacity: .92; }
+  .sticker-pack .bubble-text .ct { font-weight: 700; font-size: 20px; letter-spacing: .005em; }
+  .sticker-pack .bubble-text .q {                 /* raised, lighter opening/closing quotes */
+    font-size: 27px; font-weight: 700; line-height: 0; color: rgba(255,255,255,.6);
+    transform: translateY(-7px);
+  }
+  .sticker-pack .bubble-text .q-close { transform: translateY(-7px); }
 
   .sticker-tray {
     position: absolute; top: 28px; left: 180px; z-index: 32;
