@@ -900,6 +900,7 @@
     pts[e.pointerId] = e;
     if (Object.keys(pts).length > 1) { drag = false; dragSticker = null; return; }
     if (e.button) return;
+    panMoved = false;                                    // fresh gesture: don't let a prior pan swallow this click
     var s = e.target.closest('.sticker');
     try { vp.setPointerCapture(e.pointerId); } catch (er) {}
     cancelAnimationFrame(raf);
