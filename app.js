@@ -902,7 +902,8 @@
     if (e.button) return;
     panMoved = false;                                    // fresh gesture: don't let a prior pan swallow this click
     var s = e.target.closest('.sticker');
-    try { vp.setPointerCapture(e.pointerId); } catch (er) {}
+    // capturing the pointer retargets the click away from a piece link, so skip it on real links
+    if (!e.target.closest('a[href]')) { try { vp.setPointerCapture(e.pointerId); } catch (er) {} }
     cancelAnimationFrame(raf);
     if (s) {                                             // move that sticker
       dragSticker = s; drag = false;
