@@ -15,8 +15,9 @@
   /* set the view before first paint so a refresh doesn't flash the Work page */
   (function () {
     function ok(v) { return v === 'work' || v === 'gallery' || v === 'about'; }
-    var h = (location.hash || '').replace(/^#/, ''), v = ok(h) ? h : null;
-    if (!v) { try { var s = localStorage.getItem('view'); if (ok(s)) v = s; } catch (e) {} }
+    var p = (location.pathname || '/').replace(/\/index(\.html)?$/, '').replace(/\/+$/, '');
+    var seg = p.slice(1), v = ok(seg) ? seg : null;
+    if (!v) { var h = (location.hash || '').replace(/^#/, ''); if (ok(h)) v = h; }   // legacy #view links
     document.documentElement.setAttribute('data-view', v || 'work');
   })();
 </script>
@@ -269,6 +270,6 @@
 <!-- ===== Index view switcher (Work / Gallery) ===== -->
 
 <!-- ===== Nested case-study animation (vanilla port of the Claude Design handoff) ===== -->
-<script src="app.js?v=53"></script>
+<script src="app.js?v=54"></script>
 </body>
 </html>

@@ -495,17 +495,28 @@
   }
 
   function valid(v) { return v === 'work' || v === 'gallery' || v === 'about'; }
-  function hashView() {
-    var h = (location.hash || '').replace(/^#/, '');
-    return valid(h) ? h : null;
+  function pathFor(v) { return v === 'work' ? '/' : '/' + v; }
+  function cleanPath() { return (location.pathname || '/').replace(/\/index(\.html)?$/, '').replace(/\/+$/, ''); }
+  function viewFromPath() {
+    var p = cleanPath();
+    if (!p) return 'work';                        // '/' or '/index.html'
+    var seg = p.slice(1);
+    return valid(seg) ? seg : null;
   }
-  function storedView() {
-    try { var s = localStorage.getItem('view'); return valid(s) ? s : null; } catch (e) { return null; }
-  }
+  function legacyHash() { var h = (location.hash || '').replace(/^#/, ''); return valid(h) ? h : null; }   // old #view links
 
-  // nav links carry no href (so no URL tooltip on hover) — set the hash on click/Enter
+  function setURL(view, push) {
+    try {
+      var url = pathFor(view);
+      if (push) history.pushState({ view: view }, '', url);
+      else history.replaceState({ view: view }, '', url);
+    } catch (e) {}
+  }
+  function navigate(view, push) { showView(view); setURL(view, push !== false); window.scrollTo(0, 0); }
+
+  // nav links carry no href (so no URL tooltip on hover) — drive clean paths on click/Enter
   navLinks.forEach(function (a) {
-    function go() { var v = a.dataset.view; if (location.hash.replace(/^#/, '') === v) showView(v); else location.hash = '#' + v; }
+    function go() { navigate(a.dataset.view, true); }
     a.addEventListener('click', go);
     a.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
   });
@@ -514,22 +525,17 @@
   document.querySelectorAll('.wordmark, .mobile-wordmark').forEach(function (el) {
     el.setAttribute('role', 'link');
     el.setAttribute('tabindex', '0');
-    function home() {
-      document.body.classList.remove('menu-open');   // close the mobile drawer if open
-      if (location.hash.replace(/^#/, '') === 'work') showView('work');
-      else location.hash = '#work';
-    }
+    function home() { document.body.classList.remove('menu-open'); navigate('work', true); }
     el.addEventListener('click', home);
     el.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); home(); } });
   });
 
-  // hash drives the view; falls back to the last view if the URL has no hash
-  window.addEventListener('hashchange', function () { showView(hashView() || 'work'); window.scrollTo(0, 0); });
+  // Back/forward buttons drive the view from the path
+  window.addEventListener('popstate', function () { showView(viewFromPath() || 'work'); window.scrollTo(0, 0); });
 
-  var initial = hashView() || storedView() || 'work';
-  if (initial !== 'work' && !hashView()) {        // reflect a remembered view in the URL so refreshes stay consistent
-    try { history.replaceState(null, '', '#' + initial); } catch (e) {}
-  }
+  // initial view: the path wins; honor a legacy #view link at the root, then normalize the URL (drops the #)
+  var initial = (!cleanPath() && legacyHash()) || viewFromPath() || legacyHash() || 'work';
+  setURL(initial, false);
   showView(initial);
 })();
 
