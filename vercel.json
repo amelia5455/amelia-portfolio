@@ -3,8 +3,8 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
-    { "source": "/work", "destination": "/index.html" },
-    { "source": "/gallery", "destination": "/index.html" },
-    { "source": "/about", "destination": "/index.html" }
+    { "source": "/work", "destination": "/" },
+    { "source": "/gallery", "destination": "/" },
+    { "source": "/about", "destination": "/" }
   ]
 }
