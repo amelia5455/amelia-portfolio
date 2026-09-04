@@ -64,6 +64,6 @@
   .flowmap .fm-arrow { justify-self: center; }
 }
 
-/* playful in-progress footer, matched to Booth */
-.soon { margin-top: 84px; text-align: center; font-style: italic; color: var(--muted); font-size: 14px; letter-spacing: .02em; }
-.soon a { color: var(--coral); border-bottom: 1px solid var(--panel-line); padding-bottom: 1px; }
+/* Learnings: all three takeaways in one row */
+.learn { grid-template-columns: repeat(3, 1fr); gap: 32px; }
+@media (max-width: 820px) { .learn { grid-template-columns: 1fr; gap: 22px; } }
