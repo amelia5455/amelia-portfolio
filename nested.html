@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Nested · Amelia Simpson</title>
+<meta name="description" content="Nested — a cost calculator that tells families what senior care actually costs in minutes, with no phone call, no account, and no referral fee. A case study by Amelia Simpson." />
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sometype+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="besties.css?v=18">
+<link rel="stylesheet" href="nested.css?v=1">
+</head>
+<body>
+
+<!-- ===== Fixed left nav: back + section TOC ===== -->
+<aside class="sidenav">
+  <a class="back-link" href="/">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+    Back to work
+  </a>
+  <nav class="toc" aria-label="Sections">
+    <a href="#overview">Overview</a>
+    <a href="#problem">Problem</a>
+    <a href="#research">Research</a>
+    <a href="#ideation">Ideation</a>
+    <a href="#final-touches">Final touches</a>
+    <a href="#solution">Solution</a>
+    <a href="#learnings">Learnings</a>
+  </nav>
+</aside>
+
+<main class="wrap">
+
+  <!-- ===== Hero ===== -->
+  <section class="hero">
+    <span class="eyebrow">Case study</span>
+    <h1>Nested</h1>
+    <p class="lede">A cost calculator that tells families what senior care actually costs, in three minutes, with no phone call, no account, and no referral fee.</p>
+    <div class="tags">
+      <span>Self-initiated</span>
+      <span>Product design</span>
+      <span>Web</span>
+      <span>Healthcare</span>
+    </div>
+    <div class="hero-banner">
+      <img src="images/nested/home.jpg" alt="The Nested homepage: a full-bleed photograph of two people holding hands behind the headline Navigate senior care costs with confidence from the first question to the final decision, with Start Comparison and How it works buttons." loading="eager">
+    </div>
+  </section>
+
+  <!-- ===== Meta ===== -->
+  <div class="meta">
+    <div>
+      <div class="label">Role</div>
+      <div class="val">Product Designer</div>
+      <div class="val">Front-end</div>
+    </div>
+    <div>
+      <div class="label">Timeline</div>
+      <div class="val">Mar &ndash; Sep 2026</div>
+    </div>
+    <div>
+      <div class="label">Tools</div>
+      <div class="val">Figma</div>
+      <div class="val">Next.js</div>
+      <div class="val">Vercel</div>
+    </div>
+    <div>
+      <div class="label">Skills</div>
+      <div class="val">Design systems</div>
+      <div class="val">Accessibility</div>
+      <div class="val">Front-end build</div>
+    </div>
+  </div>
+
+  <!-- ===== Overview ===== -->
+  <section class="section" id="overview">
+    <span class="eyebrow">Overview</span>
+    <h2>About Nested</h2>
+    <p class="lead measure">Nested is a cost comparison tool for families choosing between in-home care, assisted living, and memory care. I was the solo designer and developer: brand, marketing site, a seventeen-screen calculator, the design system, and the accessibility model.</p>
+    <p class="measure">Unlike most of the category, it takes no commission from the facilities it compares, which shaped the product more than any visual decision did.</p>
+  </section>
+
+  <!-- ===== Problem ===== -->
+  <section class="section" id="problem">
+    <span class="eyebrow">Problem</span>
+    <h2>Nobody will give you a number</h2>
+    <p class="lead measure">Costs are quoted only after a phone call. Comparisons are near impossible. And most sites that do publish figures are referral businesses paid by the facilities they recommend, so the advice arrives with a commercial interest attached that families can&rsquo;t see.</p>
+    <p class="measure">The result is that people commit to one of the largest recurring expenses of their lives, often in a hurry, after a fall or a diagnosis, without ever seeing the realistic options side by side. The decision is urgent and emotional, and the information is at its most opaque exactly when clarity matters most.</p>
+  </section>
+
+  <!-- ===== Research ===== -->
+  <section class="section" id="research">
+    <span class="eyebrow">Research</span>
+    <h2>Where families get stuck</h2>
+
+    <div class="sub">
+      <div class="kicker">Target users</div>
+      <p class="measure">Two groups, weighted differently. Adult children in their forties and fifties researching care for a parent, usually under time pressure and doing it for the first time. And older adults planning for themselves. That second group sets the bar for every interface decision, because this is an audience the web routinely designs past.</p>
+    </div>
+
+    <div class="sub">
+      <div class="kicker">Competitive landscape</div>
+      <p class="measure">I looked at where families already go, and what each one withholds.</p>
+      <div class="takes">
+        <div class="take">
+          <div class="who">Referral directories</div>
+          <p>Free because facilities pay for placement. The recommendation carries an interest the family can&rsquo;t see, and pricing usually arrives only after a sales call.</p>
+        </div>
+        <div class="take">
+          <div class="who">Industry cost surveys</div>
+          <p>Credible national and state medians, published as reports. They say what care costs in general, not what your situation costs, and they don&rsquo;t weigh paths against each other.</p>
+        </div>
+        <div class="take">
+          <div class="who">Individual providers</div>
+          <p>Accurate for one facility on one path. Comparing three options means three conversations, three formats, and no like-for-like total at the end.</p>
+        </div>
+      </div>
+      <div class="callout">
+        <span class="bulb" aria-hidden="true">&#128161;</span>
+        <p><span class="hmw">How might we</span> give families an honest, comparable cost picture for every care path, in minutes, without asking them to hand over their details?</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Ideation ===== -->
+  <section class="section" id="ideation">
+    <span class="eyebrow">Ideation</span>
+    <h2>Finding the shape</h2>
+    <p class="lead measure">Two things had to be true at once. The tool needed enough detail to produce a number a family would trust, and it had to be finishable in one sitting by someone stressed and not enjoying the task.</p>
+    <p class="measure">That ruled out both ends. A single-field estimator is too crude to believe; a full financial-planning form is too heavy to complete. The resolution was a <em>branching flow</em>: choose the paths you&rsquo;re weighing, answer only the questions that path needs, and fill anything unknown with national averages you can edit field by field.</p>
+
+    <div class="sub">
+      <div class="kicker">Three constraints I set early</div>
+      <div class="cards">
+        <div class="card">
+          <div class="ct">No referral fees</div>
+          <p>Taking them would have funded the product and destroyed the reason to use it. Stated on the homepage, not buried in a policy page.</p>
+        </div>
+        <div class="card">
+          <div class="ct">No account</div>
+          <p>Results appear immediately. Sharing happens by download or email afterwards, never as a gate in front of the answer.</p>
+        </div>
+        <div class="card">
+          <div class="ct">No recommendation</div>
+          <p>Nested compares paths and stops. It doesn&rsquo;t tell a family which to choose, because it isn&rsquo;t in a position to know.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Final touches ===== -->
+  <section class="section" id="final-touches">
+    <span class="eyebrow">Final touches</span>
+    <h2>Refining the build</h2>
+    <p class="lead measure">The final phase was about making the product hold up for the people who&rsquo;d actually use it.</p>
+
+    <div class="sub">
+      <div class="kicker">Designing for older users</div>
+      <p class="measure">An accessibility panel sits in the navigation: text size in four steps, higher contrast, reduced motion, underlined links. Choices persist per device and apply before first paint, so a saved preference never flashes on load.</p>
+      <p class="measure">Page zoom was the obvious way to scale text and the wrong one. It inflates a 72px display heading until it overflows, while the body copy that needs help only grows in proportion. Reading sizes now scale up to 50%; display type barely moves.</p>
+    </div>
+
+    <div class="sub">
+      <div class="kicker">Tightening the system</div>
+      <div class="cards">
+        <div class="card">
+          <div class="ct">One accent, not two</div>
+          <p>A terracotta accent ran alongside the teal, so every new component became a decision about which to use, and the answer was rarely meaningful. One hue made the rule trivial.</p>
+        </div>
+        <div class="card">
+          <div class="ct">One voice per heading</div>
+          <p>A serif italic for emphasis words split headings into two typefaces for no gain in meaning. Removing it also fixed a bug where that line fell back to a system font.</p>
+        </div>
+        <div class="card">
+          <div class="ct">Drawn icons, not emoji</div>
+          <p>Emoji render differently on every platform and can&rsquo;t take a colour from the palette. Replaced with a line set on a 24px grid, one stroke weight, inheriting the text colour.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub">
+      <div class="kicker">Three bugs worth keeping</div>
+      <div class="cards">
+        <div class="card">
+          <span class="tag">Bug 01</span>
+          <div class="ct">The headline rendered as one long word</div>
+          <p>Each word is a separate element so it can animate in, and JSX strips whitespace spanning a line break, so the words ran together. The same bug was sitting in a second heading.</p>
+        </div>
+        <div class="card">
+          <span class="tag">Bug 02</span>
+          <div class="ct">The frosted navbar wasn&rsquo;t frosted</div>
+          <p>The CSS matched the design file exactly; the build was deleting it. The minifier collapsed two backdrop-filter declarations into the prefixed one alone, which Chrome and Firefox ignore.</p>
+        </div>
+        <div class="card">
+          <span class="tag">Bug 03</span>
+          <div class="ct">The site could get stuck on its loading screen</div>
+          <p>The intro overlay is removed by script on a timer, and browsers throttle timers in background tabs, so a page opened in an unfocused tab could sit behind it indefinitely. It now waits for the tab to be visible, with a CSS fallback if the script never runs.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Solution ===== -->
+  <section class="section" id="solution">
+    <span class="eyebrow">Solution</span>
+    <h2>How Nested works</h2>
+    <div class="cards">
+      <div class="card">
+        <div class="ct">Show the method first</div>
+        <p>A three-step walkthrough on the homepage shows exactly what the tool will ask and what it returns, so starting the calculator is never a leap of faith.</p>
+      </div>
+      <div class="card">
+        <div class="ct">Answer only what your path needs</div>
+        <p>Seventeen screens across three care paths, each split into housing, care level, and extras. Don&rsquo;t know a figure? Fill with national averages and edit any field.</p>
+      </div>
+      <div class="card">
+        <div class="ct">Compare, then take it away</div>
+        <p>Monthly cost per path, a five-year projection, and the break-even point, as a printable report to share with family or a financial advisor.</p>
+      </div>
+    </div>
+    <figure>
+      <div class="fig"><img src="images/nested/calculator.jpg" alt="The first screen of the Nested calculator, headed What would you like to compare, offering Aging at Home, Assisted Living, and Memory Care as selectable options above a Continue button, with a five step progress bar across the top."></div>
+      <figcaption>The calculator opens by asking which paths to weigh, then asks only what each path needs.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ===== Learnings ===== -->
+  <section class="section" id="learnings">
+    <span class="eyebrow">Learnings</span>
+    <h2>What I&rsquo;d take forward</h2>
+    <div class="learn">
+      <div class="item">
+        <h3>Trust is built by what you refuse to do.</h3>
+        <p>The strongest decisions here were subtractions: no referral fees, no account, no email gate on the result. Each cost a conventional growth lever and bought the only thing that matters in this category: a reason to believe the number.</p>
+      </div>
+      <div class="item">
+        <h3>Accessibility is an architecture decision, not a checklist.</h3>
+        <p>The panel was the easy part. The real work was that every reveal on the page starts hidden and is switched on by script, so reducing motion has to <em>show</em> that content rather than just stop the animation. Accommodations have to be designed into how the page is built.</p>
+      </div>
+      <div class="item">
+        <h3>Building it myself changed what I designed.</h3>
+        <p>Several problems were invisible in Figma and obvious in the browser: a heading that lost its typeface, a nav effect the build was silently stripping, a loading screen that could trap the whole site. Shipping the code is what caught the gap between the design and what people actually get.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="soon">more coming soon &middot; <a href="https://nested.care" target="_blank" rel="noopener">nested.care</a></p>
+
+</main>
+
+<script>
+  /* Scrollspy: highlight the current section in the TOC. */
+  (function () {
+    var links = Array.prototype.slice.call(document.querySelectorAll('.toc a'));
+    var byId = {};
+    links.forEach(function (a) { byId[a.getAttribute('href').slice(1)] = a; });
+    var sections = links.map(function (a) { return document.getElementById(a.getAttribute('href').slice(1)); }).filter(Boolean);
+    if (!sections.length) return;
+
+    var current = null;
+    function setActive(id) {
+      if (id === current) return;
+      current = id;
+      links.forEach(function (a) { a.classList.remove('active'); });
+      if (byId[id]) byId[id].classList.add('active');
+    }
+
+    function atBottom() {
+      return window.innerHeight + Math.ceil(window.scrollY) >= document.documentElement.scrollHeight - 2;
+    }
+    var lastId = sections[sections.length - 1].id;
+
+    /* highlight the last section whose top has passed a line ~45% down the
+       viewport; pin the last section once scrolled to the very bottom */
+    function update() {
+      if (atBottom()) { setActive(lastId); return; }
+      var line = window.innerHeight * 0.45;
+      var cur = sections[0].id;
+      for (var i = 0; i < sections.length; i++) {
+        if (sections[i].getBoundingClientRect().top <= line) cur = sections[i].id;
+        else break;
+      }
+      setActive(cur);
+    }
+
+    var ticking = false;
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () { update(); ticking = false; });
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  })();
+</script>
+</body>
+</html>
