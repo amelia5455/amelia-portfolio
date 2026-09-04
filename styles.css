@@ -213,13 +213,16 @@
       linear-gradient(160deg, #f5efe2, #f7f0e6 55%, #f8f0e8);
   }
   .salon-media::after, .gayle-media::after { opacity: .2; }
-  /* Nested: teal brand tint under the product screenshot */
+  /* Nested: MacBook mockup on a teal brand mesh (mirrors Salon / Gayle) */
   .nested-media {
     background:
-      radial-gradient(60% 60% at 16% 10%, rgba(2,83,85,.16), transparent 70%),
-      linear-gradient(160deg, #e6f0ee, #dcebe9 55%, #cfe4e2);
+      radial-gradient(58% 60% at 15% 12%, rgba(2,83,85,.18), transparent 70%),
+      radial-gradient(54% 56% at 87% 15%, rgba(176,207,207,.55), transparent 70%),
+      radial-gradient(66% 64% at 85% 102%, rgba(2,83,85,.12), transparent 70%),
+      radial-gradient(60% 60% at 13% 96%, rgba(207,228,226,.60), transparent 72%),
+      linear-gradient(160deg, #edf4f2, #e3efed 55%, #d6e7e5);
   }
-  .nested-media::after { opacity: .18; }
+  .nested-media::after { opacity: .2; }
   .laptop {
     position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
     width: 66%; max-width: 560px; z-index: 1; display: flex; flex-direction: column; align-items: center;

@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sometype+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="besties.css?v=18">
-<link rel="stylesheet" href="nested.css?v=1">
+<link rel="stylesheet" href="nested.css?v=2">
 </head>
 <body>
 
@@ -74,6 +74,12 @@
     </div>
   </div>
 
+  <!-- ===== Visit CTA ===== -->
+  <a class="visit-cta" href="https://nested.care" target="_blank" rel="noopener">
+    <span>Check out the website!</span>
+    <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>
+  </a>
+
   <!-- ===== Overview ===== -->
   <section class="section" id="overview">
     <span class="eyebrow">Overview</span>
@@ -130,6 +136,43 @@
     <h2>Finding the shape</h2>
     <p class="lead measure">Two things had to be true at once. The tool needed enough detail to produce a number a family would trust, and it had to be finishable in one sitting by someone stressed and not enjoying the task.</p>
     <p class="measure">That ruled out both ends. A single-field estimator is too crude to believe; a full financial-planning form is too heavy to complete. The resolution was a <em>branching flow</em>: choose the paths you&rsquo;re weighing, answer only the questions that path needs, and fill anything unknown with national averages you can edit field by field.</p>
+
+    <figure>
+      <div class="flowmap" role="img" aria-label="The calculator's branching flow: choose care paths, answer only what each path needs, then compare the results side by side.">
+        <div class="fm-stage">
+          <span class="fm-cap">1 &middot; Choose paths</span>
+          <div class="fm-nodes">
+            <span class="fm-chip">Aging at Home</span>
+            <span class="fm-chip">Assisted Living</span>
+            <span class="fm-chip">Memory Care</span>
+          </div>
+        </div>
+        <div class="fm-arrow" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </div>
+        <div class="fm-stage">
+          <span class="fm-cap">2 &middot; Answer only what that path needs</span>
+          <div class="fm-nodes">
+            <span class="fm-node">Housing</span>
+            <span class="fm-node">Care level</span>
+            <span class="fm-node">Extras</span>
+            <span class="fm-sub">Unknowns fill with national averages, editable field by field</span>
+          </div>
+        </div>
+        <div class="fm-arrow" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </div>
+        <div class="fm-stage">
+          <span class="fm-cap">3 &middot; Compare</span>
+          <div class="fm-nodes">
+            <span class="fm-out">Monthly cost per path</span>
+            <span class="fm-out">Five-year projection</span>
+            <span class="fm-out">Break-even point</span>
+          </div>
+        </div>
+      </div>
+      <figcaption>The core decision: a branching flow that asks only what each path needs, then puts the paths side by side.</figcaption>
+    </figure>
 
     <div class="sub">
       <div class="kicker">Three constraints I set early</div>

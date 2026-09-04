@@ -26,6 +26,44 @@
 /* solution screenshot sits in the same rounded frame as the hero shot */
 .section > figure .fig { box-shadow: 0 14px 34px rgba(2, 45, 46, .12); }
 
+/* dashed "check out the website" link box under the meta panel */
+.visit-cta {
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  margin-top: 20px; padding: 20px 24px;
+  border: 2px dashed rgba(2, 83, 85, .42); border-radius: 16px;
+  color: var(--coral); font-size: 15px; letter-spacing: .02em; font-weight: 500;
+  text-decoration: none; text-align: center;
+  transition: border-color .2s ease, background .2s ease;
+}
+.visit-cta:hover { border-color: var(--coral); background: var(--panel); }
+.visit-cta .arrow { width: 18px; height: 18px; flex-shrink: 0; transition: transform .2s ease; }
+.visit-cta:hover .arrow { transform: translate(3px, -3px); }
+
+/* branching-flow diagram (Ideation) */
+.flowmap {
+  display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 16px; align-items: stretch;
+  background: var(--panel); border-radius: 18px; padding: 28px 26px;
+}
+.flowmap .fm-stage { display: flex; flex-direction: column; gap: 12px; }
+.flowmap .fm-cap { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--coral); line-height: 1.4; }
+.flowmap .fm-nodes { display: flex; flex-direction: column; gap: 8px; }
+.flowmap .fm-chip,
+.flowmap .fm-node,
+.flowmap .fm-out {
+  font-size: 13px; line-height: 1.35; color: var(--ink); background: #fff;
+  border: 1px solid var(--panel-line); border-radius: 10px; padding: 10px 12px; text-align: center;
+}
+.flowmap .fm-chip { border-color: rgba(2, 83, 85, .32); color: var(--coral); font-weight: 500; }
+.flowmap .fm-out { background: var(--coral); color: #F5F3EE; border-color: var(--coral); }
+.flowmap .fm-sub { font-size: 11.5px; line-height: 1.5; color: var(--muted); text-align: center; margin-top: 2px; }
+.flowmap .fm-arrow { align-self: center; color: var(--coral); }
+.flowmap .fm-arrow svg { width: 22px; height: 22px; display: block; }
+@media (max-width: 720px) {
+  .flowmap { grid-template-columns: 1fr; gap: 12px; }
+  .flowmap .fm-arrow svg { transform: rotate(90deg); }
+  .flowmap .fm-arrow { justify-self: center; }
+}
+
 /* playful in-progress footer, matched to Booth */
 .soon { margin-top: 84px; text-align: center; font-style: italic; color: var(--muted); font-size: 14px; letter-spacing: .02em; }
 .soon a { color: var(--coral); border-bottom: 1px solid var(--panel-line); padding-bottom: 1px; }
