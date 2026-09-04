@@ -216,13 +216,15 @@
   /* Nested: MacBook mockup on a teal brand mesh (mirrors Salon / Gayle) */
   .nested-media {
     background:
-      radial-gradient(58% 60% at 15% 12%, rgba(2,83,85,.18), transparent 70%),
-      radial-gradient(54% 56% at 87% 15%, rgba(176,207,207,.55), transparent 70%),
-      radial-gradient(66% 64% at 85% 102%, rgba(2,83,85,.12), transparent 70%),
-      radial-gradient(60% 60% at 13% 96%, rgba(207,228,226,.60), transparent 72%),
-      linear-gradient(160deg, #edf4f2, #e3efed 55%, #d6e7e5);
+      radial-gradient(58% 60% at 15% 12%, rgba(2,83,85,.26), transparent 66%),
+      radial-gradient(56% 58% at 88% 14%, rgba(142,207,203,.70), transparent 66%),
+      radial-gradient(66% 64% at 86% 104%, rgba(3,61,63,.24), transparent 68%),
+      radial-gradient(62% 62% at 12% 98%, rgba(176,207,207,.72), transparent 70%),
+      linear-gradient(160deg, #e6f1ef, #d9ebe8 55%, #c7e0dd);
   }
   .nested-media::after { opacity: .2; }
+  /* show the site's own navbar at the top of the mockup, not a centre crop */
+  .nested-media .laptop-vid { object-position: top center; }
   .laptop {
     position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
     width: 66%; max-width: 560px; z-index: 1; display: flex; flex-direction: column; align-items: center;
