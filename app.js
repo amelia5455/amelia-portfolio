@@ -1115,3 +1115,66 @@
   new MutationObserver(function () { ScrollTrigger.refresh(); })
     .observe(document.documentElement, { attributes: true, attributeFilter: ['data-view'] });
 })();
+
+/* ---- Seattle hover: cloud drifts in and darkens, randomized rain with splashes (GSAP) ---- */
+(function () {
+  var word = document.querySelector('.seattle');
+  if (!word || !window.gsap) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;   // CSS fade-in fallback
+
+  var rain = word.querySelector('.rain');
+  var cloud = rain.querySelector('.cloud');
+  for (var n = 0; n < 2; n++) rain.appendChild(document.createElement('i'));   // a couple more drops
+  var drops = rain.querySelectorAll('i');
+  var R = gsap.utils.random;
+  var raining = false, active = [], bob = null;
+  var SHADOW = 'drop-shadow(0px 2px 2px rgba(60,80,110,0.16))';
+
+  word.classList.add('gsap-rain');
+  gsap.set(cloud, { xPercent: -50, x: 0, y: -6, opacity: 0, filter: SHADOW + ' brightness(1)' });
+  gsap.set(drops, { opacity: 0 });
+
+  function splash(x, y) {
+    [-1, 1].forEach(function (dir) {
+      var dot = document.createElement('span');
+      dot.className = 'splash';
+      rain.appendChild(dot);
+      gsap.fromTo(dot, { left: x, top: y, opacity: 0.9, scale: 1 }, {
+        x: dir * R(3, 5), y: -R(2, 4), opacity: 0, scale: 0.5,
+        duration: 0.35, ease: 'power2.out', onComplete: function () { dot.remove(); }
+      });
+    });
+  }
+
+  // each drop re-rolls its spot, length and speed every fall; it stops after the fall in progress
+  function fall(i) {
+    if (!raining) { active[i] = false; return; }
+    active[i] = true;
+    var el = drops[i], d = R(0.6, 0.95), h = R(7, 11), left = R(30, 64);
+    gsap.timeline({ delay: R(0, 0.3), onComplete: function () { fall(i); } })
+      .set(el, { left: left + '%', height: h, y: -2, scaleY: 0.7, opacity: 0, transformOrigin: '50% 0%' })
+      .to(el, { y: 12, scaleY: 1.1, duration: d, ease: 'power1.in' }, 0)
+      .to(el, { opacity: 0.9, duration: d * 0.2, ease: 'none' }, 0)
+      .to(el, { opacity: 0, duration: d * 0.2, ease: 'none' }, d * 0.8)
+      .call(function () { splash(el.offsetLeft, rain.offsetHeight + 4); }, null, d * 0.75);   // lands on the letter tops
+  }
+
+  word.addEventListener('mouseenter', function () {
+    raining = true;
+    gsap.killTweensOf(cloud);
+    gsap.timeline()
+      .to(cloud, { y: 0, opacity: 1, duration: 0.5, ease: 'back.out(2.2)' })
+      .add(function () { bob = gsap.to(cloud, { y: -1.5, duration: 1.4, ease: 'sine.inOut', yoyo: true, repeat: -1 }); });
+    gsap.to(cloud, { filter: SHADOW + ' brightness(0.86)', duration: 1.2, delay: 0.2, ease: 'power1.inOut' });
+    drops.forEach(function (_, i) {
+      if (!active[i]) gsap.delayedCall(0.25 + i * 0.07, function () { if (raining && !active[i]) fall(i); });
+    });
+  });
+
+  word.addEventListener('mouseleave', function () {
+    raining = false;                                   // drops mid-air finish their fall
+    if (bob) { bob.kill(); bob = null; }
+    gsap.killTweensOf(cloud);
+    gsap.to(cloud, { y: -8, opacity: 0, filter: SHADOW + ' brightness(1)', duration: 0.45, ease: 'power2.in' });
+  });
+})();
