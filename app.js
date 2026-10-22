@@ -16,6 +16,7 @@
     canvas.width = Math.round(W * dpr);
     canvas.height = Math.round(H * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    buildBitmaps();
     if (active) ensureRaf();
   }
   window.addEventListener('resize', resize);
@@ -86,16 +87,21 @@
     return 'rgba(' + (n>>16 & 255) + ',' + (n>>8 & 255) + ',' + (n & 255) + ',' + a + ')';
   }
 
+  // Bitmaps are rendered at screen resolution (devicePixelRatio), with headroom
+  // for the hover scale, so bubbles stay crisp on Retina displays.
+  let bmpScale = 1;
   function makeBubble(r, v) {
     const dim = Math.ceil(r * 2.4);
+    const px = Math.ceil(dim * bmpScale);
     const mk = () => (typeof OffscreenCanvas !== 'undefined')
-      ? new OffscreenCanvas(dim, dim)
-      : Object.assign(document.createElement('canvas'), { width: dim, height: dim });
+      ? new OffscreenCanvas(px, px)
+      : Object.assign(document.createElement('canvas'), { width: px, height: px });
+    const start = c => { const x = c.getContext('2d'); x.translate(px/2, px/2); x.scale(bmpScale, bmpScale); return x; };
     const fin = o => o.transferToImageBitmap ? o.transferToImageBitmap() : o;
     const disc = c => { c.beginPath(); c.arc(0,0,r,0,Math.PI*2); c.fill(); };
 
     // LAYER 1 - BASE: everything is a soft radial gradient. No strokes.
-    const bc = mk(); const b = bc.getContext('2d'); b.translate(dim/2, dim/2);
+    const bc = mk(); const b = start(bc);
     // gentle directional body shading
     let g1 = b.createRadialGradient(-r*0.30, r*0.30, 0, 0,0, r);
     g1.addColorStop(0, 'rgba(200,235,248,0.10)'); g1.addColorStop(1, 'rgba(200,235,248,0)');
@@ -118,7 +124,7 @@
     // LAYER 2 - IRIDESCENCE: a smooth conic sweep, then FEATHERED with a radial
     // alpha mask into one soft band. No ring outlines, fully continuous so it
     // can rotate seamlessly.
-    const ic = mk(); const i = ic.getContext('2d'); i.translate(dim/2, dim/2);
+    const ic = mk(); const i = start(ic);
     if (typeof i.createConicGradient === 'function') {
       const sweep = [
         [0.00,'rgba(255,170,210,0.45)'], [0.17,'rgba(255,214,160,0.40)'],
@@ -147,7 +153,7 @@
     }
 
     // LAYER 3 - GLINTS: soft reflections only. No hard dots, no strokes.
-    const gc = mk(); const g = gc.getContext('2d'); g.translate(dim/2, dim/2);
+    const gc = mk(); const g = start(gc);
     // primary window highlight (soft elongated blob)
     g.save(); g.rotate(-0.5);
     let h1 = g.createRadialGradient(-r*0.30,-r*0.34, 0, -r*0.30,-r*0.34, r*0.45);
@@ -169,7 +175,13 @@
   const DEFS = [];
   for (const v of VARIANTS)
     for (const s of SIZES)
-      DEFS.push({ v, size: s, r: s*0.5, dim: s*1.2, bmp: makeBubble(s*0.5, v) });
+      DEFS.push({ v, size: s, r: s*0.5, dim: s*1.2, bmp: null });
+  function buildBitmaps() {
+    const next = Math.max(1, window.devicePixelRatio || 1) * HOVER_SCALE;
+    if (next === bmpScale && DEFS[0].bmp) return;
+    bmpScale = next;
+    DEFS.forEach(d => { d.bmp = makeBubble(d.r, d.v); });
+  }
 
   /* ── Easing + state ──────────────────────────────────────────────────── */
   const lerp = (a,b,t) => a + (b-a)*t;
@@ -268,9 +280,10 @@
       ctx.globalAlpha = Math.max(0, b.op);
       ctx.translate(b.x, b.y);
       ctx.scale(b.hoverScale * sx, b.hoverScale * sy);
-      ctx.drawImage(d.bmp.base, -half, -half);                       // body + edges
-      ctx.save(); ctx.rotate(iriRot); ctx.drawImage(d.bmp.iri, -half, -half); ctx.restore();  // swirling film
-      ctx.drawImage(d.bmp.glints, -half, -half);                     // fixed highlights
+      const sz = d.bmp.dim;
+      ctx.drawImage(d.bmp.base, -half, -half, sz, sz);                       // body + edges
+      ctx.save(); ctx.rotate(iriRot); ctx.drawImage(d.bmp.iri, -half, -half, sz, sz); ctx.restore();  // swirling film
+      ctx.drawImage(d.bmp.glints, -half, -half, sz, sz);                     // fixed highlights
       ctx.restore();
     }
 
