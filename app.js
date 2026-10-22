@@ -1089,3 +1089,29 @@
   apply();
   requestAnimationFrame(center);
 })();
+
+/* ---- work cards: staggered reveal on scroll (GSAP + ScrollTrigger) ---- */
+(function () {
+  if (!window.gsap || !window.ScrollTrigger) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  gsap.registerPlugin(ScrollTrigger);
+
+  var cards = document.querySelectorAll('#view-work .case-card');
+  if (!cards.length) return;
+
+  gsap.set(cards, { opacity: 0, y: 40 });
+  ScrollTrigger.batch(cards, {
+    start: 'top 95%',
+    once: true,
+    onEnter: function (batch) {
+      gsap.to(batch, {
+        opacity: 1, y: 0, duration: 0.7, ease: 'power3.out',
+        stagger: 0.12, clearProps: 'transform,opacity'
+      });
+    }
+  });
+
+  // views are swapped via html[data-view]; re-measure when one comes back
+  new MutationObserver(function () { ScrollTrigger.refresh(); })
+    .observe(document.documentElement, { attributes: true, attributeFilter: ['data-view'] });
+})();
