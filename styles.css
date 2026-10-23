@@ -97,6 +97,24 @@
   .side-nav a.active { color: var(--ink); }
 
   .divider { border: none; border-top: 1px solid var(--muted); opacity: .45; margin: 0; width: 100%; }
+  /* portfolio goose: walks along the divider under the bio (see app.js) */
+  .goose-track { position: relative; margin-top: 8px; }   /* a little headroom between the bio and the goose */
+  .goose {
+    position: absolute; left: 0; bottom: 1px; width: 32px; height: 28px;
+    background: none; border: 0; padding: 0; cursor: pointer; z-index: 2; font: inherit;
+  }
+  .goose:focus-visible { outline: 2px solid var(--cursor); outline-offset: 3px; border-radius: 4px; }
+  .goose-art { display: block; width: 32px; height: 28px; shape-rendering: crispEdges; }
+  .goose-bubble {
+    position: absolute; bottom: calc(100% + 9px); left: 50%;
+    padding: 4px 9px; border-radius: 5px; background: #8f8a84; color: #fff;
+    font: inherit; font-size: 12px; line-height: 1.3; white-space: nowrap;
+    opacity: 0; pointer-events: none; transform: translateX(-50%);
+  }
+  .goose-bubble::after {
+    content: ''; position: absolute; top: 100%; left: 50%; margin-left: calc(-4px + var(--nudge, 0px));
+    border: 4px solid transparent; border-top-color: #8f8a84;
+  }
   .side-bottom { display: flex; flex-direction: column; gap: 8px; padding-top: 10px; margin-top: auto; width: fit-content; }
   #toggle {
     background: none; border: none; cursor: pointer; padding: 0;

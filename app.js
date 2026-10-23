@@ -1224,3 +1224,130 @@
     gsap.to(cloud, { y: -8, opacity: 0, filter: SHADOW + ' brightness(1)', duration: 0.45, ease: 'power2.in' });
   });
 })();
+
+/* ---- portfolio goose: a pixel goose that waddles along the bio divider ---- */
+(function () {
+  var goose = document.querySelector('.goose');
+  var track = document.querySelector('.goose-track');
+  if (!goose || !track || !window.gsap) return;
+  var bubble = goose.querySelector('.goose-bubble');
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // 16x14 pixel art, facing right. k outline, w white, g wing, o beak/feet, e eye
+  var BODY = [
+    '..........kkk...',
+    '.........kwwwk..',
+    '.........kwewkoo',
+    '.........kwwwko.',
+    '..........kwk...',
+    '..........kwk...',
+    '.kk.......kwk...',
+    'kwwkkkkkkkwwk...',
+    'kwwwgggwwwwwk...',
+    '.kwwwggwwwwwk...',
+    '..kwwwwwwwwk....',
+    '...kkkkkkkk.....'
+  ];
+  var STRIDE = ['.....o...o......', '....oo..oo......'];   // legs apart
+  var STAND  = ['......o.o.......', '.....oo.oo......'];   // legs together
+  var COLOR = { k: '#2a2622', w: '#ffffff', g: '#dcd7ce', o: '#f0973a', e: '#2a2622' };
+
+  function pixels(rows, y0) {
+    var out = '';
+    rows.forEach(function (row, y) {
+      for (var x = 0; x < row.length; x++) {
+        var c = row[x];
+        if (c === '.') continue;
+        var run = 1;                                     // merge same-colour runs into one rect
+        while (row[x + run] === c) run++;
+        out += '<rect x="' + x + '" y="' + (y + y0) + '" width="' + run + '" height="1" fill="' + COLOR[c] + '"/>';
+        x += run - 1;
+      }
+    });
+    return out;
+  }
+  goose.insertAdjacentHTML('beforeend',
+    '<svg class="goose-art" viewBox="0 0 16 14" aria-hidden="true">' + pixels(BODY, 0) +
+    '<g class="legs-stride" style="display:none">' + pixels(STRIDE, 12) + '</g>' +
+    '<g class="legs-stand">' + pixels(STAND, 12) + '</g></svg>');
+  var art = goose.querySelector('.goose-art');
+  var stride = art.querySelector('.legs-stride'), stand = art.querySelector('.legs-stand');
+
+  var x = 0, walk = null, idle = null, step = null, hovering = false, bubbleTimer = null;
+  var R = gsap.utils.random;
+  var maxX = function () { return Math.max(0, track.clientWidth - goose.offsetWidth); };
+
+  function legs(striding) { stride.style.display = striding ? '' : 'none'; stand.style.display = striding ? 'none' : ''; }
+  function face(dir) { gsap.set(art, { scaleX: dir < 0 ? -1 : 1, transformOrigin: '50% 50%' }); }
+
+  function say(text, hold) {
+    if (bubbleTimer) { bubbleTimer.kill(); bubbleTimer = null; }
+    bubble.textContent = text;
+    // keep the bubble inside the track; the arrow stays pointed at the goose
+    var bw = bubble.offsetWidth, mid = x + goose.offsetWidth / 2;
+    var left = Math.min(Math.max(0, mid - bw / 2), track.clientWidth - bw);
+    var nudge = left - (mid - bw / 2);
+    gsap.set(bubble, { xPercent: -50, x: nudge });
+    bubble.style.setProperty('--nudge', -nudge + 'px');
+    gsap.killTweensOf(bubble);
+    gsap.fromTo(bubble, { opacity: 0, y: 4, scale: 0.85 },
+      { opacity: 1, y: 0, scale: 1, duration: reduceMotion ? 0 : 0.28, ease: 'back.out(2.4)' });
+    if (hold) bubbleTimer = gsap.delayedCall(hold, hush);
+  }
+  function hush() {
+    gsap.to(bubble, { opacity: 0, y: 3, duration: reduceMotion ? 0 : 0.2, ease: 'power1.in' });
+  }
+  function hop() {
+    if (reduceMotion) return;
+    gsap.fromTo(art, { y: 0 }, { y: -3, duration: 0.11, ease: 'power1.out', yoyo: true, repeat: 1 });
+  }
+
+  function rest() {
+    walk = null;
+    if (step) { step.kill(); step = null; }
+    legs(false);
+    if (!hovering && Math.random() < 0.35) { say(Math.random() < 0.8 ? 'Honk!' : 'Honk honk!', 1.3); hop(); }
+    idle = gsap.delayedCall(R(1.4, 3.6), wander);
+  }
+
+  function wander() {
+    idle = null;
+    if (hovering) { idle = gsap.delayedCall(1, wander); return; }
+    var max = maxX(), to = R(0, max);
+    if (Math.abs(to - x) < 40) to = x < max / 2 ? Math.min(max, x + R(60, 140)) : Math.max(0, x - R(60, 140));
+    face(to - x);
+    var flip = false;
+    step = gsap.delayedCall(0.14, function tick() { flip = !flip; legs(flip); step = gsap.delayedCall(0.14, tick); });
+    walk = gsap.to(goose, {
+      x: to, duration: Math.abs(to - x) / 30, ease: 'none',      // about 30px a second
+      onUpdate: function () { x = gsap.getProperty(goose, 'x'); },
+      onComplete: rest
+    });
+  }
+
+  function pause() {
+    hovering = true;
+    if (walk) walk.pause();
+    if (step) step.pause();
+    legs(false);
+    say('Say hi to Amelia');
+  }
+  function resume() {
+    hovering = false;
+    hush();
+    if (walk) { walk.resume(); if (step) step.resume(); }
+  }
+  goose.addEventListener('mouseenter', pause);
+  goose.addEventListener('mouseleave', resume);
+  goose.addEventListener('focus', pause);
+  goose.addEventListener('blur', resume);
+  goose.addEventListener('click', function () {
+    say('Honk!', 0.9); hop();
+    setTimeout(function () { window.location.href = 'mailto:amelia@winoman.com'; }, 250);
+  });
+
+  if (reduceMotion) { x = maxX() * 0.7; gsap.set(goose, { x: x }); return; }   // stands still
+  x = R(0, maxX()); gsap.set(goose, { x: x });
+  idle = gsap.delayedCall(R(0.8, 2), wander);
+  window.addEventListener('resize', function () { if (x > maxX()) { x = maxX(); gsap.set(goose, { x: x }); } });
+})();
