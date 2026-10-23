@@ -100,11 +100,13 @@
   /* portfolio goose: walks along the divider under the bio (see app.js) */
   .goose-track { position: relative; margin-top: 8px; }   /* a little headroom between the bio and the goose */
   .goose {
-    position: absolute; left: 0; bottom: 1px; width: 32px; height: 28px;
+    position: absolute; left: 0; bottom: 1px; width: 32px; height: 32px;
     background: none; border: 0; padding: 0; cursor: pointer; z-index: 2; font: inherit;
   }
   .goose:focus-visible { outline: 2px solid var(--cursor); outline-offset: 3px; border-radius: 4px; }
-  .goose-art { display: block; width: 32px; height: 28px; shape-rendering: crispEdges; }
+  .goose-art { display: block; width: 32px; height: 32px; shape-rendering: crispEdges; }
+  /* the gloom drains colour; give the raincoat it back so it stays a bright yellow on a grey day */
+  body.raining .goose-art { filter: saturate(1.6) brightness(1.08); }
   .goose-bubble {
     position: absolute; bottom: calc(100% + 9px); left: 50%;
     padding: 4px 9px; border-radius: 5px; background: #8f8a84; color: #fff;
@@ -126,6 +128,23 @@
   .ico-off, .ico-bubble { display: none; line-height: 0; }
   body:not(.bubbles) .ico-off { display: flex; }
   body.bubbles .ico-bubble { display: flex; }
+  /* rain mode (app.js, WEATHER_MODE = 'rain'): sun when off, rain cloud when on */
+  .ico-rain { display: none; line-height: 0; }
+  #toggle .ico-rain svg { width: 24px; height: 24px; }   /* a touch bigger than the sun so the cloud reads */
+  body.raining .ico-off { display: none; }
+  body.raining .ico-rain { display: flex; }
+  /* the Seattle gloom: a cool grey-blue wash, darker toward the edges, colours a little drained */
+  #gloom {
+    position: fixed; inset: 0; z-index: 55; pointer-events: none; opacity: 0;
+    background:
+      radial-gradient(125% 95% at 50% 32%, rgba(70,84,104,.06) 0%, rgba(40,52,70,.36) 100%),
+      rgba(92,106,126,.16);
+    -webkit-backdrop-filter: saturate(.68) brightness(.93); backdrop-filter: saturate(.68) brightness(.93);
+    transition: opacity 1.6s ease;
+  }
+  body.raining #gloom { opacity: 1; }
+  #rain-canvas { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 58; }
+  html.weather-rain .seattle .rain { display: none; }   /* rain mode replaces the Seattle hover rain */
   .side-meta { font-size: 12px; color: var(--muted); line-height: 1.4; text-transform: uppercase; letter-spacing: .08em; margin-top: 0; }
   .side-bottom .metabits { display: flex; align-items: center; justify-content: space-between; gap: 8px;
     font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
@@ -156,7 +175,7 @@
 
 
   /* ---- Main: intentionally open space to pop bubbles ---- */
-  main { position: relative; z-index: 5; margin-left: var(--rail); padding: 72vh 56px 16vh; min-height: 100vh; }
+  main { position: relative; z-index: 5; margin-left: var(--rail); padding: 136px 56px 16vh; min-height: 100vh; }
 
   /* ---- Case study cards (mono / terminal style) ---- */
   .case-grid { display: flex; flex-direction: column; gap: 96px; align-items: stretch; max-width: none; margin: 0; }
@@ -421,6 +440,13 @@
   }
   .sticker-tray.open { transform: scale(1); opacity: 1; pointer-events: auto; }
   @media (prefers-reduced-motion: reduce) { .sticker-tray { transition: opacity .2s ease; } }
+  /* roll-out version (app.js adds .roll when GSAP is available): revealed by clip-path, not scaled */
+  .sticker-tray.roll { transform: none; opacity: 1; transition: none; clip-path: inset(0 100% 0 0); }
+  .tray-roll {
+    position: absolute; z-index: 33; border-radius: 10px; pointer-events: none; opacity: 0;
+    background: linear-gradient(to right, #ddd6cb 0%, #fbf9f5 38%, #fff 50%, #ece7df 78%, #cfc7ba 100%);
+    box-shadow: 0 6px 14px rgba(40,30,20,.20), inset 0 0 0 1px rgba(40,30,20,.06);
+  }
 
   .sticker-reset {
     position: absolute; top: 67px; right: 26px; transform: translateY(-50%); z-index: 31; border: none; cursor: pointer;
@@ -472,6 +498,13 @@
   }
   .sticker-ghost .emoji { font-size: 52px; line-height: 1; }
   .sticker-ghost img { width: 100%; height: 100%; object-fit: contain; }
+  /* peel-off layers (app.js): the front with its corner folded away, and the white backing on the flap */
+  .sticker-ghost .peel-front, .sticker-ghost .peel-flap, .sticker-ghost .peel-back {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  }
+  /* the flap is mirrored across the fold; its shadow falls on the sticker still stuck down */
+  .sticker-ghost .peel-flap { transform-origin: 0 0; display: none; filter: drop-shadow(0 1.5px 2px rgba(40,30,20,.3)); }
+  .sticker-ghost .peel-back { filter: brightness(0) invert(.95); }
 
   @media (max-width: 720px) {
     html[data-view="gallery"] main { padding: 56px 0 0; }

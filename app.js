@@ -1,5 +1,9 @@
 /* Amelia Simpson — portfolio scripts (vanilla JS) */
 
+/* The top-right toggle's weather: 'rain' (rain mode + Seattle gloom) or 'bubbles'
+   (the original bubble mode, kept intact below). Switch this to bring bubbles back. */
+var WEATHER_MODE = 'rain';
+
 /* ---- block 1 ---- */
 (function () {
   'use strict';
@@ -407,15 +411,18 @@
     setTimeout(() => { fog.style.transition = 'opacity .48s ease-out'; fog.style.opacity = '0'; }, 160);
   }
 
+  window.portfolioClickSound = clickSound;        // rain mode reuses the toggle click
+  if (WEATHER_MODE === 'bubbles') {
   document.getElementById('toggle').addEventListener('pointerdown', initAudio, { once: true });
   document.getElementById('toggle').addEventListener('click', toggle);
   document.addEventListener('keydown', e => {
     if ((e.key === 't' || e.key === 'T') && !e.metaKey && !e.ctrlKey && !e.altKey &&
         !/INPUT|TEXTAREA/.test(document.activeElement.tagName)) toggle();
   });
+  }
 
   resize();
-  if (localStorage.getItem('bubbles') === '1') enable();
+  if (WEATHER_MODE === 'bubbles' && localStorage.getItem('bubbles') === '1') enable();
 
   const fmt = new Intl.DateTimeFormat('en-US', {
     timeZone: 'America/Los_Angeles', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true,
@@ -1045,6 +1052,44 @@
 
   var pack = document.getElementById('stickerPack');
   var tray = document.getElementById('stickerTray');
+  var motionOK = !!window.gsap && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // peel: you pull the trailing edge back over the sticker. The fold line is the
+  // perpendicular bisector between where the edge started (G) and where it is now (P),
+  // like a page curl: the part on G's side flips over, showing the white backing.
+  function peelLayers(ghost, h) {
+    ghost.innerHTML = '<div class="peel-front">' + h + '</div>' +
+      '<div class="peel-flap"><div class="peel-back">' + h + '</div></div>';
+    var front = ghost.firstChild, flap = ghost.lastChild, back = flap.firstChild, S = ghost.offsetWidth || 72;
+    var SQ = [[0, 0], [S, 0], [S, S], [0, S]];
+    function half(poly, M, n, keepFront) {               // clip a polygon to one side of the fold line
+      var out = [];
+      for (var i = 0; i < poly.length; i++) {
+        var a = poly[i], b = poly[(i + 1) % poly.length];
+        var sa = (a[0] - M[0]) * n[0] + (a[1] - M[1]) * n[1], sb = (b[0] - M[0]) * n[0] + (b[1] - M[1]) * n[1];
+        if (!keepFront) { sa = -sa; sb = -sb; }
+        if (sa >= 0) out.push(a);
+        if ((sa >= 0) !== (sb >= 0)) { var t = sa / (sa - sb); out.push([a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t]); }
+      }
+      return out;
+    }
+    function css(poly) {
+      if (poly.length < 3) return 'polygon(0 0,0 0,0 0)';
+      return 'polygon(' + poly.map(function (p) { return p[0].toFixed(2) + 'px ' + p[1].toFixed(2) + 'px'; }).join(',') + ')';
+    }
+    return function setFold(G, P) {
+      var dx = P[0] - G[0], dy = P[1] - G[1], L = Math.hypot(dx, dy);
+      if (L < 1.5) { front.style.clipPath = 'none'; flap.style.display = 'none'; return; }
+      var n = [dx / L, dy / L], M = [(G[0] + P[0]) / 2, (G[1] + P[1]) / 2], m = M[0] * n[0] + M[1] * n[1];
+      front.style.clipPath = css(half(SQ, M, n, true));
+      back.style.clipPath = css(half(SQ, M, n, false));
+      flap.style.display = '';
+      // reflect across the fold line: X' = X - 2((X - M)·n) n
+      flap.style.transform = 'matrix(' + [1 - 2 * n[0] * n[0], -2 * n[0] * n[1], -2 * n[0] * n[1], 1 - 2 * n[1] * n[1],
+        2 * m * n[0], 2 * m * n[1]].map(function (v) { return v.toFixed(4); }).join(',') + ')';
+    };
+  }
+
   function spawn(e) {
     var btn = this;
     if (btn.classList.contains('used')) return;   // one instance per sticker
@@ -1054,15 +1099,67 @@
     var ghost = document.createElement('div');
     ghost.className = 'sticker-ghost'; ghost.innerHTML = html(STICKERS[idx]);
     document.body.appendChild(ghost);
-    function mv(ev) { ghost.style.left = ev.clientX + 'px'; ghost.style.top = ev.clientY + 'px'; }
-    mv(e);
+    var px = e.clientX, py = e.clientY, state = 'held';
+    function follow() { ghost.style.left = px + 'px'; ghost.style.top = py + 'px'; }
+
+    if (!(motionOK && STICKERS[idx] && STICKERS[idx].img)) {
+      state = 'free'; follow();
+    } else {
+      // the sticker stays stuck in its slot while you peel it
+      state = 'peeling';
+      var setFold = peelLayers(ghost, html(STICKERS[idx]));
+      var S = ghost.offsetWidth || 72, r = btn.getBoundingClientRect(), k = r.width / S * 1.12;
+      var cx = r.left + r.width / 2, cy = r.top + r.height / 2, x0 = e.clientX, y0 = e.clientY;
+      var G = [S / 2, S / 2], P = [S / 2, S / 2], RELEASE = 40;   // px of pull before it comes free
+      ghost.style.left = cx + 'px'; ghost.style.top = cy + 'px';
+      gsap.set(ghost, { x: 0, y: 0, xPercent: -50, yPercent: -50, scale: r.width / S, filter: 'drop-shadow(0 1px 2px rgba(40,30,20,.22))' });
+      gsap.to(ghost, { scale: k, duration: 0.12, ease: 'power2.out' });            // tiny lift as you press
+      var peelTo = function () {
+        var dx = (px - x0) / k, dy = (py - y0) / k, L = Math.hypot(dx, dy);       // pull in sticker units
+        if (L < 0.5) { G = [S / 2, S / 2]; P = G.slice(); setFold(G, P); return; }
+        var u = [dx / L, dy / L], R = S * 0.48;
+        G = [S / 2 - u[0] * R, S / 2 - u[1] * R];                                 // trailing edge you're pulling
+        P = [G[0] + dx, G[1] + dy];
+        setFold(G, P);
+      };
+      var free = function () {                                                    // it lets go: flatten into your hand
+        state = 'releasing';
+        var f = { t: 0 }, G0 = G.slice(), P0 = P.slice();
+        gsap.timeline({ onComplete: function () { if (state === 'releasing') { state = 'free'; ghost.innerHTML = html(STICKERS[idx]); follow(); } } })
+          .to(f, { t: 1, duration: 0.18, ease: 'power2.out', onUpdate: function () {
+            setFold(G0, [P0[0] + (G0[0] - P0[0]) * f.t, P0[1] + (G0[1] - P0[1]) * f.t]); } })
+          .to(ghost, { scale: 1, filter: 'drop-shadow(0 13px 22px rgba(40,30,20,.32))', duration: 0.24, ease: 'back.out(1.8)' }, 0)
+          .to(ghost, { left: function () { return px; }, top: function () { return py; }, duration: 0.16, ease: 'power2.out' }, 0);
+      };
+    }
+
+    function mv(ev) {
+      px = ev.clientX; py = ev.clientY;
+      if (state === 'free') follow();
+      else if (state === 'peeling') { peelTo(); if (Math.hypot(px - x0, py - y0) > RELEASE) free(); }
+    }
     function up(ev) {
       window.removeEventListener('pointermove', mv);
       window.removeEventListener('pointerup', up);
+      if (state === 'peeling') {                  // let go before it came free: it smooths back down
+        state = 'done';
+        var f = { t: 0 }, G0 = G.slice(), P0 = P.slice();
+        gsap.timeline({ onComplete: function () { ghost.remove(); btn.classList.remove('used'); } })
+          .to(f, { t: 1, duration: 0.2, ease: 'power2.out', onUpdate: function () {
+            setFold(G0, [P0[0] + (G0[0] - P0[0]) * f.t, P0[1] + (G0[1] - P0[1]) * f.t]); } })
+          .to(ghost, { scale: r.width / S, duration: 0.2, ease: 'power2.out' }, 0);
+        return;
+      }
+      state = 'done';
+      if (window.gsap) gsap.killTweensOf(ghost);
       ghost.remove();
-      var r = vp.getBoundingClientRect();
-      if (ev.clientX >= r.left && ev.clientX <= r.right && ev.clientY >= r.top && ev.clientY <= r.bottom) {
-        place(idx, (ev.clientX - r.left - st.x) / st.s, (ev.clientY - r.top - st.y) / st.s);
+      var vr = vp.getBoundingClientRect();
+      if (ev.clientX >= vr.left && ev.clientX <= vr.right && ev.clientY >= vr.top && ev.clientY <= vr.bottom) {
+        var el = place(idx, (ev.clientX - vr.left - st.x) / st.s, (ev.clientY - vr.top - st.y) / st.s);
+        if (motionOK) {                           // pressed down onto the canvas with a little spring
+          el.classList.add('lift');
+          requestAnimationFrame(function () { requestAnimationFrame(function () { el.classList.remove('lift'); }); });
+        }
         save();
       } else {
         btn.classList.remove('used');             // dropped off-canvas: put it back in the strip
@@ -1079,10 +1176,42 @@
       b.addEventListener('pointerdown', spawn);
       tray.appendChild(b);
     });
+    // roll-out: the tray unrolls from the heart like a roll of stickers, a paper
+    // cylinder riding the edge and thinning as it unrolls; pressing again rolls it back up
+    var roll = null, rollTl = null, unrolled = { p: 0 };
+    if (motionOK) {
+      tray.classList.add('roll');
+      roll = document.createElement('span');
+      roll.className = 'tray-roll'; roll.setAttribute('aria-hidden', 'true');
+      tray.parentNode.appendChild(roll);
+    }
+    function drawRoll() {
+      var W = tray.offsetWidth, H = tray.offsetHeight, PAD = 44;
+      var edge = unrolled.p * W;                                  // how much of the strip is out
+      tray.style.clipPath = 'inset(-' + PAD + 'px ' + (unrolled.p >= 1 ? -PAD : W - edge) + 'px -' + (PAD + 10) + 'px -' + PAD + 'px)';
+      var rw = 20 - 13 * unrolled.p;                              // the roll gets thinner as it unrolls
+      roll.style.width = rw + 'px'; roll.style.height = (H + 4) + 'px';
+      roll.style.left = (tray.offsetLeft + Math.min(edge, W) - rw / 2) + 'px';
+      roll.style.top = (tray.offsetTop - 2) + 'px';
+    }
+    if (roll) drawRoll();
+
     pack.addEventListener('click', function () {
       var open = !tray.classList.contains('open');
       tray.classList.toggle('open', open);
       pack.classList.toggle('open', open);
+      if (!roll) return;
+      if (rollTl) rollTl.kill();
+      rollTl = gsap.timeline();
+      if (open) {
+        rollTl.set(roll, { opacity: 1 })
+          .to(unrolled, { p: 1, duration: 0.6, ease: 'power2.out', onUpdate: drawRoll })
+          .to(roll, { opacity: 0, duration: 0.15 }, '-=0.12');
+      } else {
+        rollTl.to(roll, { opacity: 1, duration: 0.08 })
+          .to(unrolled, { p: 0, duration: 0.42, ease: 'power2.in', onUpdate: drawRoll }, 0)
+          .to(roll, { opacity: 0, duration: 0.12 });
+      }
     });
   }
   var reset = document.getElementById('stickerReset');
@@ -1165,6 +1294,7 @@
 /* ---- Seattle hover: cloud drifts in and darkens, randomized rain with splashes (GSAP) ---- */
 (function () {
   var word = document.querySelector('.seattle');
+  if (WEATHER_MODE === 'rain') { document.documentElement.classList.add('weather-rain'); return; }   // rain mode replaces the hover rain
   if (!word || !window.gsap) return;
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;   // CSS fade-in fallback
 
@@ -1233,8 +1363,10 @@
   var bubble = goose.querySelector('.goose-bubble');
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // 16x14 pixel art, facing right. k outline, w white, g wing, o beak/feet, e eye
+  // 16x16 pixel art, facing right. k outline, w white, g wing, o beak/feet, e eye, y/Y raincoat yellow
   var BODY = [
+    '................',
+    '................',
     '..........kkk...',
     '.........kwwwk..',
     '.........kwewkoo',
@@ -1248,9 +1380,26 @@
     '..kwwwwwwwwk....',
     '...kkkkkkkk.....'
   ];
+  // rain mode outfit: a yellow raincoat, white tail poking out
+  var RAINCOAT = [
+    '................',
+    '................',
+    '..........kkk...',
+    '.........kwwwk..',
+    '.........kwewkoo',
+    '.........kwwwko.',
+    '..........kwk...',
+    '..........kwk...',
+    '.kk.......kyk...',
+    'kwwkkkkkkkyyk...',
+    'kwwyyyyyyYyyk...',
+    '.kyyyyyyyYyyk...',
+    '..kyyYYYyYyk....',
+    '...kkkkkkkk.....'
+  ];
   var STRIDE = ['.....o...o......', '....oo..oo......'];   // legs apart
   var STAND  = ['......o.o.......', '.....oo.oo......'];   // legs together
-  var COLOR = { k: '#2a2622', w: '#ffffff', g: '#dcd7ce', o: '#f0973a', e: '#2a2622' };
+  var COLOR = { k: '#2a2622', w: '#ffffff', g: '#dcd7ce', o: '#f0973a', e: '#2a2622', y: '#ffd21f', Y: '#eaa20a' };   // bright enough to stay yellow under the gloom
 
   function pixels(rows, y0) {
     var out = '';
@@ -1267,10 +1416,20 @@
     return out;
   }
   goose.insertAdjacentHTML('beforeend',
-    '<svg class="goose-art" viewBox="0 0 16 14" aria-hidden="true">' + pixels(BODY, 0) +
-    '<g class="legs-stride" style="display:none">' + pixels(STRIDE, 12) + '</g>' +
-    '<g class="legs-stand">' + pixels(STAND, 12) + '</g></svg>');
+    '<svg class="goose-art" viewBox="0 0 16 16" aria-hidden="true">' +
+    '<g class="outfit-clear">' + pixels(BODY, 0) + '</g>' +
+    '<g class="outfit-rain" style="display:none">' + pixels(RAINCOAT, 0) + '</g>' +
+    '<g class="legs-stride" style="display:none">' + pixels(STRIDE, 14) + '</g>' +
+    '<g class="legs-stand">' + pixels(STAND, 14) + '</g></svg>');
   var art = goose.querySelector('.goose-art');
+  // dresses for the weather: raincoat + bucket hat whenever rain mode is on
+  var clear = art.querySelector('.outfit-clear'), coat = art.querySelector('.outfit-rain');
+  function dress() {
+    var rain = document.body.classList.contains('raining');
+    clear.style.display = rain ? 'none' : ''; coat.style.display = rain ? '' : 'none';
+  }
+  dress();
+  new MutationObserver(dress).observe(document.body, { attributes: true, attributeFilter: ['class'] });
   var stride = art.querySelector('.legs-stride'), stand = art.querySelector('.legs-stand');
 
   var x = 0, walk = null, idle = null, step = null, hovering = false, bubbleTimer = null;
@@ -1306,8 +1465,12 @@
     walk = null;
     if (step) { step.kill(); step = null; }
     legs(false);
-    if (!hovering && Math.random() < 0.35) { say(Math.random() < 0.8 ? 'Honk!' : 'Honk honk!', 1.3); hop(); }
-    idle = gsap.delayedCall(R(1.4, 3.6), wander);
+    if (Math.random() > 0.4) { idle = gsap.delayedCall(R(0.1, 0.25), wander); return; }   // most of the time: a quick beat, then off again
+    if (!hovering && Math.random() < 0.5) {
+      var wet = document.body.classList.contains('raining');
+      say(Math.random() < 0.8 ? 'Honk!' : (wet ? 'Puddle time!' : 'Honk honk!'), 1.1); hop();
+    }
+    idle = gsap.delayedCall(R(0.6, 1.6), wander);
   }
 
   function wander() {
@@ -1350,4 +1513,101 @@
   x = R(0, maxX()); gsap.set(goose, { x: x });
   idle = gsap.delayedCall(R(0.8, 2), wander);
   window.addEventListener('resize', function () { if (x > maxX()) { x = maxX(); gsap.set(goose, { x: x }); } });
+})();
+
+/* ---- rain mode: drizzle in three depths, little splashes, and the Seattle gloom ---- */
+(function () {
+  if (WEATHER_MODE !== 'rain') return;
+  var btn = document.getElementById('toggle');
+  if (!btn) return;
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  btn.setAttribute('aria-label', 'Toggle rain mode');
+
+  var gloom = document.createElement('div'); gloom.id = 'gloom'; gloom.setAttribute('aria-hidden', 'true');
+  var canvas = document.createElement('canvas'); canvas.id = 'rain-canvas'; canvas.setAttribute('aria-hidden', 'true');
+  document.body.appendChild(gloom); document.body.appendChild(canvas);
+  var ctx = canvas.getContext('2d'), W = 0, H = 0;
+  function resize() {
+    var dpr = window.devicePixelRatio || 1;
+    W = window.innerWidth; H = window.innerHeight;
+    canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  window.addEventListener('resize', resize); resize();
+
+  // far drops are short, slow and faint; near ones long, fast and brighter
+  var LAYERS = [
+    { len: [7, 11],  speed: [480, 560],   width: 0.8, alpha: 0.30, share: 0.45, splash: 0 },
+    { len: [13, 19], speed: [760, 880],   width: 1.1, alpha: 0.42, share: 0.35, splash: 0.25 },
+    { len: [22, 32], speed: [1050, 1250], width: 1.4, alpha: 0.55, share: 0.20, splash: 0.6 }
+  ];
+  var WIND = 0.14;                                   // gentle slant to the right
+  var drops = [], splashes = [], raining = false, intensity = 0, raf = null, last = 0;
+  var rnd = function (a, b) { return a + Math.random() * (b - a); };
+  var target = function () { return Math.round(Math.min(320, W * H / 5200)); };
+
+  function pickLayer() { var r = Math.random(), acc = 0; for (var i = 0; i < LAYERS.length; i++) { acc += LAYERS[i].share; if (r < acc) return i; } return 0; }
+  function drop(anywhere) {
+    var L = LAYERS[pickLayer()];
+    return { L: L, x: rnd(-W * WIND, W), y: anywhere ? rnd(-H, H) : rnd(-80, -10),
+      len: rnd(L.len[0], L.len[1]), v: rnd(L.speed[0], L.speed[1]) };
+  }
+  function splash(x) {
+    var n = 2 + (Math.random() * 2 | 0);
+    for (var i = 0; i < n; i++) splashes.push({ x: x, y: H - 1, vx: rnd(-55, 55), vy: rnd(-120, -60), life: 1 });
+  }
+
+  function frame(ts) {
+    var dt = last ? Math.min(0.05, (ts - last) / 1000) : 0.016; last = ts;
+    intensity += ((raining ? 1 : 0) - intensity) * Math.min(1, dt * 1.6);   // rain builds up and tapers off
+    var want = Math.round(target() * intensity);
+    while (drops.length < want) drops.push(drop(false));
+
+    ctx.clearRect(0, 0, W, H);
+    ctx.lineCap = 'round';
+    for (var i = drops.length - 1; i >= 0; i--) {
+      var d = drops[i];
+      d.y += d.v * dt; d.x += d.v * WIND * dt;
+      if (d.y - d.len > H) {
+        if (d.L.splash && Math.random() < d.L.splash) splash(d.x);
+        if (drops.length > want) { drops.splice(i, 1); continue; }
+        var nd = drop(false); drops[i] = nd; continue;
+      }
+      ctx.strokeStyle = 'rgba(214,226,240,' + d.L.alpha + ')';
+      ctx.lineWidth = d.L.width;
+      ctx.beginPath(); ctx.moveTo(d.x, d.y); ctx.lineTo(d.x - d.len * WIND, d.y - d.len); ctx.stroke();
+    }
+    ctx.fillStyle = 'rgba(206,218,234,0.55)';
+    for (var j = splashes.length - 1; j >= 0; j--) {
+      var s = splashes[j];
+      s.vy += 520 * dt; s.x += s.vx * dt; s.y += s.vy * dt; s.life -= dt * 3.2;
+      if (s.life <= 0 || s.y > H) { splashes.splice(j, 1); continue; }
+      ctx.globalAlpha = s.life;
+      ctx.beginPath(); ctx.arc(s.x, s.y, 1.1, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+
+    if (raining || drops.length || splashes.length) raf = requestAnimationFrame(frame);
+    else { raf = null; last = 0; ctx.clearRect(0, 0, W, H); }
+  }
+
+  function set(on, remember) {
+    raining = on;
+    document.body.classList.toggle('raining', on);
+    btn.setAttribute('aria-pressed', String(on));
+    if (remember) { try { on ? localStorage.setItem('rain', '1') : localStorage.removeItem('rain'); } catch (e) {} }
+    if (reduceMotion) return;                         // the gloom only, no falling rain
+    if (on && !raf) { if (!drops.length) { for (var i = 0; i < target() * 0.25; i++) drops.push(drop(true)); } raf = requestAnimationFrame(frame); }
+  }
+
+  function toggle() {
+    if (window.portfolioClickSound) window.portfolioClickSound();
+    set(!raining, true);
+  }
+  btn.addEventListener('click', toggle);
+  document.addEventListener('keydown', function (e) {
+    if ((e.key === 't' || e.key === 'T') && !e.metaKey && !e.ctrlKey && !e.altKey &&
+        !/INPUT|TEXTAREA/.test(document.activeElement.tagName)) toggle();
+  });
+  try { if (localStorage.getItem('rain') === '1') set(true, false); } catch (e) {}
 })();
