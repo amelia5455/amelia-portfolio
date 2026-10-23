@@ -175,7 +175,7 @@
 
 
   /* ---- Main: intentionally open space to pop bubbles ---- */
-  main { position: relative; z-index: 5; margin-left: var(--rail); padding: 136px 56px 16vh; min-height: 100vh; }
+  main { position: relative; z-index: 5; margin-left: var(--rail); padding: 101px 56px 16vh; min-height: 100vh; }   /* "Selected Work" lines up with the first line of the bio */
 
   /* ---- Case study cards (mono / terminal style) ---- */
   .case-grid { display: flex; flex-direction: column; gap: 96px; align-items: stretch; max-width: none; margin: 0; }
@@ -498,13 +498,6 @@
   }
   .sticker-ghost .emoji { font-size: 52px; line-height: 1; }
   .sticker-ghost img { width: 100%; height: 100%; object-fit: contain; }
-  /* peel-off layers (app.js): the front with its corner folded away, and the white backing on the flap */
-  .sticker-ghost .peel-front, .sticker-ghost .peel-flap, .sticker-ghost .peel-back {
-    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-  }
-  /* the flap is mirrored across the fold; its shadow falls on the sticker still stuck down */
-  .sticker-ghost .peel-flap { transform-origin: 0 0; display: none; filter: drop-shadow(0 1.5px 2px rgba(40,30,20,.3)); }
-  .sticker-ghost .peel-back { filter: brightness(0) invert(.95); }
 
   @media (max-width: 720px) {
     html[data-view="gallery"] main { padding: 56px 0 0; }

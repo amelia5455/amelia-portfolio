@@ -1054,42 +1054,6 @@ var WEATHER_MODE = 'rain';
   var tray = document.getElementById('stickerTray');
   var motionOK = !!window.gsap && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // peel: you pull the trailing edge back over the sticker. The fold line is the
-  // perpendicular bisector between where the edge started (G) and where it is now (P),
-  // like a page curl: the part on G's side flips over, showing the white backing.
-  function peelLayers(ghost, h) {
-    ghost.innerHTML = '<div class="peel-front">' + h + '</div>' +
-      '<div class="peel-flap"><div class="peel-back">' + h + '</div></div>';
-    var front = ghost.firstChild, flap = ghost.lastChild, back = flap.firstChild, S = ghost.offsetWidth || 72;
-    var SQ = [[0, 0], [S, 0], [S, S], [0, S]];
-    function half(poly, M, n, keepFront) {               // clip a polygon to one side of the fold line
-      var out = [];
-      for (var i = 0; i < poly.length; i++) {
-        var a = poly[i], b = poly[(i + 1) % poly.length];
-        var sa = (a[0] - M[0]) * n[0] + (a[1] - M[1]) * n[1], sb = (b[0] - M[0]) * n[0] + (b[1] - M[1]) * n[1];
-        if (!keepFront) { sa = -sa; sb = -sb; }
-        if (sa >= 0) out.push(a);
-        if ((sa >= 0) !== (sb >= 0)) { var t = sa / (sa - sb); out.push([a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t]); }
-      }
-      return out;
-    }
-    function css(poly) {
-      if (poly.length < 3) return 'polygon(0 0,0 0,0 0)';
-      return 'polygon(' + poly.map(function (p) { return p[0].toFixed(2) + 'px ' + p[1].toFixed(2) + 'px'; }).join(',') + ')';
-    }
-    return function setFold(G, P) {
-      var dx = P[0] - G[0], dy = P[1] - G[1], L = Math.hypot(dx, dy);
-      if (L < 1.5) { front.style.clipPath = 'none'; flap.style.display = 'none'; return; }
-      var n = [dx / L, dy / L], M = [(G[0] + P[0]) / 2, (G[1] + P[1]) / 2], m = M[0] * n[0] + M[1] * n[1];
-      front.style.clipPath = css(half(SQ, M, n, true));
-      back.style.clipPath = css(half(SQ, M, n, false));
-      flap.style.display = '';
-      // reflect across the fold line: X' = X - 2((X - M)·n) n
-      flap.style.transform = 'matrix(' + [1 - 2 * n[0] * n[0], -2 * n[0] * n[1], -2 * n[0] * n[1], 1 - 2 * n[1] * n[1],
-        2 * m * n[0], 2 * m * n[1]].map(function (v) { return v.toFixed(4); }).join(',') + ')';
-    };
-  }
-
   function spawn(e) {
     var btn = this;
     if (btn.classList.contains('used')) return;   // one instance per sticker
@@ -1099,67 +1063,15 @@ var WEATHER_MODE = 'rain';
     var ghost = document.createElement('div');
     ghost.className = 'sticker-ghost'; ghost.innerHTML = html(STICKERS[idx]);
     document.body.appendChild(ghost);
-    var px = e.clientX, py = e.clientY, state = 'held';
-    function follow() { ghost.style.left = px + 'px'; ghost.style.top = py + 'px'; }
-
-    if (!(motionOK && STICKERS[idx] && STICKERS[idx].img)) {
-      state = 'free'; follow();
-    } else {
-      // the sticker stays stuck in its slot while you peel it
-      state = 'peeling';
-      var setFold = peelLayers(ghost, html(STICKERS[idx]));
-      var S = ghost.offsetWidth || 72, r = btn.getBoundingClientRect(), k = r.width / S * 1.12;
-      var cx = r.left + r.width / 2, cy = r.top + r.height / 2, x0 = e.clientX, y0 = e.clientY;
-      var G = [S / 2, S / 2], P = [S / 2, S / 2], RELEASE = 40;   // px of pull before it comes free
-      ghost.style.left = cx + 'px'; ghost.style.top = cy + 'px';
-      gsap.set(ghost, { x: 0, y: 0, xPercent: -50, yPercent: -50, scale: r.width / S, filter: 'drop-shadow(0 1px 2px rgba(40,30,20,.22))' });
-      gsap.to(ghost, { scale: k, duration: 0.12, ease: 'power2.out' });            // tiny lift as you press
-      var peelTo = function () {
-        var dx = (px - x0) / k, dy = (py - y0) / k, L = Math.hypot(dx, dy);       // pull in sticker units
-        if (L < 0.5) { G = [S / 2, S / 2]; P = G.slice(); setFold(G, P); return; }
-        var u = [dx / L, dy / L], R = S * 0.48;
-        G = [S / 2 - u[0] * R, S / 2 - u[1] * R];                                 // trailing edge you're pulling
-        P = [G[0] + dx, G[1] + dy];
-        setFold(G, P);
-      };
-      var free = function () {                                                    // it lets go: flatten into your hand
-        state = 'releasing';
-        var f = { t: 0 }, G0 = G.slice(), P0 = P.slice();
-        gsap.timeline({ onComplete: function () { if (state === 'releasing') { state = 'free'; ghost.innerHTML = html(STICKERS[idx]); follow(); } } })
-          .to(f, { t: 1, duration: 0.18, ease: 'power2.out', onUpdate: function () {
-            setFold(G0, [P0[0] + (G0[0] - P0[0]) * f.t, P0[1] + (G0[1] - P0[1]) * f.t]); } })
-          .to(ghost, { scale: 1, filter: 'drop-shadow(0 13px 22px rgba(40,30,20,.32))', duration: 0.24, ease: 'back.out(1.8)' }, 0)
-          .to(ghost, { left: function () { return px; }, top: function () { return py; }, duration: 0.16, ease: 'power2.out' }, 0);
-      };
-    }
-
-    function mv(ev) {
-      px = ev.clientX; py = ev.clientY;
-      if (state === 'free') follow();
-      else if (state === 'peeling') { peelTo(); if (Math.hypot(px - x0, py - y0) > RELEASE) free(); }
-    }
+    function mv(ev) { ghost.style.left = ev.clientX + 'px'; ghost.style.top = ev.clientY + 'px'; }
+    mv(e);
     function up(ev) {
       window.removeEventListener('pointermove', mv);
       window.removeEventListener('pointerup', up);
-      if (state === 'peeling') {                  // let go before it came free: it smooths back down
-        state = 'done';
-        var f = { t: 0 }, G0 = G.slice(), P0 = P.slice();
-        gsap.timeline({ onComplete: function () { ghost.remove(); btn.classList.remove('used'); } })
-          .to(f, { t: 1, duration: 0.2, ease: 'power2.out', onUpdate: function () {
-            setFold(G0, [P0[0] + (G0[0] - P0[0]) * f.t, P0[1] + (G0[1] - P0[1]) * f.t]); } })
-          .to(ghost, { scale: r.width / S, duration: 0.2, ease: 'power2.out' }, 0);
-        return;
-      }
-      state = 'done';
-      if (window.gsap) gsap.killTweensOf(ghost);
       ghost.remove();
-      var vr = vp.getBoundingClientRect();
-      if (ev.clientX >= vr.left && ev.clientX <= vr.right && ev.clientY >= vr.top && ev.clientY <= vr.bottom) {
-        var el = place(idx, (ev.clientX - vr.left - st.x) / st.s, (ev.clientY - vr.top - st.y) / st.s);
-        if (motionOK) {                           // pressed down onto the canvas with a little spring
-          el.classList.add('lift');
-          requestAnimationFrame(function () { requestAnimationFrame(function () { el.classList.remove('lift'); }); });
-        }
+      var r = vp.getBoundingClientRect();
+      if (ev.clientX >= r.left && ev.clientX <= r.right && ev.clientY >= r.top && ev.clientY <= r.bottom) {
+        place(idx, (ev.clientX - r.left - st.x) / st.s, (ev.clientY - r.top - st.y) / st.s);
         save();
       } else {
         btn.classList.remove('used');             // dropped off-canvas: put it back in the strip
@@ -1461,14 +1373,23 @@ var WEATHER_MODE = 'rain';
     gsap.fromTo(art, { y: 0 }, { y: -3, duration: 0.11, ease: 'power1.out', yoyo: true, repeat: 1 });
   }
 
+  var HONKS = ['Honk', 'Honk honk', 'Honk!', 'HONK', 'Hoooonnnnnnkkkkkkk', 'honk?', 'Honk honk honk!', 'HONK HONK'];
+  var lastHonk = '';
+  function honkLine() {                            // a random honk, never the same twice in a row
+    var line;
+    do { line = HONKS[Math.random() * HONKS.length | 0]; } while (line === lastHonk);
+    return (lastHonk = line);
+  }
+  function honk(hold) { say(honkLine(), hold); hop(); }
+
   function rest() {
     walk = null;
     if (step) { step.kill(); step = null; }
     legs(false);
     if (Math.random() > 0.4) { idle = gsap.delayedCall(R(0.1, 0.25), wander); return; }   // most of the time: a quick beat, then off again
     if (!hovering && Math.random() < 0.5) {
-      var wet = document.body.classList.contains('raining');
-      say(Math.random() < 0.8 ? 'Honk!' : (wet ? 'Puddle time!' : 'Honk honk!'), 1.1); hop();
+      if (document.body.classList.contains('raining') && Math.random() < 0.15) { say('Puddle time!', 1.2); hop(); }
+      else honk(1.1);
     }
     idle = gsap.delayedCall(R(0.6, 1.6), wander);
   }
@@ -1493,7 +1414,7 @@ var WEATHER_MODE = 'rain';
     if (walk) walk.pause();
     if (step) step.pause();
     legs(false);
-    say('Say hi to Amelia');
+    say('Honk!');
   }
   function resume() {
     hovering = false;
@@ -1504,10 +1425,7 @@ var WEATHER_MODE = 'rain';
   goose.addEventListener('mouseleave', resume);
   goose.addEventListener('focus', pause);
   goose.addEventListener('blur', resume);
-  goose.addEventListener('click', function () {
-    say('Honk!', 0.9); hop();
-    setTimeout(function () { window.location.href = 'mailto:amelia@winoman.com'; }, 250);
-  });
+  goose.addEventListener('click', function () { honk(1.1); });
 
   if (reduceMotion) { x = maxX() * 0.7; gsap.set(goose, { x: x }); return; }   // stands still
   x = R(0, maxX()); gsap.set(goose, { x: x });
