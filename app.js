@@ -1103,30 +1103,63 @@
   requestAnimationFrame(center);
 })();
 
-/* ---- work cards: staggered reveal on scroll (GSAP + ScrollTrigger) ---- */
+/* ---- work cards: intro where the cards start in a pile and deal out into place (GSAP) ---- */
 (function () {
-  if (!window.gsap || !window.ScrollTrigger) return;
+  if (!window.gsap) return;
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  gsap.registerPlugin(ScrollTrigger);
 
-  var cards = document.querySelectorAll('#view-work .case-card');
-  if (!cards.length) return;
+  var view = document.getElementById('view-work');
+  var cards = Array.prototype.slice.call(document.querySelectorAll('#view-work .case-card'));
+  if (!view || !cards.length) return;
+  // each card's text stays hidden in the pile (only the images stack) and fades in as it lands
+  var texts = cards.map(function (c) { return c.querySelectorAll('.case-title, .case-meta, .case-desc'); });
+  var all = cards.concat(texts.reduce(function (a, t) { return a.concat(Array.prototype.slice.call(t)); }, []));
+  var tl = null;
 
-  gsap.set(cards, { opacity: 0, y: 40 });
-  ScrollTrigger.batch(cards, {
-    start: 'top 95%',
-    once: true,
-    onEnter: function (batch) {
-      gsap.to(batch, {
-        opacity: 1, y: 0, duration: 0.7, ease: 'power3.out',
-        stagger: 0.12, clearProps: 'transform,opacity'
+  function play() {
+    if (tl) tl.kill();
+    gsap.set(all, { clearProps: 'all' });                // measure where each card really sits
+
+    // the pile: centred over the work column, a little below the top of the screen
+    var col = view.getBoundingClientRect();
+    var pileX = col.left + col.width / 2;
+    var pileY = Math.min(window.innerHeight * 0.5, col.top + window.innerHeight * 0.4);
+    var n = cards.length;
+
+    cards.forEach(function (card, i) {
+      var r = card.getBoundingClientRect();
+      gsap.set(card, {
+        position: 'relative', zIndex: n - i,               // first card on top of the pile
+        x: pileX - (r.left + r.width / 2),
+        y: pileY - (r.top + r.height / 2),
+        rotation: (i - (n - 1) / 2) * 3.5 + gsap.utils.random(-1.5, 1.5),
+        scale: 0.42, opacity: 0, transformOrigin: '50% 50%'
       });
-    }
-  });
+    });
 
-  // views are swapped via html[data-view]; re-measure when one comes back
-  new MutationObserver(function () { ScrollTrigger.refresh(); })
-    .observe(document.documentElement, { attributes: true, attributeFilter: ['data-view'] });
+    texts.forEach(function (t) { gsap.set(t, { opacity: 0, y: 8 }); });
+
+    var DEAL = 1.05, EACH = 0.09;
+    tl = gsap.timeline({ onComplete: function () { gsap.set(all, { clearProps: 'all' }); tl = null; } })
+      .to(cards, { opacity: 1, scale: 0.46, duration: 0.35, ease: 'power2.out', stagger: 0.03 })
+      .addLabel('deal', '+=0.15')
+      .to(cards, {
+        x: 0, y: 0, rotation: 0, scale: 1,
+        duration: DEAL, ease: 'power3.inOut',
+        stagger: { each: EACH, from: 'end' }               // bottom of the pile leaves first, top card lands last
+      }, 'deal');
+    texts.forEach(function (t, i) {
+      var lands = (n - 1 - i) * EACH + DEAL;
+      tl.to(t, { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out', stagger: 0.05 }, 'deal+=' + (lands - 0.2));
+    });
+  }
+
+  if (document.documentElement.getAttribute('data-view') === 'work') play();
+
+  // replay whenever the Work view is opened (nav link, wordmark, back button)
+  new MutationObserver(function () {
+    if (document.documentElement.getAttribute('data-view') === 'work') play();
+  }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-view'] });
 })();
 
 /* ---- Seattle hover: cloud drifts in and darkens, randomized rain with splashes (GSAP) ---- */
