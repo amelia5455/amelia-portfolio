@@ -123,7 +123,6 @@
     width: 28px; height: 28px; display: flex; align-items: center;
     justify-content: center; opacity: 1; transition: transform .25s ease, opacity .25s ease;
   }
-  #toggle:hover { transform: scale(1.12); }
   #toggle svg { width: 20px; height: 20px; display: block; }
   .ico-off, .ico-bubble { display: none; line-height: 0; }
   body:not(.bubbles) .ico-off { display: flex; }

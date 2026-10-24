@@ -1100,7 +1100,9 @@ var WEATHER_MODE = 'rain';
     function drawRoll() {
       var W = tray.offsetWidth, H = tray.offsetHeight, PAD = 44;
       var edge = unrolled.p * W;                                  // how much of the strip is out
-      tray.style.clipPath = 'inset(-' + PAD + 'px ' + (unrolled.p >= 1 ? -PAD : W - edge) + 'px -' + (PAD + 10) + 'px -' + PAD + 'px)';
+      // fully rolled up: hide everything, shadow included (the padded inset would leave its left edge showing)
+      tray.style.clipPath = unrolled.p <= 0.001 ? 'inset(0 100% 0 0)'
+        : 'inset(-' + PAD + 'px ' + (unrolled.p >= 1 ? -PAD : W - edge) + 'px -' + (PAD + 10) + 'px -' + PAD + 'px)';
       var rw = 20 - 13 * unrolled.p;                              // the roll gets thinner as it unrolls
       roll.style.width = rw + 'px'; roll.style.height = (H + 4) + 'px';
       roll.style.left = (tray.offsetLeft + Math.min(edge, W) - rw / 2) + 'px';
