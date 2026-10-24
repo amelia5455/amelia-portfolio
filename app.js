@@ -1487,9 +1487,9 @@ var WEATHER_MODE = 'rain';
 
   function frame(ts) {
     var dt = last ? Math.min(0.05, (ts - last) / 1000) : 0.016; last = ts;
-    intensity += ((raining ? 1 : 0) - intensity) * Math.min(1, dt * 1.6);   // rain builds up and tapers off
+    intensity += ((raining ? 1 : 0) - intensity) * Math.min(1, dt * (raining ? 1.6 : 1.0));   // rain builds up, and tapers off a little more slowly
     var want = Math.round(target() * intensity);
-    while (drops.length < want) drops.push(drop(false));
+    if (raining) while (drops.length < want) drops.push(drop(false));
 
     ctx.clearRect(0, 0, W, H);
     ctx.lineCap = 'round';
@@ -1498,7 +1498,9 @@ var WEATHER_MODE = 'rain';
       d.y += d.v * dt; d.x += d.v * WIND * dt;
       if (d.y - d.len > H) {
         if (d.L.splash && Math.random() < d.L.splash) splash(d.x);
-        if (drops.length > want) { drops.splice(i, 1); continue; }
+        // tapering off: fewer drops come back as the shower fades, and none once it's nearly gone,
+        // so the last few fall away instead of trickling on
+        if (drops.length > want || (!raining && (intensity < 0.08 || Math.random() > intensity))) { drops.splice(i, 1); continue; }
         var nd = drop(false); drops[i] = nd; continue;
       }
       ctx.strokeStyle = 'rgba(214,226,240,' + d.L.alpha + ')';
