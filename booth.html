@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Booth · Amelia Simpson</title>
-<meta name="description" content="Booth — an analog photobooth finder. A personal project by Amelia Simpson: a hand-placed paper-and-ink map of real booths, a private library for the strips you shoot, designed and built solo from web prototype to the App Store." />
+<meta name="description" content="Booth — a photobooth finder app. A personal project by Amelia Simpson: find real booths near you, save the ones you love, and log the strips you shoot in a private library." />
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,14 +21,12 @@
     Back to work
   </a>
   <nav class="toc" aria-label="Sections">
-    <a href="#overview">Overview</a>
+    <a href="#tldr">TL;DR</a>
     <a href="#background">Background</a>
     <a href="#problem">Problem</a>
-    <a href="#approach">Approach</a>
-    <a href="#design">Design</a>
+    <a href="#concept">Concept</a>
     <a href="#building">Building</a>
-    <a href="#shipping">Shipping</a>
-    <a href="#learnings">Learnings</a>
+    <a href="#whats-next">What&rsquo;s next</a>
   </nav>
 </aside>
 
@@ -38,23 +36,23 @@
   <section class="hero">
     <span class="eyebrow">Personal project</span>
     <h1>Booth</h1>
-    <p class="lede">An analog photobooth finder. A hand-placed map of real booths, a private library for the strips you shoot, and no feed in sight. Designed and built solo, from a web prototype to the App Store.</p>
+    <p class="lede">A photobooth finder app. Find real booths near you, save the ones you love, and log the strips you shoot in a private library.</p>
     <div class="tags">
       <span class="dot">In progress</span>
       <span>Personal project</span>
       <span>iOS</span>
-      <span>Design &amp; build</span>
+      <span>Consumer</span>
     </div>
     <div class="hero-banner">
       <img src="images/booth.svg?v=2" alt="The Booth app mark on a film-grain backdrop" loading="eager">
     </div>
   </section>
 
-  <!-- ===== Overview ===== -->
-  <section class="section" id="overview" style="padding-top: 54px;">
+  <!-- ===== TL;DR ===== -->
+  <section class="section" id="tldr" style="padding-top: 54px;">
     <div class="tldr">
-      <span class="eyebrow">Overview</span>
-      <p>Booth is an analog photobooth finder I designed and built on my own, from a single-file web prototype to a SwiftUI app on the App Store track. It is a paper-and-ink map of real machines, placed by hand, close to 400 of them across 11 cities. Every strip you shoot gets a private library to live in: no feed, no followers, passwordless sign-in. I owned all of it: the design system, the iOS app, the backend, and the pipeline that ships it.</p>
+      <span class="eyebrow">TL;DR</span>
+      <p>Booth is a photobooth finder app I&rsquo;m designing and building on my own. Analog photobooths are back, but they&rsquo;re scattered and hard to track down. Booth puts them on a map, lets you save your favorites, and gives the strips you shoot a private library to live in.</p>
     </div>
   </section>
 
@@ -70,15 +68,13 @@
       <div class="val">2026 &ndash; Present</div>
     </div>
     <div>
+      <div class="label">Status</div>
+      <div class="val">In progress</div>
+    </div>
+    <div>
       <div class="label">Platform</div>
       <div class="val">iOS</div>
       <div class="val">Phone-first</div>
-    </div>
-    <div>
-      <div class="label">Stack</div>
-      <div class="val">SwiftUI</div>
-      <div class="val">Supabase</div>
-      <div class="val">Twilio</div>
     </div>
   </div>
 
@@ -100,112 +96,44 @@
     </div>
   </section>
 
-  <!-- ===== Approach ===== -->
-  <section class="section" id="approach">
-    <span class="eyebrow">Approach</span>
-    <h2>One source of truth, ported carefully</h2>
-    <p class="lead measure">I built Booth the way I wanted it to behave: one design that two surfaces obey, in a single material, held honest by the real device.</p>
-
-    <div class="sub">
-      <div class="kicker">The prototype is law</div>
-      <p class="measure">I built a single HTML file first and made it the design source of truth. The iOS app is a port of that prototype, verified pixel by pixel and motion by motion on a real phone. Every disagreement between the two is a bug in the app, not a fork in the design, and both surfaces get the same change or neither does. That one rule kept the app from quietly drifting away from the thing I actually designed.</p>
-    </div>
-
-    <div class="sub">
-      <div class="kicker">Paper and ink, as a system</div>
-      <p class="measure">The whole app is built from one material: a paper ground, an ink foreground, one serif for names and one mono for everything utilitarian. Even the map obeys. The basemap tiles are pushed through a desaturated, low-contrast, sepia wash so the map reads as a printed page rather than a tech product, with the attribution folded behind an (i).</p>
-    </div>
-  </section>
-
-  <!-- ===== Design ===== -->
-  <section class="section" id="design">
-    <span class="eyebrow">Design</span>
-    <h2>The decisions that make it Booth</h2>
-    <p class="lead measure">A handful of small, opinionated calls did most of the work of making the app feel like a hand-made object rather than a utility.</p>
-    <div class="cards">
-      <div class="card">
-        <div class="ct">From social to private</div>
-        <p>The first build had a social tab: likes, comments, a feed. I deleted it, not deferred it. It became Strips, a private wall of the booths you have visited, three columns, every print on a slim paper mat at a uniform 3:4 crop. A staggered salon layout got rejected twice, because uniform prints should hang level.</p>
-      </div>
-      <div class="card">
-        <div class="ct">Pins, then the swap</div>
-        <p>Pins are the booth&rsquo;s own drawing, tinted by status. My first scheme darkened saved booths to full ink. I reversed it after living with it: the unsaved field is ink and loud, and saving quiets a booth to stone. You dim what is already yours; the undiscovered stays loud.</p>
-      </div>
-      <div class="card">
-        <div class="ct">Save is a bookmark, not a heart</div>
-        <p>Saving a booth is a bookmark, not a like. The button inverts its own circle, an ink disc with a paper mark, rather than swapping the icon. Small, but it keeps saving from reading as social approval.</p>
-      </div>
-      <div class="card">
-        <div class="ct">One color belongs to the user</div>
-        <p>Each person picks a booth color that becomes their avatar and identity, and never touches the app&rsquo;s chrome. It is the one pigment that is theirs. I later pulled it off the map pins too, so a user&rsquo;s color stays about them, not about navigation.</p>
-      </div>
-      <div class="card">
-        <div class="ct">Trust is hand-made</div>
-        <p>Nothing lands on the map unmoderated. Adding a booth needs a photo as proof and queues for review. Location permission is optional and never leaves the phone, with a city picker for anyone who declines. Outside 80km of any city, the app says &ldquo;Not here yet.&rdquo; instead of faking an empty map.</p>
-      </div>
-      <div class="card">
-        <div class="ct">Accessibility is a setting</div>
-        <p>The accessibility screen has a Simplified Language toggle that swaps every wry flavor line for a plain sentence, and a typeface switcher (Default, OpenDyslexic, Lexend) where each button is set in its own face. Supporting OpenDyslexic meant rewriting its vertical metrics so switching typefaces moves no edges.</p>
-      </div>
-    </div>
-
-    <div class="sub">
-      <div class="kicker">Motion has a grammar</div>
-      <p class="measure">Movement in Booth follows one rulebook. The map is the floor; Strips and You slide up over it; onboarding steps push in from the right. Entering the app does not load a new screen, it lifts a veil off a map that was already alive underneath. The app intro even plays the booth&rsquo;s own story: the slot pops, a strip drops with a wobble, the camera dives into the middle frame, and you land standing inside it. Reduce Motion sees none of it, by design.</p>
-    </div>
+  <!-- ===== Concept ===== -->
+  <section class="section" id="concept">
+    <span class="eyebrow">Concept</span>
+    <h2>A map-led home for booths</h2>
+    <p class="lead measure">Booth treats photobooths like destinations worth seeking out. The core is a map of booths near you, built to be glanceable the moment the urge strikes. Onboarding is phone-first and quick, so you can go from opening the app to standing in front of a booth without friction, and everything after that is designed to reward showing up in person.</p>
   </section>
 
   <!-- ===== Building ===== -->
   <section class="section" id="building">
     <span class="eyebrow">Building</span>
-    <h2>What building it taught me</h2>
-    <p class="lead measure">Designing and building the same product meant the hard parts showed up on the device, not in the file. A few that taught me the most:</p>
-    <div class="takes">
-      <div class="take">
-        <div class="who">The detent saga</div>
-        <p>Getting pop-ups to hug their content through the system&rsquo;s sheet detents failed four different ways, ending in a mystery dark rectangle that turned out to be the sheet&rsquo;s own shadow. The fix was to stop using sheets: pop-ups became overlays inside the view, exactly as tall as what they hold, with the nav still visible behind a light scrim. When a system component fights the design four times, stop negotiating with it.</p>
+    <h2>What I&rsquo;m building</h2>
+    <div class="cards">
+      <div class="card">
+        <svg class="cicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-5.8-6.5-10.5a6.5 6.5 0 0 1 13 0C18.5 15.2 12 21 12 21z"/><circle cx="12" cy="10.5" r="2.3"/></svg>
+        <div class="ct">Find</div>
+        <p>A map-led view of booths near you, with the details that actually matter: where it is, whether it is working, and what it costs.</p>
       </div>
-      <div class="take">
-        <div class="who">Masked builds</div>
-        <p>Three &ldquo;fixes&rdquo; in a row never reached the phone. Piping a build through <code>tail</code> reports the pipe&rsquo;s exit code, so a failed compile looked like a success and the old binary kept getting reinstalled. The fix was <code>set -o pipefail</code> and an explicit build-ok gate before any install. The lesson stuck: verify the tool&rsquo;s own exit status, never the pipeline&rsquo;s.</p>
+      <div class="card">
+        <svg class="cicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 4h11a1 1 0 0 1 1 1v15l-6.5-3.8L5.5 20V5a1 1 0 0 1 1-1z"/></svg>
+        <div class="ct">Save</div>
+        <p>Collect the booths you love into a personal list, so the good ones are one tap away the next time you are nearby.</p>
       </div>
-      <div class="take">
-        <div class="who">The quiet delete</div>
-        <p>Deleting your account looked like it worked but left your data on the server. The app had wrapped the delete in a silent <code>try?</code> and logged out regardless, faking success, while a platform rule change had broken the delete itself. Now the app removes your photos through the Storage API, deletes the account, and shows an error if anything fails. Never hide a failure the user needs to know about.</p>
-      </div>
-      <div class="take">
-        <div class="who">Enter the app</div>
-        <p>The open-the-app animation never felt right through pass after pass of tuning. The real problem was structural: in the prototype the map is alive under onboarding and entering just fades a veil off it, but the Swift app was building the map at the moment of reveal, so there was nothing behind the curtain. Mounting the app as the floor fixed it. Mechanism over easing curves.</p>
+      <div class="card">
+        <svg class="cicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5.5" width="16" height="13" rx="2"/><circle cx="9" cy="10.5" r="1.5"/><path d="M5 16.5l4.2-4 3.3 3.2 2.8-2.6L19 16"/></svg>
+        <div class="ct">Collect</div>
+        <p>Every strip you shoot has somewhere to go. Log the strips from each booth in a private library that is just yours.</p>
       </div>
     </div>
   </section>
 
-  <!-- ===== Shipping ===== -->
-  <section class="section" id="shipping">
-    <span class="eyebrow">Shipping</span>
-    <h2>Where it is now</h2>
-    <p class="lead measure">Booth is on the App Store submission track. The backend is live, with row-level security on every table, nearly 400 booths seeded and verified across 11 cities, and passwordless sign-in running on Twilio Verify. Builds 3 through 7 are on TestFlight with the full listing, privacy, and support pages in place. The one call left before review is moving off the free database tier, so the project cannot pause itself mid-review. After that, it is wider city coverage and getting Booth into real hands.</p>
+  <!-- ===== What's next ===== -->
+  <section class="section" id="whats-next">
+    <span class="eyebrow">What&rsquo;s next</span>
+    <h2>Where it&rsquo;s headed</h2>
+    <p class="lead measure">Booth is still in progress. I am designing the core map and save flows first, then building them out, with the private strip library coming next. The goal is a small, focused app that makes an analog ritual easier to reach.</p>
   </section>
 
-  <!-- ===== Learnings ===== -->
-  <section class="section" id="learnings">
-    <span class="eyebrow">Learnings</span>
-    <h2>What I&rsquo;d take forward</h2>
-    <div class="learn">
-      <div class="item">
-        <h3>Designing and building the same thing changes both.</h3>
-        <p>The device kept the design honest. A map that looked finished in the file was being born at the moment of reveal; taps that read fine on screen were dead on glass. Shipping the code is what caught the gap between the design and what people actually get.</p>
-      </div>
-      <div class="item">
-        <h3>One source of truth beats two good ones.</h3>
-        <p>Making the prototype law, and porting to it rather than around it, meant the app never quietly drifted. Every change landed in both surfaces or neither. That rule did more for consistency than any amount of after-the-fact cleanup.</p>
-      </div>
-      <div class="item">
-        <h3>Honesty is a feature.</h3>
-        <p>&ldquo;Not here yet&rdquo; instead of an empty map. A photo required before a booth goes live. A failed delete that actually says so. Each one costs a shortcut and buys the thing a small app lives or dies on: trust.</p>
-      </div>
-    </div>
-  </section>
+  <p class="soon">more coming soon ◝(ᵔᵕᵔ)◜</p>
 
 </main>
 
