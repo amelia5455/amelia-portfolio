@@ -381,13 +381,13 @@
   }
   /* a pixel excavator (5px per art pixel) drives to the dirt pile, scoops, backs up with a full bucket and dumps it */
   .construction-art { position: relative; width: 240px; height: 105px; margin-bottom: 22px; }
-  .cx-rig { position: absolute; left: 0; top: 0; animation: cx-drive 5.6s ease-in-out infinite; }
+  .cx-rig { position: absolute; left: 0; top: 0; animation: cx-drive 8.5s ease-in-out infinite; }
   .cx-excavator { display: block; width: 120px; height: 95px; }
   .cx-pile { position: absolute; left: 180px; top: 70px; width: 60px; height: 25px; }   /* in front, so the bucket digs into it */
   .cx-ground { position: absolute; left: 0; top: 95px; width: 240px; height: 10px; }
-  .cx-up   { animation: cx-show-up 5.6s step-end infinite; }
-  .cx-dig  { opacity: 0; animation: cx-show-dig 5.6s step-end infinite; }
-  .cx-full { opacity: 0; animation: cx-show-full 5.6s step-end infinite; }
+  .cx-up   { animation: cx-show-up 8.5s step-end infinite; }
+  .cx-dig  { opacity: 0; animation: cx-show-dig 8.5s step-end infinite; }
+  .cx-full { opacity: 0; animation: cx-show-full 8.5s step-end infinite; }
   @keyframes cx-drive {
     0%, 8%   { transform: translateX(0); }
     38%, 55% { transform: translateX(100px); }
