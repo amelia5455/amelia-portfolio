@@ -373,6 +373,33 @@
   /* ---- Gallery: infinite canvas ---- */
   html[data-view="gallery"] main { min-height: 100vh; padding: 72px 0 0; }
   #view-gallery { position: relative; height: calc(100vh - 72px); overflow: hidden; }
+  /* gallery is under construction: hide the canvas (kept in the markup) and show the hammer instead */
+  #galleryCanvas { display: none; }
+  .construction {
+    position: absolute; inset: 0; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 10px; padding: 0 24px; text-align: center;
+  }
+  /* a pixel excavator (5px per art pixel) drives to the dirt pile, scoops, backs up with a full bucket and dumps it */
+  .construction-art { position: relative; width: 220px; height: 75px; margin-bottom: 22px; }
+  .cx-rig { position: absolute; left: 0; top: 0; animation: cx-drive 5.6s ease-in-out infinite; }
+  .cx-excavator { display: block; width: 120px; height: 70px; animation: cx-rumble .24s steps(2) infinite; }
+  .cx-pile { position: absolute; left: 160px; top: 40px; width: 60px; height: 25px; }   /* in front, so the bucket digs into it */
+  .cx-ground { position: absolute; left: 0; top: 65px; width: 220px; height: 10px; }
+  .cx-up   { animation: cx-show-up 5.6s step-end infinite; }
+  .cx-dig  { opacity: 0; animation: cx-show-dig 5.6s step-end infinite; }
+  .cx-full { opacity: 0; animation: cx-show-full 5.6s step-end infinite; }
+  @keyframes cx-drive {
+    0%, 8%   { transform: translateX(0); }
+    38%, 55% { transform: translateX(85px); }
+    85%, 100% { transform: translateX(0); }
+  }
+  @keyframes cx-rumble { from { transform: translateY(0); } to { transform: translateY(-1px); } }
+  @keyframes cx-show-up   { 0% { opacity: 1; } 38% { opacity: 0; } 97% { opacity: 1; } }
+  @keyframes cx-show-dig  { 0% { opacity: 0; } 38% { opacity: 1; } 52% { opacity: 0; } 87% { opacity: 1; } 97% { opacity: 0; } }
+  @keyframes cx-show-full { 0% { opacity: 0; } 52% { opacity: 1; } 87% { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) {
+    .cx-rig, .cx-excavator, .cx-up, .cx-dig, .cx-full { animation: none; }
+  }
   .canvas-vp {
     position: absolute; inset: 0; overflow: hidden;
     cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none;
