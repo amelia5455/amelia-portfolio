@@ -287,7 +287,6 @@
   }
   .case-title {
     margin-top: 22px; font-size: 20px; letter-spacing: .03em; text-transform: uppercase; color: var(--ink);
-    text-decoration: underline; text-underline-offset: 5px; text-decoration-thickness: 1px;
   }
   .case-meta { margin-top: 7px; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); opacity: .8; }
   .case-tags { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
@@ -359,7 +358,7 @@
   .topnav { margin-top: 2px; }
   .topnav a.active { color: var(--ink); }
   .worktop { display: flex; align-items: baseline; justify-content: space-between; gap: 20px;
-    max-width: none; margin: 0 0 64px; padding-bottom: 16px; border-bottom: 1px solid rgba(30,40,60,.13); }
+    max-width: none; margin: 0 0 28px; }
   .work-label { font-size: 13px; letter-spacing: .28em; text-transform: uppercase; color: var(--muted); }
   .work-years { font-size: 13px; letter-spacing: .12em; color: var(--muted); opacity: .65; font-variant-numeric: tabular-nums; }
 
@@ -609,7 +608,7 @@
     .topmeta .metabits { display: none; }
     .topmeta .meta-sep { display: none; }
     .sidebar { border-right: none; }
-    .worktop { max-width: none; margin-bottom: 40px; }
+    .worktop { max-width: none; margin-bottom: 24px; }
   }
 
   #nested-media { background: #F5F3EE; }
