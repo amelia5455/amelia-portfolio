@@ -9,7 +9,7 @@
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    font-family: 'Sometype Mono', ui-monospace, monospace;
+    font-family: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
     color: var(--ink); background: var(--bg);
     transition: background-color .55s ease;
     min-height: 100vh; overflow-x: hidden;
@@ -36,7 +36,7 @@
     padding: 18px 40px 30px;
     border-right: 1px solid rgba(30,40,60,.13);
   }
-  .wordmark { font-size: 22px; color: var(--ink); letter-spacing: .01em; cursor: pointer; }
+  .wordmark { font-family: 'Crimson Pro', Georgia, serif; font-size: 26px; color: var(--ink); letter-spacing: .005em; cursor: pointer; }
   .wordmark:hover, .mobile-wordmark:hover { opacity: .62; }
   .mobile-wordmark { cursor: pointer; }
   .role { font-size: 15px; color: var(--muted); letter-spacing: .01em; }
@@ -98,17 +98,17 @@
 
   .divider { border: none; border-top: 1px solid var(--muted); opacity: .45; margin: 0; width: 100%; }
   /* portfolio goose: walks along the divider under the bio (see app.js) */
-  .goose-track { position: relative; margin-top: 8px; }   /* a little headroom between the bio and the goose */
+  .goose-track { position: relative; margin-top: 22px; }   /* a little headroom between the bio and the goose */
   .goose {
-    position: absolute; left: 0; bottom: 1px; width: 32px; height: 32px;
+    position: absolute; left: 0; bottom: 1px; width: 48px; height: 42px;
     background: none; border: 0; padding: 0; cursor: pointer; z-index: 2; font: inherit;
   }
   .goose:focus-visible { outline: 2px solid var(--cursor); outline-offset: 3px; border-radius: 4px; }
-  .goose-art { display: block; width: 32px; height: 32px; shape-rendering: crispEdges; }
+  .goose-art { display: block; width: 48px; height: 42px; shape-rendering: crispEdges; }
   /* the gloom drains colour; give the raincoat it back so it stays a bright yellow on a grey day */
   body.raining .goose-art { filter: saturate(1.6) brightness(1.08); }
   .goose-bubble {
-    position: absolute; bottom: calc(100% + 9px); left: 50%;
+    position: absolute; bottom: calc(100% + 9px); left: 16px;   /* over the goose's body, not the umbrella space */
     padding: 4px 9px; border-radius: 5px; background: #8f8a84; color: #fff;
     font: inherit; font-size: 12px; line-height: 1.3; white-space: nowrap;
     opacity: 0; pointer-events: none; transform: translateX(-50%);
@@ -174,7 +174,7 @@
 
 
   /* ---- Main: intentionally open space to pop bubbles ---- */
-  main { position: relative; z-index: 5; margin-left: var(--rail); padding: 101px 56px 16vh; min-height: 100vh; }   /* "Selected Work" lines up with the first line of the bio */
+  main { position: relative; z-index: 5; margin-left: var(--rail); padding: 102px 56px 16vh; min-height: 100vh; }   /* "Selected Work" lines up with the first line of the bio */
 
   /* ---- Case study cards (mono / terminal style) ---- */
   .case-grid { display: flex; flex-direction: column; gap: 96px; align-items: stretch; max-width: none; margin: 0; }
@@ -309,7 +309,7 @@
       position: sticky; top: 0; z-index: 65;
       padding: 15px 20px; background: var(--bg); border-bottom: 1px solid var(--muted);
     }
-    .mobile-wordmark { font-size: 15px; color: var(--ink); letter-spacing: .01em; }
+    .mobile-wordmark { font-family: 'Crimson Pro', Georgia, serif; font-size: 19px; color: var(--ink); letter-spacing: .005em; }
     .menu-btn { background: none; border: none; padding: 0; cursor: pointer; color: var(--ink); display: flex; }
     .menu-btn svg { width: 22px; height: 22px; display: block; }
 
@@ -333,7 +333,7 @@
       display: inline-flex; align-items: center; gap: 9px;
       padding: 11px 20px; border-radius: 999px;
       background: linear-gradient(135deg, #d2efdf, #ddccf6); color: #4d3f88;
-      font-family: 'Sometype Mono', ui-monospace, monospace;
+      font-family: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
       font-size: 12px; letter-spacing: .06em; text-transform: uppercase; white-space: nowrap;
       transform: translate(-50%, -50%); pointer-events: none; opacity: 0; will-change: transform;
       transition: opacity .16s ease;

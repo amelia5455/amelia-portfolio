@@ -1277,43 +1277,54 @@ var WEATHER_MODE = 'rain';
   var bubble = goose.querySelector('.goose-bubble');
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // 16x16 pixel art, facing right. k outline, w white, g wing, o beak/feet, e eye, y/Y raincoat yellow
+  // 24x21 pixel art, facing right (the goose's body is the left 16 columns; the rest is room for the umbrella). k outline, w white, g wing, o beak/feet, e eye,
+  // y/Y raincoat yellow, r/R umbrella red
   var BODY = [
-    '................',
-    '................',
-    '..........kkk...',
-    '.........kwwwk..',
-    '.........kwewkoo',
-    '.........kwwwko.',
-    '..........kwk...',
-    '..........kwk...',
-    '.kk.......kwk...',
-    'kwwkkkkkkkwwk...',
-    'kwwwgggwwwwwk...',
-    '.kwwwggwwwwwk...',
-    '..kwwwwwwwwk....',
-    '...kkkkkkkk.....'
+    '........................',
+    '........................',
+    '........................',
+    '........................',
+    '........................',
+    '........................',
+    '........................',
+    '..........kkk...........',
+    '.........kwwwk..........',
+    '.........kwewkoo........',
+    '.........kwwwko.........',
+    '..........kwk...........',
+    '..........kwk...........',
+    '.kk.......kwk...........',
+    'kwwkkkkkkkwwk...........',
+    'kwwwgggwwwwwk...........',
+    '.kwwwggwwwwwk...........',
+    '..kwwwwwwwwk............',
+    '...kkkkkkkk.............'
   ];
-  // rain mode outfit: a yellow raincoat, white tail poking out
+  // rain mode outfit: a red umbrella on a straight pole, held up over the head by one wing, and a yellow raincoat
   var RAINCOAT = [
-    '................',
-    '................',
-    '..........kkk...',
-    '.........kwwwk..',
-    '.........kwewkoo',
-    '.........kwwwko.',
-    '..........kwk...',
-    '..........kwk...',
-    '.kk.......kyk...',
-    'kwwkkkkkkkyyk...',
-    'kwwyyyyyyYyyk...',
-    '.kyyyyyyyYyyk...',
-    '..kyyYYYyYyk....',
-    '...kkkkkkkk.....'
+    '................k.......',
+    '..............kkkkk.....',
+    '............kkrrrrrkk...',
+    '..........kkrrrrrrrrrkk.',
+    '.........krrrrrrrrrrrrrk',
+    '.........kRRkRRkRRkRRkRk',
+    '................k.......',
+    '..........kkk...k.......',
+    '.........kwwwk..k.......',
+    '.........kwewkook.......',
+    '.........kwwwko.k.......',
+    '..........kwk...k.......',
+    '..........kwkkkkk.......',
+    '.kk.......kykwwwk.......',
+    'kwwkkkkkkkyykkkkk.......',
+    'kwwyyyyyyYyyk..k........',
+    '.kyyyyyyyYyyk...........',
+    '..kyyYYYyYyk............',
+    '...kkkkkkkk.............'
   ];
   var STRIDE = ['.....o...o......', '....oo..oo......'];   // legs apart
   var STAND  = ['......o.o.......', '.....oo.oo......'];   // legs together
-  var COLOR = { k: '#2a2622', w: '#ffffff', g: '#dcd7ce', o: '#f0973a', e: '#2a2622', y: '#ffd21f', Y: '#eaa20a' };   // bright enough to stay yellow under the gloom
+  var COLOR = { k: '#2a2622', w: '#ffffff', g: '#dcd7ce', o: '#f0973a', e: '#2a2622', y: '#ffd21f', Y: '#eaa20a', r: '#e5483f', R: '#b8302a' };   // bright enough to stay yellow under the gloom
 
   function pixels(rows, y0) {
     var out = '';
@@ -1330,11 +1341,11 @@ var WEATHER_MODE = 'rain';
     return out;
   }
   goose.insertAdjacentHTML('beforeend',
-    '<svg class="goose-art" viewBox="0 0 16 16" aria-hidden="true">' +
+    '<svg class="goose-art" viewBox="0 0 24 21" aria-hidden="true">' +
     '<g class="outfit-clear">' + pixels(BODY, 0) + '</g>' +
     '<g class="outfit-rain" style="display:none">' + pixels(RAINCOAT, 0) + '</g>' +
-    '<g class="legs-stride" style="display:none">' + pixels(STRIDE, 14) + '</g>' +
-    '<g class="legs-stand">' + pixels(STAND, 14) + '</g></svg>');
+    '<g class="legs-stride" style="display:none">' + pixels(STRIDE, 19) + '</g>' +
+    '<g class="legs-stand">' + pixels(STAND, 19) + '</g></svg>');
   var art = goose.querySelector('.goose-art');
   // dresses for the weather: raincoat + bucket hat whenever rain mode is on
   var clear = art.querySelector('.outfit-clear'), coat = art.querySelector('.outfit-rain');
@@ -1348,16 +1359,17 @@ var WEATHER_MODE = 'rain';
 
   var x = 0, walk = null, idle = null, step = null, hovering = false, bubbleTimer = null;
   var R = gsap.utils.random;
-  var maxX = function () { return Math.max(0, track.clientWidth - goose.offsetWidth); };
+  var BODY_W = 32;                                 // the goose itself is 16 pixels = 32px wide
+  var maxX = function () { return Math.max(0, track.clientWidth - BODY_W); };
 
   function legs(striding) { stride.style.display = striding ? '' : 'none'; stand.style.display = striding ? 'none' : ''; }
-  function face(dir) { gsap.set(art, { scaleX: dir < 0 ? -1 : 1, transformOrigin: '50% 50%' }); }
+  function face(dir) { gsap.set(art, { scaleX: dir < 0 ? -1 : 1, transformOrigin: (BODY_W / 2) + 'px 50%' }); }   // turn around its own middle
 
   function say(text, hold) {
     if (bubbleTimer) { bubbleTimer.kill(); bubbleTimer = null; }
     bubble.textContent = text;
     // keep the bubble inside the track; the arrow stays pointed at the goose
-    var bw = bubble.offsetWidth, mid = x + goose.offsetWidth / 2;
+    var bw = bubble.offsetWidth, mid = x + BODY_W / 2;
     var left = Math.min(Math.max(0, mid - bw / 2), track.clientWidth - bw);
     var nudge = left - (mid - bw / 2);
     gsap.set(bubble, { xPercent: -50, x: nudge });
@@ -1389,10 +1401,6 @@ var WEATHER_MODE = 'rain';
     if (step) { step.kill(); step = null; }
     legs(false);
     if (Math.random() > 0.4) { idle = gsap.delayedCall(R(0.1, 0.25), wander); return; }   // most of the time: a quick beat, then off again
-    if (!hovering && Math.random() < 0.5) {
-      if (document.body.classList.contains('raining') && Math.random() < 0.15) { say('Puddle time!', 1.2); hop(); }
-      else honk(1.1);
-    }
     idle = gsap.delayedCall(R(0.6, 1.6), wander);
   }
 

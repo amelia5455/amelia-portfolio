@@ -1,4 +1,4 @@
-/* Besties — case study page. Amelia's cream + Sometype Mono aesthetic,
+/* Besties — case study page. Amelia's cream + IBM Plex Sans aesthetic,
    single-column editorial layout modeled on christina-lu.com/work/onepratt. */
 
 :root {
@@ -19,7 +19,7 @@ html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
 body {
-  font-family: 'Sometype Mono', ui-monospace, monospace;
+  font-family: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
   color: var(--body);
   background: var(--bg);
   min-height: 100vh;
