@@ -1519,23 +1519,23 @@ var WEATHER_MODE = 'rain';
     else { raf = null; last = 0; ctx.clearRect(0, 0, W, H); }
   }
 
-  function set(on, remember) {
+  function set(on) {
     raining = on;
     document.body.classList.toggle('raining', on);
     btn.setAttribute('aria-pressed', String(on));
-    if (remember) { try { on ? localStorage.setItem('rain', '1') : localStorage.removeItem('rain'); } catch (e) {} }
     if (reduceMotion) return;                         // the gloom only, no falling rain
     if (on && !raf) { if (!drops.length) { for (var i = 0; i < target() * 0.25; i++) drops.push(drop(true)); } raf = requestAnimationFrame(frame); }
   }
 
   function toggle() {
     if (window.portfolioClickSound) window.portfolioClickSound();
-    set(!raining, true);
+    set(!raining);
   }
   btn.addEventListener('click', toggle);
   document.addEventListener('keydown', function (e) {
     if ((e.key === 't' || e.key === 'T') && !e.metaKey && !e.ctrlKey && !e.altKey &&
         !/INPUT|TEXTAREA/.test(document.activeElement.tagName)) toggle();
   });
-  try { if (localStorage.getItem('rain') === '1') set(true, false); } catch (e) {}
+  // every visit starts clear; rain is only on while you've toggled it (clear the old saved setting)
+  try { localStorage.removeItem('rain'); } catch (e) {}
 })();
