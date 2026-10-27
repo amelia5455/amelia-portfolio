@@ -1370,7 +1370,12 @@ var WEATHER_MODE = 'rain';
     stepB.style.display = pose === 'b' ? '' : 'none';
     stand.style.display = pose === 'a' || pose === 'b' ? 'none' : '';
   }
-  function upright() { gsap.to(art, { rotation: 0, duration: 0.15, ease: 'sine.out' }); }
+  var sway = null, SWAY = 0.9;                       // one full side-to-side rock, in seconds
+  function upright() { if (sway) { sway.kill(); sway = null; } gsap.to(art, { rotation: 0, duration: 0.2, ease: 'sine.out' }); }
+  function startSway() {                            // a gentle, continuous waddle: lean forward, centre, lean back, centre
+    if (sway) sway.kill();
+    sway = gsap.to(art, { keyframes: { rotation: [0, 2.5, 0, -2.5, 0], easeEach: 'sine.inOut' }, duration: SWAY, ease: 'none', repeat: -1 });
+  }
   function face(dir) { gsap.set(art, { scaleX: dir < 0 ? -1 : 1, transformOrigin: (BODY_W / 2) + 'px 100%' }); }   // turn (and rock) around its own feet
 
   function say(text, hold) {
@@ -1418,11 +1423,10 @@ var WEATHER_MODE = 'rain';
     var max = maxX(), to = R(0, max);
     if (Math.abs(to - x) < 40) to = x < max / 2 ? Math.min(max, x + R(60, 140)) : Math.max(0, x - R(60, 140));
     face(to - x);
-    var flip = false;
-    step = gsap.delayedCall(0.16, function tick() {   // each step lifts the other foot and rocks the body onto the planted one
+    var flip = true; legs('a'); startSway();
+    step = gsap.delayedCall(SWAY / 2, function tick() {   // the other foot lifts as the body swings back through centre
       flip = !flip; legs(flip ? 'a' : 'b');
-      gsap.to(art, { rotation: flip ? 4 : -4, duration: 0.16, ease: 'sine.inOut' });
-      step = gsap.delayedCall(0.16, tick);
+      step = gsap.delayedCall(SWAY / 2, tick);
     });
     walk = gsap.to(goose, {
       x: to, duration: Math.abs(to - x) / 30, ease: 'none',      // about 30px a second
@@ -1441,7 +1445,7 @@ var WEATHER_MODE = 'rain';
   function resume() {
     hovering = false;
     hush();
-    if (walk) { walk.resume(); if (step) step.resume(); }
+    if (walk) { walk.resume(); if (step) step.resume(); startSway(); }
   }
   goose.addEventListener('mouseenter', pause);
   goose.addEventListener('mouseleave', resume);
