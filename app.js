@@ -1322,7 +1322,9 @@ var WEATHER_MODE = 'rain';
     '..kyyYYYyYyk............',
     '...kkkkkkkk.............'
   ];
-  var STRIDE = ['.....o...o......', '....oo..oo......'];   // legs apart
+  // waddle: one foot lifted while the other is planted, alternating
+  var STEP_A = ['....oo...o......', '.........oo.....'];   // back foot up, front foot down
+  var STEP_B = ['.....o...oo.....', '.....oo.........'];   // front foot up, back foot down
   var STAND  = ['......o.o.......', '.....oo.oo......'];   // legs together
   var COLOR = { k: '#2a2622', w: '#ffffff', g: '#dcd7ce', o: '#f0973a', e: '#2a2622', y: '#ffd21f', Y: '#eaa20a', r: '#e5483f', R: '#b8302a' };   // bright enough to stay yellow under the gloom
 
@@ -1344,7 +1346,8 @@ var WEATHER_MODE = 'rain';
     '<svg class="goose-art" viewBox="0 0 24 21" aria-hidden="true">' +
     '<g class="outfit-clear">' + pixels(BODY, 0) + '</g>' +
     '<g class="outfit-rain" style="display:none">' + pixels(RAINCOAT, 0) + '</g>' +
-    '<g class="legs-stride" style="display:none">' + pixels(STRIDE, 19) + '</g>' +
+    '<g class="legs-a" style="display:none">' + pixels(STEP_A, 19) + '</g>' +
+    '<g class="legs-b" style="display:none">' + pixels(STEP_B, 19) + '</g>' +
     '<g class="legs-stand">' + pixels(STAND, 19) + '</g></svg>');
   var art = goose.querySelector('.goose-art');
   // dresses for the weather: raincoat + bucket hat whenever rain mode is on
@@ -1355,15 +1358,20 @@ var WEATHER_MODE = 'rain';
   }
   dress();
   new MutationObserver(dress).observe(document.body, { attributes: true, attributeFilter: ['class'] });
-  var stride = art.querySelector('.legs-stride'), stand = art.querySelector('.legs-stand');
+  var stepA = art.querySelector('.legs-a'), stepB = art.querySelector('.legs-b'), stand = art.querySelector('.legs-stand');
 
   var x = 0, walk = null, idle = null, step = null, hovering = false, bubbleTimer = null;
   var R = gsap.utils.random;
   var BODY_W = 32;                                 // the goose itself is 16 pixels = 32px wide
   var maxX = function () { return Math.max(0, track.clientWidth - BODY_W); };
 
-  function legs(striding) { stride.style.display = striding ? '' : 'none'; stand.style.display = striding ? 'none' : ''; }
-  function face(dir) { gsap.set(art, { scaleX: dir < 0 ? -1 : 1, transformOrigin: (BODY_W / 2) + 'px 50%' }); }   // turn around its own middle
+  function legs(pose) {                            // 'a' / 'b' = mid-step, anything else = standing
+    stepA.style.display = pose === 'a' ? '' : 'none';
+    stepB.style.display = pose === 'b' ? '' : 'none';
+    stand.style.display = pose === 'a' || pose === 'b' ? 'none' : '';
+  }
+  function upright() { gsap.to(art, { rotation: 0, duration: 0.15, ease: 'sine.out' }); }
+  function face(dir) { gsap.set(art, { scaleX: dir < 0 ? -1 : 1, transformOrigin: (BODY_W / 2) + 'px 100%' }); }   // turn (and rock) around its own feet
 
   function say(text, hold) {
     if (bubbleTimer) { bubbleTimer.kill(); bubbleTimer = null; }
@@ -1399,7 +1407,7 @@ var WEATHER_MODE = 'rain';
   function rest() {
     walk = null;
     if (step) { step.kill(); step = null; }
-    legs(false);
+    legs(false); upright();
     if (Math.random() > 0.4) { idle = gsap.delayedCall(R(0.1, 0.25), wander); return; }   // most of the time: a quick beat, then off again
     idle = gsap.delayedCall(R(0.6, 1.6), wander);
   }
@@ -1411,7 +1419,11 @@ var WEATHER_MODE = 'rain';
     if (Math.abs(to - x) < 40) to = x < max / 2 ? Math.min(max, x + R(60, 140)) : Math.max(0, x - R(60, 140));
     face(to - x);
     var flip = false;
-    step = gsap.delayedCall(0.14, function tick() { flip = !flip; legs(flip); step = gsap.delayedCall(0.14, tick); });
+    step = gsap.delayedCall(0.16, function tick() {   // each step lifts the other foot and rocks the body onto the planted one
+      flip = !flip; legs(flip ? 'a' : 'b');
+      gsap.to(art, { rotation: flip ? 4 : -4, duration: 0.16, ease: 'sine.inOut' });
+      step = gsap.delayedCall(0.16, tick);
+    });
     walk = gsap.to(goose, {
       x: to, duration: Math.abs(to - x) / 30, ease: 'none',      // about 30px a second
       onUpdate: function () { x = gsap.getProperty(goose, 'x'); },
@@ -1423,7 +1435,7 @@ var WEATHER_MODE = 'rain';
     hovering = true;
     if (walk) walk.pause();
     if (step) step.pause();
-    legs(false);
+    legs(false); upright();
     say('Honk!');
   }
   function resume() {
