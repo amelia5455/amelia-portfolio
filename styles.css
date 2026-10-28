@@ -400,12 +400,6 @@
   .t-froyo   { grid-column: 1;     grid-row: 3 / 5; }
   .t-paros   { grid-column: 2;     grid-row: 3 / 5; }
   .bento .scratch-card { aspect-ratio: auto; height: 100%; }   /* fill the cell instead of its own 16:7 */
-  /* show the whole litho photo; a blurred copy fills any space the tile has beyond its 3:4 shape */
-  .t-frida img { object-fit: contain; }
-  .t-frida::before {
-    content: ''; position: absolute; inset: -30px;
-    background: url('images/playground/frida-litho.jpg') center / cover; filter: blur(22px) brightness(.97);
-  }
   /* breakpoints follow the grid's own width (the sidebar eats 380px of the window) */
   #view-gallery { container-type: inline-size; }
   @container (max-width: 760px) {
