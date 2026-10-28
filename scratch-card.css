@@ -23,8 +23,7 @@
 }
 
 .scratch-foil {
-  filter: hue-rotate(var(--foil-hue, 0deg)) saturate(1.15);
-  transition: filter 0.5s ease-out;
+  filter: saturate(1.15);
 }
 
 .scratch-coat {
@@ -114,5 +113,5 @@
 .scratch-actions svg { width: 16px; height: 16px; }
 
 @media (prefers-reduced-motion: reduce) {
-  .scratch-foil, .scratch-pill, .scratch-actions { transition: none; }
+  .scratch-pill, .scratch-actions { transition: none; }
 }

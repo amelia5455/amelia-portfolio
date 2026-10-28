@@ -198,7 +198,6 @@
       });
 
       c.addEventListener('pointermove', (e) => {
-        this.tilt(e);
         if (!this.drawing) return;
         const events = e.getCoalescedEvents ? e.getCoalescedEvents() : [e];
         for (const ev of events) {
@@ -211,17 +210,9 @@
       const end = () => { this.drawing = false; this.last = null; };
       c.addEventListener('pointerup', end);
       c.addEventListener('pointercancel', end);
-      c.addEventListener('pointerleave', () => this.root.style.removeProperty('--foil-hue'));
 
       this.resetBtn?.addEventListener('click', () => this.reset());
       this.saveBtn?.addEventListener('click', () => this.save());
-    }
-
-    // Holographic foil shifts hue as you move across it, like tilting the page.
-    tilt(e) {
-      const pt = this.point(e);
-      const deg = ((pt.x / this.w) - 0.5) * 70 + ((pt.y / this.h) - 0.5) * 20;
-      this.root.style.setProperty('--foil-hue', `${deg.toFixed(1)}deg`);
     }
 
     markScratched() {
