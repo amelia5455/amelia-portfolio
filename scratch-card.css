@@ -1,0 +1,118 @@
+.scratch-card {
+  /* Wooden stylus cursor — hotspot sits on the sharpened tip. */
+  --stylus: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M2 2 L10 5.5 L29 24.5 Q30.5 29 26 29 L24.5 29 L5.5 10 Z' fill='%23e9c08a' stroke='white' stroke-width='1.6' stroke-linejoin='round'/%3E%3Cpath d='M9 7 L27.5 25.5' stroke='%23b8834a' stroke-width='1.2' stroke-linecap='round'/%3E%3Cpath d='M2 2 L10 5.5 L5.5 10 Z' fill='%23f6e2c2'/%3E%3Cpath d='M24.5 29 L29 24.5 Q30.5 29 26 29 Z' fill='%238a5a2b'/%3E%3C/svg%3E") 2 2, crosshair;
+
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 7;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #0a0a0b;
+  isolation: isolate;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.scratch-card canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.scratch-foil {
+  filter: hue-rotate(var(--foil-hue, 0deg)) saturate(1.15);
+  transition: filter 0.5s ease-out;
+}
+
+.scratch-coat {
+  cursor: var(--stylus);
+  touch-action: none;
+}
+
+/* ---------- overlays (never block the stylus) ---------- */
+
+.scratch-label {
+  position: absolute;
+  left: 22px;
+  bottom: 18px;
+  z-index: 2;
+  pointer-events: none;
+  color: #fff;
+}
+.scratch-label h3 {
+  margin: 0;
+  font-size: clamp(17px, 2.4vw, 22px);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+.scratch-label p {
+  margin: 2px 0 0;
+  font-size: clamp(13px, 1.7vw, 15px);
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.scratch-pill {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px 8px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #161616;
+  font-size: 14px;
+  font-weight: 500;
+  pointer-events: none;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.scratch-pill svg { width: 18px; height: 18px; }
+.is-scratched .scratch-pill {
+  opacity: 0;
+  transform: translateY(-6px) scale(0.96);
+}
+
+.scratch-actions {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  z-index: 3;
+  display: flex;
+  gap: 8px;
+  opacity: 0;
+  transform: translateY(6px);
+  pointer-events: none;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.is-scratched .scratch-actions {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+.scratch-actions button {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: background 0.2s ease;
+}
+.scratch-actions button:hover { background: rgba(255, 255, 255, 0.26); }
+.scratch-actions button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+.scratch-actions svg { width: 16px; height: 16px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .scratch-foil, .scratch-pill, .scratch-actions { transition: none; }
+}
