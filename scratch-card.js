@@ -199,7 +199,8 @@
 
       c.addEventListener('pointermove', (e) => {
         if (!this.drawing) return;
-        const events = e.getCoalescedEvents ? e.getCoalescedEvents() : [e];
+        const coalesced = e.getCoalescedEvents?.();
+        const events = coalesced && coalesced.length ? coalesced : [e];
         for (const ev of events) {
           const pt = this.point(ev);
           this.line(this.last.x, this.last.y, pt.x, pt.y, this.widthFor(pt.p));
