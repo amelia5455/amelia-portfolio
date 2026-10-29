@@ -2,7 +2,7 @@
    single-column editorial layout modeled on christina-lu.com/work/onepratt. */
 
 :root {
-  --bg: #FAF9F5;
+  --bg: #F5F5F4;
   --ink: #1a1a1a;
   --body: #33322e;
   --muted: #9C9C9C;
@@ -67,7 +67,7 @@ a { color: inherit; }
     flex-direction: row; align-items: center; gap: 22px;
     padding: 13px clamp(20px, 5vw, 40px);
     border-right: none; border-bottom: 1px solid var(--line);
-    background: rgba(250, 249, 245, .85);
+    background: rgba(245, 245, 244, .85);
     backdrop-filter: saturate(140%) blur(10px);
     -webkit-backdrop-filter: saturate(140%) blur(10px);
   }
