@@ -1322,9 +1322,9 @@ var WEATHER_MODE = 'rain';
     '..kyyYYYyYyk............',
     '...kkkkkkkk.............'
   ];
-  // waddle: one foot lifted while the other is planted, alternating
-  var STEP_A = ['....oo...o......', '.........oo.....'];   // back foot up, front foot down
-  var STEP_B = ['.....o...oo.....', '.....oo.........'];   // front foot up, back foot down
+  // shuffle: both feet stay planted and scoot back and forth a pixel as it goes
+  var STEP_A = ['.....o..o.......', '.....oo.oo......'];
+  var STEP_B = ['......o..o......', '......oo.oo.....'];
   var STAND  = ['......o.o.......', '.....oo.oo......'];   // legs together
   var COLOR = { k: '#2a2622', w: '#ffffff', g: '#dcd7ce', o: '#f0973a', e: '#2a2622', y: '#ffd21f', Y: '#eaa20a', r: '#e5483f', R: '#b8302a' };   // bright enough to stay yellow under the gloom
 
@@ -1342,19 +1342,78 @@ var WEATHER_MODE = 'rain';
     });
     return out;
   }
+  // the umbrella (canopy + the pole down to the wing) is its own layer so it can open and fold
+  var POLE_X = 16, UMB = [], COAT = [];
+  RAINCOAT.forEach(function (row, y) {
+    var u = '', c = '';
+    for (var i = 0; i < row.length; i++) {
+      var isUmb = y <= 5 || (y <= 11 && i === POLE_X);
+      u += isUmb ? row[i] : '.'; c += isUmb ? '.' : row[i];
+    }
+    UMB.push(u); COAT.push(c);
+  });
   goose.insertAdjacentHTML('beforeend',
     '<svg class="goose-art" viewBox="0 0 24 21" aria-hidden="true">' +
     '<g class="outfit-clear">' + pixels(BODY, 0) + '</g>' +
-    '<g class="outfit-rain" style="display:none">' + pixels(RAINCOAT, 0) + '</g>' +
+    '<g class="outfit-rain" style="opacity:0">' + pixels(COAT, 0) + '<g class="umbrella">' + pixels(UMB, 0) + '</g></g>' +
     '<g class="legs-a" style="display:none">' + pixels(STEP_A, 19) + '</g>' +
     '<g class="legs-b" style="display:none">' + pixels(STEP_B, 19) + '</g>' +
     '<g class="legs-stand">' + pixels(STAND, 19) + '</g></svg>');
   var art = goose.querySelector('.goose-art');
-  // dresses for the weather: raincoat + bucket hat whenever rain mode is on
-  var clear = art.querySelector('.outfit-clear'), coat = art.querySelector('.outfit-rain');
+  // dresses for the weather with a playful costume change:
+  // rain on:  crouch, hop and twirl, vanish in a pixel poof and land in the raincoat; then the umbrella springs open
+  // rain off: the umbrella snaps shut, the goose shakes itself off like a wet dog, then hops and twirls back
+  var clear = art.querySelector('.outfit-clear'), coat = art.querySelector('.outfit-rain'), umbrella = art.querySelector('.umbrella');
+  var dressedForRain = null, dressTl = null, busy = false;
+  gsap.set(umbrella, { svgOrigin: (POLE_X + 0.5) + ' 12' });            // opens from where the wing holds the pole
+  function outfit(rain) { gsap.set(clear, { opacity: rain ? 0 : 1 }); gsap.set(coat, { opacity: rain ? 1 : 0 }); }
+  function bits(color, size, n, spread, rise) {                        // little pixel squares that burst out and fade
+    for (var i = 0; i < n; i++) {
+      var d = document.createElement('span');
+      d.style.cssText = 'position:absolute;left:14px;top:24px;width:' + size + 'px;height:' + size + 'px;background:' + color + ';pointer-events:none';
+      goose.appendChild(d);
+      var ang = (i / n) * Math.PI * 2 + Math.random() * 0.6;
+      gsap.fromTo(d, { x: 0, y: 0, scale: 0.4, opacity: 1 }, {
+        x: Math.cos(ang) * spread, y: Math.sin(ang) * spread * 0.7 - rise, scale: 1, opacity: 0,
+        duration: 0.45, ease: 'power2.out', onComplete: d.remove.bind(d)
+      });
+    }
+  }
+  function costume(rain) {
+    busy = true;
+    if (walk) walk.pause(); if (step) step.pause(); if (sway) { sway.kill(); sway = null; }
+    legs(false);
+    var s = gsap.getProperty(art, 'scaleX') < 0 ? -1 : 1;              // keep facing the same way
+    gsap.set(art, { transformOrigin: (BODY_W / 2) + 'px 100%' });     // squash and twirl around its feet
+    dressTl = gsap.timeline({ onComplete: function () {
+      busy = false;
+      if (walk && !hovering) { walk.resume(); if (step) step.resume(); startSway(); }
+    } });
+    dressTl.to(art, { rotation: 0, duration: 0.1 });
+    if (!rain) {
+      dressTl.to(umbrella, { scaleX: 0.25, scaleY: 0, duration: 0.22, ease: 'back.in(2)' })
+        .add(function () { bits('#7fb8e6', 3, 6, 16, 6); })
+        .to(art, { keyframes: { rotation: [0, -9, 9, -8, 8, -5, 5, 0] }, duration: 0.55, ease: 'none' }, '<');
+    }
+    dressTl.to(art, { scaleY: 0.8, y: 2, duration: 0.12, ease: 'power1.in' })                 // crouch
+      .to(art, { scaleY: 1.1, y: -16, duration: 0.24, ease: 'power2.out' })                   // hop
+      .to(art, { scaleX: -s, duration: 0.12, ease: 'none' }, '<')                             // twirl...
+      .add(function () { outfit(rain); bits('#ffffff', 6, 7, 20, 0); bits('#e6e1d8', 4, 5, 14, 4); })   // poof!
+      .to(art, { scaleX: s, duration: 0.12, ease: 'none' })                                    // ...and round
+      .to(art, { scaleY: 1, y: 0, duration: 0.22, ease: 'power2.in' }, '<')                   // fall
+      .to(art, { scaleY: 0.85, duration: 0.08, ease: 'power1.out', yoyo: true, repeat: 1 });  // land with a squash
+    if (rain) {
+      dressTl.fromTo(umbrella, { scaleX: 0.25, scaleY: 0 }, { scaleX: 1, scaleY: 1, duration: 0.6, ease: 'elastic.out(1, 0.45)' }, '-=0.05');
+    }
+  }
   function dress() {
     var rain = document.body.classList.contains('raining');
-    clear.style.display = rain ? 'none' : ''; coat.style.display = rain ? '' : 'none';
+    if (rain === dressedForRain) return;                               // body class changed for something else
+    var first = dressedForRain === null;
+    dressedForRain = rain;
+    if (dressTl) { dressTl.progress(1).kill(); dressTl = null; }       // finish any change already in progress
+    if (first || reduceMotion) { outfit(rain); gsap.set(umbrella, { scaleX: 1, scaleY: rain ? 1 : 0 }); return; }
+    costume(rain);
   }
   dress();
   new MutationObserver(dress).observe(document.body, { attributes: true, attributeFilter: ['class'] });
@@ -1365,16 +1424,23 @@ var WEATHER_MODE = 'rain';
   var BODY_W = 32;                                 // the goose itself is 16 pixels = 32px wide
   var maxX = function () { return Math.max(0, track.clientWidth - BODY_W); };
 
-  function legs(pose) {                            // 'a' / 'b' = mid-step, anything else = standing
+  function legs(pose) {                            // 'a' / 'b' = the two shuffle positions, anything else = standing
     stepA.style.display = pose === 'a' ? '' : 'none';
     stepB.style.display = pose === 'b' ? '' : 'none';
     stand.style.display = pose === 'a' || pose === 'b' ? 'none' : '';
   }
   var sway = null, SWAY = 0.9;                       // one full side-to-side rock, in seconds
   function upright() { if (sway) { sway.kill(); sway = null; } gsap.to(art, { rotation: 0, duration: 0.2, ease: 'sine.out' }); }
-  function startSway() {                            // a gentle, continuous waddle: lean forward, centre, lean back, centre
-    if (sway) sway.kill();
-    sway = gsap.to(art, { keyframes: { rotation: [0, 2.5, 0, -2.5, 0], easeEach: 'sine.inOut' }, duration: SWAY, ease: 'none', repeat: -1 });
+  function startSway() {                            // the waddle: rock forward, upright, back, upright, with the
+    if (sway) sway.kill();                          // planted feet shifting each time the body passes upright
+    var h = SWAY / 4;
+    sway = gsap.timeline({ repeat: -1 })
+      .call(legs, ['a'], 0)
+      .to(art, { rotation: 4, duration: h, ease: 'sine.out' }, 0)
+      .to(art, { rotation: 0, duration: h, ease: 'sine.in' })
+      .call(legs, ['b'])
+      .to(art, { rotation: -4, duration: h, ease: 'sine.out' })
+      .to(art, { rotation: 0, duration: h, ease: 'sine.in' });
   }
   function face(dir) { gsap.set(art, { scaleX: dir < 0 ? -1 : 1, transformOrigin: (BODY_W / 2) + 'px 100%' }); }   // turn (and rock) around its own feet
 
@@ -1419,15 +1485,11 @@ var WEATHER_MODE = 'rain';
 
   function wander() {
     idle = null;
-    if (hovering) { idle = gsap.delayedCall(1, wander); return; }
+    if (hovering || busy) { idle = gsap.delayedCall(1, wander); return; }
     var max = maxX(), to = R(0, max);
     if (Math.abs(to - x) < 40) to = x < max / 2 ? Math.min(max, x + R(60, 140)) : Math.max(0, x - R(60, 140));
     face(to - x);
-    var flip = true; legs('a'); startSway();
-    step = gsap.delayedCall(SWAY / 2, function tick() {   // the other foot lifts as the body swings back through centre
-      flip = !flip; legs(flip ? 'a' : 'b');
-      step = gsap.delayedCall(SWAY / 2, tick);
-    });
+    startSway();
     walk = gsap.to(goose, {
       x: to, duration: Math.abs(to - x) / 30, ease: 'none',      // about 30px a second
       onUpdate: function () { x = gsap.getProperty(goose, 'x'); },
@@ -1445,7 +1507,7 @@ var WEATHER_MODE = 'rain';
   function resume() {
     hovering = false;
     hush();
-    if (walk) { walk.resume(); if (step) step.resume(); startSway(); }
+    if (walk && !busy) { walk.resume(); if (step) step.resume(); startSway(); }
   }
   goose.addEventListener('mouseenter', pause);
   goose.addEventListener('mouseleave', resume);

@@ -106,7 +106,7 @@ a { color: inherit; }
 
 .hero-banner {
   margin-top: 44px;
-  border-radius: 22px; overflow: hidden; position: relative;
+  border-radius: 9px; overflow: hidden; position: relative;
   background:
     radial-gradient(120% 140% at 12% 0%, #f7b9c2 0%, rgba(247,185,194,0) 55%),
     linear-gradient(118deg, #f7a7b0 0%, #ff8a6d 46%, #ff6347 100%);
@@ -124,7 +124,7 @@ a { color: inherit; }
 /* ---------- Meta block (role / timeline / tools / skills) ---------- */
 .meta {
   margin-top: 40px; padding: 26px 30px;
-  background: var(--panel); border-radius: 18px;
+  background: var(--panel); border-radius: 7px;
   display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
 }
 .meta .label {
@@ -159,21 +159,21 @@ a { color: inherit; }
 /* ---------- Figures ---------- */
 figure { margin: 26px 0 0; }
 .fig {
-  border-radius: 16px; overflow: hidden;
+  border-radius: 7px; overflow: hidden;
 }
 .fig img { display: block; width: 100%; height: auto; }
 figcaption { font-size: 12.5px; color: var(--muted); margin-top: 10px; line-height: 1.55; }
 
 /* text + tall image side by side (problem / distance map) */
 .split { display: grid; grid-template-columns: 1fr 244px; gap: 48px; align-items: center; margin-top: 8px; }
-.split .fig { border-radius: 20px; }
+.split .fig { border-radius: 7px; }
 .split figure { margin-top: 0; }
 @media (max-width: 720px) { .split { grid-template-columns: 1fr; gap: 24px; max-width: 340px; } }
 
 /* ---------- Cards (interview themes / competitors) ---------- */
 .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 26px; }
 .card {
-  background: #fff; border: 1px solid var(--line); border-radius: 14px;
+  background: #fff; border: 1px solid var(--line); border-radius: 6px;
   padding: 22px 20px;
 }
 .card .ct { font-size: 16px; font-weight: 500; color: var(--ink); margin-bottom: 8px; }
@@ -188,7 +188,7 @@ figcaption { font-size: 12.5px; color: var(--muted); margin-top: 10px; line-heig
 .callout {
   margin-top: 30px; display: flex; gap: 20px; align-items: center;
   background: var(--panel);
-  border-radius: 18px; padding: 26px 28px;
+  border-radius: 7px; padding: 26px 28px;
 }
 .callout .bulb { font-size: 42px; line-height: 1; flex-shrink: 0; }
 .callout p {
