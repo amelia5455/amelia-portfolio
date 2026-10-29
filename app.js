@@ -1323,8 +1323,8 @@ var WEATHER_MODE = 'rain';
     '...kkkkkkkk.............'
   ];
   // shuffle: both feet stay planted and scoot back and forth a pixel as it goes
-  var STEP_A = ['.....o..o.......', '.....oo.oo......'];
-  var STEP_B = ['......o..o......', '......oo.oo.....'];
+  var STEP_A = ['....oo...o......', '.........oo.....'];   // back foot up, front foot down
+  var STEP_B = ['.....o...oo.....', '.....oo.........'];   // front foot up, back foot down
   var STAND  = ['......o.o.......', '.....oo.oo......'];   // legs together
   var COLOR = { k: '#2a2622', w: '#ffffff', g: '#dcd7ce', o: '#f0973a', e: '#2a2622', y: '#ffd21f', Y: '#eaa20a', r: '#e5483f', R: '#b8302a' };   // bright enough to stay yellow under the gloom
 
@@ -1429,18 +1429,15 @@ var WEATHER_MODE = 'rain';
     stepB.style.display = pose === 'b' ? '' : 'none';
     stand.style.display = pose === 'a' || pose === 'b' ? 'none' : '';
   }
-  var sway = null, SWAY = 0.9;                       // one full side-to-side rock, in seconds
+  var sway = null, STEP = 0.16;                      // seconds per stomp
   function upright() { if (sway) { sway.kill(); sway = null; } gsap.to(art, { rotation: 0, duration: 0.2, ease: 'sine.out' }); }
-  function startSway() {                            // the waddle: rock forward, upright, back, upright, with the
-    if (sway) sway.kill();                          // planted feet shifting each time the body passes upright
-    var h = SWAY / 4;
+  function startSway() {                            // the stomp: each step lifts the other foot and rocks the body onto the planted one
+    if (sway) sway.kill();
     sway = gsap.timeline({ repeat: -1 })
       .call(legs, ['a'], 0)
-      .to(art, { rotation: 4, duration: h, ease: 'sine.out' }, 0)
-      .to(art, { rotation: 0, duration: h, ease: 'sine.in' })
+      .to(art, { rotation: 4, duration: STEP, ease: 'sine.inOut' }, 0)
       .call(legs, ['b'])
-      .to(art, { rotation: -4, duration: h, ease: 'sine.out' })
-      .to(art, { rotation: 0, duration: h, ease: 'sine.in' });
+      .to(art, { rotation: -4, duration: STEP, ease: 'sine.inOut' });
   }
   function face(dir) { gsap.set(art, { scaleX: dir < 0 ? -1 : 1, transformOrigin: (BODY_W / 2) + 'px 100%' }); }   // turn (and rock) around its own feet
 
