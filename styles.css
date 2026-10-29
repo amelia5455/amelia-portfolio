@@ -394,6 +394,15 @@
   .t-frida   { grid-column: 3;     grid-row: 1 / 5; }
   .t-froyo   { grid-column: 1;     grid-row: 3 / 5; }
   .t-paros   { grid-column: 2;     grid-row: 3 / 5; }
+  .t-404     { grid-column: 1 / 4; grid-row: 5 / 7; background: #363a6e; --s: 1.6; }
+  /* the 404 page renders at --s times the tile's size, then shrinks to fit, so the whole scene shows */
+  .t-404 iframe {
+    position: absolute; top: 0; left: 0; border: 0; pointer-events: none;
+    width: calc(100% * var(--s)); height: calc(100% * var(--s));
+    transform: scale(calc(1 / var(--s))); transform-origin: 0 0;
+  }
+  /* the night sky is dark enough to read on, and the top keeps the caption off the barn and cow */
+  .t-404 .tile-cap { top: 0; bottom: auto; padding: 14px 64px 0 16px; background: none; }
   .bento .scratch-card { aspect-ratio: auto; height: 100%; }   /* fill the cell instead of its own 16:7 */
   /* breakpoints follow the grid's own width (the sidebar eats 380px of the window) */
   #view-gallery { container-type: inline-size; }
@@ -402,6 +411,7 @@
     .t-frida { grid-column: 1; grid-row: 3 / 7; }
     .t-froyo { grid-column: 2; grid-row: 3 / 5; }
     .t-paros { grid-column: 2; grid-row: 5 / 7; }
+    .t-404   { grid-column: 1 / 3; grid-row: 7 / 10; }
   }
   @container (max-width: 520px) {
     .bento { grid-template-columns: 1fr; grid-auto-rows: auto; }
@@ -409,6 +419,8 @@
     .bento .t-scratch { aspect-ratio: 4 / 3; height: auto; }
     .t-frida { aspect-ratio: 3 / 4; }
     .t-froyo, .t-paros { aspect-ratio: 16 / 10; }
+    .t-404 { aspect-ratio: 4 / 3; --s: 2; }
+    .t-404 .tile-cap { display: none; }   /* too narrow to share the sky with the page's own "404" */
   }
   .construction {
     position: absolute; inset: 0; display: flex; flex-direction: column;

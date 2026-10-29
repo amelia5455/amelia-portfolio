@@ -44,7 +44,10 @@
   .home { font-size: 14px; margin-top: 12px; color: #b9bad6; }
   .home a { color: #f3eee6; text-underline-offset: 3px; }
   @media (max-width: 600px) { .moon { right: 8vw; } .tree-a { display: none; } h1 { font-size: 52px; } }
+  /* shown inside the Play bento (?embed): no "taking you home" line */
+  .embed .home { display: none; }
 </style>
+<script>if (/[?&]embed\b/.test(location.search)) document.documentElement.className = 'embed';</script>
 </head>
 <body>
   <div class="sky" aria-hidden="true"><span class="px-star" style="left:8%;top:22%"><svg class="" viewBox="0 0 3 3" shape-rendering="crispEdges" aria-hidden="true"><rect x="1" y="0" width="1" height="1" fill="#f0d877"/><rect x="0" y="1" width="3" height="1" fill="#f0d877"/><rect x="1" y="2" width="1" height="1" fill="#f0d877"/></svg></span><span class="px-dot" style="left:21%;top:9%"></span><span class="px-star" style="left:30%;top:30%"><svg class="" viewBox="0 0 3 3" shape-rendering="crispEdges" aria-hidden="true"><rect x="1" y="0" width="1" height="1" fill="#f0d877"/><rect x="0" y="1" width="3" height="1" fill="#f0d877"/><rect x="1" y="2" width="1" height="1" fill="#f0d877"/></svg></span><span class="px-dot" style="left:44%;top:14%"></span><span class="px-dot" style="left:58%;top:55%"></span><span class="px-star" style="left:64%;top:8%"><svg class="" viewBox="0 0 3 3" shape-rendering="crispEdges" aria-hidden="true"><rect x="1" y="0" width="1" height="1" fill="#f0d877"/><rect x="0" y="1" width="3" height="1" fill="#f0d877"/><rect x="1" y="2" width="1" height="1" fill="#f0d877"/></svg></span><span class="px-star" style="left:88%;top:30%"><svg class="" viewBox="0 0 3 3" shape-rendering="crispEdges" aria-hidden="true"><rect x="1" y="0" width="1" height="1" fill="#f0d877"/><rect x="0" y="1" width="3" height="1" fill="#f0d877"/><rect x="1" y="2" width="1" height="1" fill="#f0d877"/></svg></span><span class="px-dot" style="left:93%;top:12%"></span><span class="px-dot" style="left:14%;top:40%"></span><span class="px-dot" style="left:73%;top:38%"></span><span class="px-dot" style="left:38%;top:44%"></span><span class="px-star" style="left:82%;top:46%"><svg class="" viewBox="0 0 3 3" shape-rendering="crispEdges" aria-hidden="true"><rect x="1" y="0" width="1" height="1" fill="#f0d877"/><rect x="0" y="1" width="3" height="1" fill="#f0d877"/><rect x="1" y="2" width="1" height="1" fill="#f0d877"/></svg></span></div>
@@ -66,13 +69,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
 <script>
 /* a flying saucer swoops in from the top-left corner, beams the cow up, and flies off;
-   once it's gone, the visitor is sent to the homepage */
+   once it's gone, the visitor is sent to the homepage (embedded in the Play bento, it loops instead) */
 (function () {
+  var embed = document.documentElement.className === 'embed';
   function home() { window.location.replace('/'); }
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (!window.gsap || reduceMotion) {                     // no animation: show the scene, then go home
     if (window.gsap) gsap.set('.beam', { opacity: 1 });
-    setTimeout(home, 4000);
+    if (!embed) setTimeout(home, 4000);
     return;
   }
   var ufo = document.querySelector('.ufo'), cow = document.querySelector('.cow'), beam = document.querySelector('.beam');
@@ -82,7 +86,7 @@
   var lift = cow.getBoundingClientRect().top - r.bottom + 8;                         // cow rises into the saucer
 
   gsap.set(ufo, { x: fromX, y: fromY, rotation: 14 });
-  gsap.timeline({ delay: 0.6, onComplete: home })
+  gsap.timeline(embed ? { delay: 0.6, repeat: -1, repeatDelay: 1.2 } : { delay: 0.6, onComplete: home })
     // swoop down from the corner and settle over the cow
     .to(ufo, { x: 0, duration: 2.2, ease: 'power1.out' })
     .to(ufo, { y: 0, duration: 2.2, ease: 'power3.out' }, '<')
