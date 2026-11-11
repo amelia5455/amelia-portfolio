@@ -770,7 +770,7 @@ void main(){
   }
   function kick(){ if (!raf) raf = requestAnimationFrame(loop); }
 
-  frameEl.addEventListener('pointerdown', (e) => {
+  frameEl.addEventListener('click', (e) => {
     const r = canvas.getBoundingClientRect();
     const u = (e.clientX - r.left)/r.width, v = 1 - (e.clientY - r.top)/r.height;
     const aspect = r.width/r.height;

@@ -16,7 +16,7 @@ Personal portfolio for Amelia Simpson (product designer, Seattle). Live at **ame
 - The nav label says **Play**, but internally everything is still called `gallery`: `data-view="gallery"`, `#view-gallery`, and the URL `/gallery`.
 - Content is a bento grid: `<section class="bento">` in `index.html`, with `.tile` / `.t-*` rules in `styles.css`.
 - Current tiles: scratch art, Frida litho, Froyo Shop (links out), Paros photo, and the 404 page.
-- The Puddle tile embeds `puddle.html?embed` (a WebGL shader, canvas only). Clicking it spins the card open into `#puddle-panel` (`puddle-tile.js` / `puddle-tile.css`), where the puddle is playable beside the design and development story. `puddle.html` on its own is the full project page.
+- The Puddle tile embeds `puddle.html?embed` (a WebGL shader, canvas only) and is playable in place: clicking the water makes the boots jump in. Only the expand button in its upper-left corner spins the card open into `#puddle-panel` (`puddle-tile.js` / `puddle-tile.css`), where the puddle is playable beside the design and development story. `puddle.html` on its own is the full project page.
 - The 404 tile embeds `404.html?embed`, which loops the animation instead of redirecting home.
 - The old pan-around canvas (`#galleryCanvas`) is hidden by CSS, not deleted.
 - Responsive breakpoints use container queries on `#view-gallery` (760px and 520px), not media queries, because the sidebar takes 380px.

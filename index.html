@@ -12,9 +12,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css?v=114">
 <link rel="stylesheet" href="scratch-card.css?v=3">
-<link rel="stylesheet" href="puddle-tile.css?v=1">
+<link rel="stylesheet" href="puddle-tile.css?v=2">
 <script src="scratch-card.js?v=4" defer></script>
-<script src="puddle-tile.js?v=1" defer></script>
+<script src="puddle-tile.js?v=3" defer></script>
 <script>
   /* set the view before first paint so a refresh doesn't flash the Work page */
   (function () {
@@ -228,14 +228,15 @@
           </div>
         </a>
 
-        <!-- the live puddle shader; clicking spins it open into #puddle-panel (puddle-tile.js) -->
-        <div class="tile t-puddle" role="button" tabindex="0" data-puddle-open
-             aria-haspopup="dialog" aria-controls="puddle-panel" aria-label="Open Puddle: rain falling into a Seattle puddle that you can jump in">
-          <iframe src="puddle.html?embed" title="Rain falling into a puddle on brick pavers" loading="lazy" tabindex="-1" aria-hidden="true"></iframe>
-          <span class="tile-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></span>
+        <!-- the live puddle shader, playable right here; only the corner button spins it open into #puddle-panel (puddle-tile.js) -->
+        <div class="tile t-puddle">
+          <iframe src="puddle.html?embed&amp;v=2" title="Puddle: click the water to jump in" loading="lazy"></iframe>
+          <button type="button" class="tile-arrow pp-expand" data-puddle-open aria-haspopup="dialog" aria-controls="puddle-panel" aria-label="Expand Puddle and read how it was made" title="Expand">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+          </button>
           <div class="tile-cap">
             <h3>Puddle</h3>
-            <p>Seattle rain you can jump in</p>
+            <p>Click the water to jump in</p>
           </div>
         </div>
 
