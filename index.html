@@ -12,7 +12,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css?v=115">
 <link rel="stylesheet" href="scratch-card.css?v=3">
-<link rel="stylesheet" href="play-panels.css?v=3">
+<link rel="stylesheet" href="play-panels.css?v=4">
 <script src="scratch-card.js?v=5" defer></script>
 <script src="play-panels.js?v=2" defer></script>
 <script>
@@ -228,13 +228,13 @@
         </figure>
 
         <!-- the real 404 page, playing on a loop (?embed skips the redirect home);
-             the whole card is a button that opens #panel-404; the upper-right "Visit" opens the real page -->
+             the whole card and its upper-right "Read more" open #panel-404, which links to the real page -->
         <div class="tile t-404" data-panel-tile="404">
           <button type="button" class="tile-open" data-panel-open="404" aria-haspopup="dialog" aria-controls="panel-404" aria-label="Read more about the 404 page"></button>
           <iframe src="404.html?embed" title="My 404 page: a UFO beams up a cow" loading="lazy" tabindex="-1" aria-hidden="true"></iframe>
-          <a class="tile-btn tile-btn-right" href="/404" target="_blank" rel="noopener" aria-label="Open the 404 page in a new tab">
-            <span class="tile-btn-label">Visit</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>
-          </a>
+          <button type="button" class="tile-btn tile-btn-right" data-panel-open="404" aria-haspopup="dialog" aria-controls="panel-404" aria-label="Read more about the 404 page">
+            <span class="tile-btn-label">Read more</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+          </button>
           <div class="tile-cap">
             <h3>404 Page</h3>
             <p>A UFO abduction for lost visitors</p>
@@ -516,6 +516,7 @@
             <h2 id="pp-title-404">404 Page</h2>
             <p class="pp-lede">Instead of a dead end, lost visitors watch a UFO beam up a cow, then get sent home.</p>
             <p class="pp-hint">It loops here. The real page sends you home when it ends.</p>
+            <p class="pp-link pp-link-top"><a href="/404" target="_blank" rel="noopener">Open the real 404 page ↗</a></p>
           </header>
 
           <section>
@@ -529,7 +530,6 @@
             <p>The animation is one GSAP timeline. The saucer swoops in from the top-left corner, settles over the cow and turns on its beam. The cow floats up wiggling and shrinks into the saucer, which hops and flies off the top-right.</p>
             <p>On the real 404 page, the visitor is sent home when the saucer leaves. Embedded here, it loops instead.</p>
           </section>
-          <p class="pp-link"><a href="/404" target="_blank" rel="noopener">Open the real 404 page ↗</a></p>
         </article>
       </div>
       <button type="button" class="pp-close" data-panel-close aria-label="Close 404 Page">

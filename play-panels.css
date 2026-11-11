@@ -2,7 +2,7 @@
 
 /* ---- corner buttons on the cards ----
    one button per card, always in the upper-right: "Read more" opens the card's panel
-   (Scratch Art, Puddle), "Visit" goes to the real thing (Froyo, 404).
+   (Scratch Art, Puddle, 404), "Visit" goes to the real thing (Froyo).
    On hover the pill turns dark and slides its label out (no scale or nudge). */
 .tile-btn {
   position: absolute; top: 14px; z-index: 3;
@@ -127,6 +127,7 @@ html.pp-lock { overflow: hidden; }
 .pp-story section p { color: #3a3a3a; max-width: 60ch; }
 .pp-story section p + p { margin-top: 10px; }
 .pp-note { font-size: 13px; color: var(--muted); }
+.pp-link-top { margin-top: 14px; }
 .pp-link a { color: var(--ink); font-size: 14px; text-decoration: none; border-bottom: 1px solid var(--muted); padding-bottom: 1px; }
 .pp-link a:focus-visible { outline: 2px solid var(--cursor); outline-offset: 3px; }
 
