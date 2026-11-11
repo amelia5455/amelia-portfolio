@@ -32,16 +32,22 @@
 .tile-btn:focus-visible .tile-btn-label { max-width: 90px; opacity: 1; }
 @media (prefers-reduced-motion: reduce) { .tile-btn, .tile-btn-label { transition: none; } }
 
-/* the 404 caption used to sit at the top, clear of the barn and cow; the "Read more" button
-   lives there now, so it goes to the bottom like every other card, on the same dark fade */
+/* the 404 caption sits at the bottom like every other card, starting just past the barn
+   (the barn is 5% in from the left and about 55px wide at the tile's size) */
 .t-404 .tile-cap {
   top: auto; bottom: 0; display: block;
-  padding: 40px 16px 13px;
-  background: linear-gradient(to top, rgba(0,0,0,.5), rgba(0,0,0,0));
+  padding: 40px 16px 13px calc(5% + 72px);
+  background: linear-gradient(to top, rgba(0,0,0,.45), rgba(0,0,0,0) 70%);
 }
 
-/* cards that open when clicked anywhere (not playable in place) */
-[data-panel-click] { cursor: pointer; }
+/* cards that aren't playable in place (Frida, Froyo, 404) are one big invisible button;
+   their "Visit" link sits above it */
+.tile-open {
+  position: absolute; inset: 0; z-index: 2;
+  padding: 0; border: 0; border-radius: inherit;
+  background: transparent; cursor: pointer;
+}
+.tile-open:focus-visible { outline: 2px solid var(--cursor); outline-offset: 3px; }
 
 /* ---- puddle tile: a full-width row under the 404 tile ---- */
 .t-puddle { grid-column: 1 / 4; grid-row: 7 / 10; background: #5d5850; }
@@ -84,9 +90,7 @@ html.pp-lock { overflow: hidden; }
 }
 .pp-back {
   transform: rotateY(180deg);
-  background: var(--pp-back, #5d5850); color: #f4f1ec;
-  display: grid; place-items: center;
-  font-size: 22px; font-weight: 500; letter-spacing: -.01em;
+  background: var(--pp-back, #5d5850);   /* a plain back, in each card's own color */
 }
 .play-panel[data-panel="scratch"] { --pp-back: #0a0a0b; }
 .play-panel[data-panel="frida"]   { --pp-back: #8d8a83; }

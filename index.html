@@ -12,9 +12,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css?v=114">
 <link rel="stylesheet" href="scratch-card.css?v=3">
-<link rel="stylesheet" href="play-panels.css?v=1">
-<script src="scratch-card.js?v=4" defer></script>
-<script src="play-panels.js?v=1" defer></script>
+<link rel="stylesheet" href="play-panels.css?v=2">
+<script src="scratch-card.js?v=5" defer></script>
+<script src="play-panels.js?v=2" defer></script>
 <script>
   /* set the view before first paint so a refresh doesn't flash the Work page */
   (function () {
@@ -196,24 +196,20 @@
           </div>
         </div>
 
-        <!-- the whole card opens #panel-frida -->
-        <figure class="tile t-frida" data-panel-tile="frida" data-panel-click>
+        <!-- the whole card is a button that opens #panel-frida -->
+        <figure class="tile t-frida" data-panel-tile="frida">
+          <button type="button" class="tile-open" data-panel-open="frida" aria-haspopup="dialog" aria-controls="panel-frida" aria-label="Read more about the Frida litho"></button>
           <img src="images/playground/frida-litho.jpg" alt="A pencil lithograph of Frida Kahlo surrounded by flowers, drawn on a litho plate">
-          <button type="button" class="tile-btn tile-btn-left" data-panel-open="frida" aria-haspopup="dialog" aria-controls="panel-frida" aria-label="Read more about the Frida litho">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg><span class="tile-btn-label">Read more</span>
-          </button>
           <figcaption class="tile-cap">
             <h3>Frida Litho</h3>
             <p>A lithograph I made for my printmaking class</p>
           </figcaption>
         </figure>
 
-        <!-- the whole card opens #panel-froyo; the upper-right button goes straight to the shop -->
-        <div class="tile t-froyo" data-panel-tile="froyo" data-panel-click>
+        <!-- the whole card is a button that opens #panel-froyo; the upper-right "Visit" goes straight to the shop -->
+        <div class="tile t-froyo" data-panel-tile="froyo">
+          <button type="button" class="tile-open" data-panel-open="froyo" aria-haspopup="dialog" aria-controls="panel-froyo" aria-label="Read more about The Froyo Shop"></button>
           <img src="images/playground/froyo-shop.jpg" alt="The Froyo Shop app: a soft-serve frozen yogurt in a polka-dot cup with flavor, cup, and topping pickers">
-          <button type="button" class="tile-btn tile-btn-left" data-panel-open="froyo" aria-haspopup="dialog" aria-controls="panel-froyo" aria-label="Read more about The Froyo Shop">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg><span class="tile-btn-label">Read more</span>
-          </button>
           <a class="tile-btn tile-btn-right" href="https://froyo-shop.vercel.app/" target="_blank" rel="noopener" aria-label="Open The Froyo Shop in a new tab">
             <span class="tile-btn-label">Visit</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>
           </a>
@@ -232,12 +228,10 @@
         </figure>
 
         <!-- the real 404 page, playing on a loop (?embed skips the redirect home);
-             the whole card opens #panel-404, the upper-right button opens the real page -->
-        <div class="tile t-404" data-panel-tile="404" data-panel-click>
+             the whole card is a button that opens #panel-404; the upper-right "Visit" opens the real page -->
+        <div class="tile t-404" data-panel-tile="404">
+          <button type="button" class="tile-open" data-panel-open="404" aria-haspopup="dialog" aria-controls="panel-404" aria-label="Read more about the 404 page"></button>
           <iframe src="404.html?embed" title="My 404 page: a UFO beams up a cow" loading="lazy" tabindex="-1" aria-hidden="true"></iframe>
-          <button type="button" class="tile-btn tile-btn-left" data-panel-open="404" aria-haspopup="dialog" aria-controls="panel-404" aria-label="Read more about the 404 page">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg><span class="tile-btn-label">Read more</span>
-          </button>
           <a class="tile-btn tile-btn-right" href="/404" target="_blank" rel="noopener" aria-label="Open the 404 page in a new tab">
             <span class="tile-btn-label">Visit</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>
           </a>
@@ -393,7 +387,7 @@
   <!-- Play panels: each interactive card spins up into its own panel (play-panels.js) -->
   <dialog id="panel-scratch" class="play-panel" data-panel="scratch" aria-labelledby="pp-title-scratch">
     <div class="pp-card">
-      <div class="pp-back" aria-hidden="true"><span>Scratch Art</span></div>
+      <div class="pp-back" aria-hidden="true"></div>
       <div class="pp-face">
         <div class="pp-stage pp-stage-scratch">
           <div class="scratch-card" data-scratch-card role="group" aria-label="Scratch-art card: drag to scratch through black wax and reveal a rainbow foil underneath">
@@ -441,7 +435,7 @@
 
   <dialog id="panel-frida" class="play-panel" data-panel="frida" aria-labelledby="pp-title-frida">
     <div class="pp-card">
-      <div class="pp-back" aria-hidden="true"><span>Frida Litho</span></div>
+      <div class="pp-back" aria-hidden="true"></div>
       <div class="pp-face">
         <div class="pp-stage pp-stage-frida"><img src="images/playground/frida-litho.jpg" alt="A pencil lithograph of Frida Kahlo surrounded by flowers, drawn on a litho plate"></div>
         <article class="pp-story">
@@ -480,7 +474,7 @@
 
   <dialog id="panel-froyo" class="play-panel" data-panel="froyo" aria-labelledby="pp-title-froyo">
     <div class="pp-card">
-      <div class="pp-back" aria-hidden="true"><span>The Froyo Shop</span></div>
+      <div class="pp-back" aria-hidden="true"></div>
       <div class="pp-face">
         <div class="pp-stage pp-stage-froyo" data-stage-src="https://froyo-shop.vercel.app/" data-stage-title="The Froyo Shop, playable"></div>
         <article class="pp-story">
@@ -513,7 +507,7 @@
 
   <dialog id="panel-404" class="play-panel" data-panel="404" aria-labelledby="pp-title-404">
     <div class="pp-card">
-      <div class="pp-back" aria-hidden="true"><span>404 Page</span></div>
+      <div class="pp-back" aria-hidden="true"></div>
       <div class="pp-face">
         <div class="pp-stage pp-stage-404" data-stage-src="404.html?embed" data-stage-title="My 404 page: a UFO beams up a cow"></div>
         <article class="pp-story">
@@ -546,7 +540,7 @@
 
   <dialog id="panel-puddle" class="play-panel" data-panel="puddle" aria-labelledby="pp-title-puddle">
     <div class="pp-card">
-      <div class="pp-back" aria-hidden="true"><span>Puddle</span></div>
+      <div class="pp-back" aria-hidden="true"></div>
       <div class="pp-face">
         <div class="pp-stage pp-stage-puddle" data-stage-src="puddle.html?embed&amp;v=2" data-stage-title="Puddle: click the water to jump in"></div>
         <article class="pp-story">

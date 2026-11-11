@@ -17,7 +17,7 @@ Personal portfolio for Amelia Simpson (product designer, Seattle). Live at **ame
 - Content is a bento grid: `<section class="bento">` in `index.html`, with `.tile` / `.t-*` rules in `styles.css`.
 - Current tiles: scratch art, Frida litho, Froyo Shop (links out), Paros photo, and the 404 page.
 - Interactive cards (scratch art, Frida litho, Froyo Shop, 404, Puddle) each flip open into their own panel: a `<dialog class="play-panel" data-panel="key">` in `index.html`, driven by `play-panels.js` / `play-panels.css`. The panel holds a stage on the left (a fresh iframe from `data-stage-src`, an image, or a second scratch card) and the card's story on the right.
-- Every one of those cards has a "Read more" button in its upper-left (`[data-panel-open]`). Cards that aren't playable in place (Frida, Froyo, 404) also open when clicked anywhere (`[data-panel-click]`) and keep an upper-right "Visit" link to the real thing. Scratch art and Puddle stay playable in the tile, so only the button opens them.
+- One corner button per card. Scratch art and Puddle stay playable in the tile, so they open only from a "Read more" button in the upper-left. Frida, Froyo and 404 aren't playable in place, so the whole card is an invisible button (`.tile-open`) that opens the panel; Froyo and 404 keep an upper-right "Visit" link to the real thing.
 - The Puddle tile embeds `puddle.html?embed` (a WebGL shader, canvas only); `puddle.html` on its own is the full project page.
 - The 404 tile embeds `404.html?embed`, which loops the animation instead of redirecting home.
 - The old pan-around canvas (`#galleryCanvas`) is hidden by CSS, not deleted.

@@ -1,9 +1,9 @@
 /* Play panels: each interactive card on the Play page opens into its own panel
    (<dialog class="play-panel" data-panel="key">) with a single card flip.
 
-   - [data-panel-open="key"] buttons open it (the "Read more" button in a card's upper-left).
-   - A card with [data-panel-click] also opens when the card itself is clicked
-     (cards that aren't playable in place: Frida, Froyo, 404).
+   - [data-panel-open="key"] buttons open it: the "Read more" button in the upper-left of a
+     playable card (Scratch Art, Puddle), or the invisible button covering a card that isn't
+     playable in place (Frida, Froyo, 404).
    - A stage with [data-stage-src] gets a fresh iframe each time the panel opens,
      and loses it on close so nothing keeps running in the background.
    Closing flips the card back down into its tile. */
@@ -90,12 +90,6 @@
     Array.prototype.forEach.call(openers, function (btn) {
       btn.addEventListener('click', function (e) { e.stopPropagation(); open(btn); });
     });
-    if (tile.hasAttribute('data-panel-click')) {
-      tile.addEventListener('click', function (e) {
-        if (e.target.closest('a, button')) return;   // the card's own buttons and links do their own thing
-        open(openers[0]);
-      });
-    }
     if (closeBtn) closeBtn.addEventListener('click', close);
     dlg.addEventListener('cancel', function (e) { e.preventDefault(); close(); });   // Esc
     dlg.addEventListener('click', function (e) { if (e.target === dlg) close(); });  // the dim area around the card

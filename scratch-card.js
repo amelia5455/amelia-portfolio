@@ -53,7 +53,9 @@
     /* ---------- sizing ---------- */
 
     resize() {
-      const { width, height } = this.root.getBoundingClientRect();
+      // Layout size, not getBoundingClientRect(): the card can be mid-animation inside a
+      // scaled panel when it first appears, and the canvas must match its real size.
+      const width = this.root.offsetWidth, height = this.root.offsetHeight;
       if (!width || !height) return;
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       const first = !this.w;
@@ -180,8 +182,10 @@
     }
 
     point(e) {
+      // map the pointer from screen space into the card's own (untransformed) space
       const r = this.coat.getBoundingClientRect();
-      return { x: e.clientX - r.left, y: e.clientY - r.top, p: e.pressure };
+      const sx = r.width ? this.w / r.width : 1, sy = r.height ? this.h / r.height : 1;
+      return { x: (e.clientX - r.left) * sx, y: (e.clientY - r.top) * sy, p: e.pressure };
     }
 
     bind() {
