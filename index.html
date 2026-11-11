@@ -12,7 +12,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css?v=114">
 <link rel="stylesheet" href="scratch-card.css?v=3">
+<link rel="stylesheet" href="puddle-tile.css?v=1">
 <script src="scratch-card.js?v=4" defer></script>
+<script src="puddle-tile.js?v=1" defer></script>
 <script>
   /* set the view before first paint so a refresh doesn't flash the Work page */
   (function () {
@@ -226,6 +228,17 @@
           </div>
         </a>
 
+        <!-- the live puddle shader; clicking spins it open into #puddle-panel (puddle-tile.js) -->
+        <div class="tile t-puddle" role="button" tabindex="0" data-puddle-open
+             aria-haspopup="dialog" aria-controls="puddle-panel" aria-label="Open Puddle: rain falling into a Seattle puddle that you can jump in">
+          <iframe src="puddle.html?embed" title="Rain falling into a puddle on brick pavers" loading="lazy" tabindex="-1" aria-hidden="true"></iframe>
+          <span class="tile-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></span>
+          <div class="tile-cap">
+            <h3>Puddle</h3>
+            <p>Seattle rain you can jump in</p>
+          </div>
+        </div>
+
       </section>
       <div class="canvas-vp" id="galleryCanvas">
         <div class="canvas-plane" id="galleryPlane">
@@ -356,6 +369,43 @@
       </div>
     </div>
   </main>
+
+  <!-- Puddle panel: the tile spins up into this (puddle-tile.js) -->
+  <dialog id="puddle-panel" class="puddle-panel" aria-labelledby="pp-title">
+    <div class="pp-card">
+      <div class="pp-back" aria-hidden="true"><span>Puddle</span></div>
+      <div class="pp-face">
+        <div class="pp-stage" data-pp-stage></div>
+        <article class="pp-story">
+          <header class="pp-head">
+            <p class="pp-meta">Personal Project · Fall 2026</p>
+            <h2 id="pp-title">Puddle</h2>
+            <p class="pp-lede">Seattle in November. The sky lies flat on the pavement and every drop breaks it into rings.</p>
+            <p class="pp-hint">Click or tap the puddle to jump in.</p>
+          </header>
+
+          <section>
+            <h3>Design</h3>
+            <p>It started as a three-second video I shot of rain landing on brick pavers, and I wanted it to feel like that clip. The palette is the grey-taupe of wet pavers, and the red rubber boots are the one bright thing on the page.</p>
+            <p>Getting the water right took the most rounds. My first puddles read as a torn piece of paper, then as a cloud. What finally worked was treating the water as a mirror. The near side reflects a dark eave, so the pavers show through clearly. The far side mirrors a white ledge, and the crisp line between the two is what the ripples bend.</p>
+            <p>The edges matter as much as the middle. Real water fades out into wet pavement and collects in the grout first, and the far edge stays short so it doesn't haze over.</p>
+          </section>
+
+          <section>
+            <h3>Development</h3>
+            <p>Everything is one WebGL fragment shader with no libraries. It draws running-bond pavers, a puddle shaped from layered noise, and raindrops as small ring waves that decay as they spread.</p>
+            <p>A click sends down a pair of legs in jeans and rainboots, drawn with signed distance fields. Each landing pushes the water out from under the boots and throws a crown of spray. Then it sends a heavy swell outward, and that swell only travels where there's water to carry it. The falling spray leaves its own small rings.</p>
+            <p>A second pass softens it all with a shallow depth of field, a little bloom, film grain and frequency modulated halftones. The scene renders at 80% size and pauses when it's off screen.</p>
+          </section>
+
+          <p class="pp-link"><a href="puddle.html" target="_blank" rel="noopener">Open it on its own page ↗</a></p>
+        </article>
+      </div>
+      <button type="button" class="pp-close" data-puddle-close aria-label="Close Puddle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+  </dialog>
 
 
 <!-- ===== Index view switcher (Work / Gallery) ===== -->
