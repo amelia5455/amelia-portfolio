@@ -2,7 +2,7 @@
 
 /* ---- corner buttons on the cards ----
    one button per card, always in the upper-right: "Read more" opens the card's panel
-   (Scratch Art, Puddle, 404), "Visit" goes to the real thing (Froyo).
+   (Scratch Art, Frida, Puddle, 404), "Visit" goes to the real thing (Froyo).
    On hover the pill turns dark and slides its label out (no scale or nudge). */
 .tile-btn {
   position: absolute; top: 14px; z-index: 3;
