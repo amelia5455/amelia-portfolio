@@ -1,7 +1,8 @@
 /* ===== Play panels: card corner buttons, and the panel each interactive card flips open into ===== */
 
 /* ---- corner buttons on the cards ----
-   upper-left "Read more" opens the card's panel; upper-right "Visit" goes to the real thing.
+   one button per card, always in the upper-right: "Read more" opens the card's panel
+   (Scratch Art, Puddle), "Visit" goes to the real thing (Froyo, 404).
    On hover the pill turns dark and slides its label out (no scale or nudge). */
 .tile-btn {
   position: absolute; top: 14px; z-index: 3;
@@ -16,19 +17,19 @@
   transition: background-color .22s ease, color .22s ease, gap .28s ease, padding .28s ease;
 }
 .tile-btn svg { width: 15px; height: 15px; flex: none; display: block; }
-.tile-btn-left { left: 14px; }
 .tile-btn-right { right: 14px; }
+/* the scratch card keeps its own "scratch me!" pill and save/start-over buttons up there too,
+   so on the Play page they shift left of the "Read more" button */
+.t-scratch > .scratch-pill, .t-scratch > .scratch-actions { right: 58px; }
 .tile-btn-label {
   display: block; max-width: 0; overflow: hidden; white-space: nowrap; opacity: 0;
   transition: max-width .3s ease, opacity .2s ease;
 }
 @media (hover: hover) {
-  .tile-btn:hover { background: #161616; color: #fff; gap: 7px; padding: 0 13px 0 10px; }
-  .tile-btn-right:hover { padding: 0 10px 0 13px; }
+  .tile-btn:hover { background: #161616; color: #fff; gap: 7px; padding: 0 10px 0 13px; }
   .tile-btn:hover .tile-btn-label { max-width: 90px; opacity: 1; }
 }
-.tile-btn:focus-visible { background: #161616; color: #fff; gap: 7px; padding: 0 13px 0 10px; outline: 2px solid var(--cursor); outline-offset: 3px; }
-.tile-btn-right:focus-visible { padding: 0 10px 0 13px; }
+.tile-btn:focus-visible { background: #161616; color: #fff; gap: 7px; padding: 0 10px 0 13px; outline: 2px solid var(--cursor); outline-offset: 3px; }
 .tile-btn:focus-visible .tile-btn-label { max-width: 90px; opacity: 1; }
 @media (prefers-reduced-motion: reduce) { .tile-btn, .tile-btn-label { transition: none; } }
 
