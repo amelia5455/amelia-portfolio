@@ -12,9 +12,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css?v=114">
 <link rel="stylesheet" href="scratch-card.css?v=3">
-<link rel="stylesheet" href="puddle-tile.css?v=2">
+<link rel="stylesheet" href="play-panels.css?v=1">
 <script src="scratch-card.js?v=4" defer></script>
-<script src="puddle-tile.js?v=3" defer></script>
+<script src="play-panels.js?v=1" defer></script>
 <script>
   /* set the view before first paint so a refresh doesn't flash the Work page */
   (function () {
@@ -170,9 +170,12 @@
     <div id="view-gallery">
       <!-- the old pan-around canvas below stays hidden by CSS (#galleryCanvas), not removed -->
       <section class="bento" aria-label="Play">
-        <!-- Scratch art (interactive) -->
-        <div class="tile t-scratch scratch-card" data-scratch-card role="img"
+        <!-- Scratch art: playable in place; the corner button spins it open into #panel-scratch (play-panels.js) -->
+        <div class="tile t-scratch scratch-card" data-scratch-card data-panel-tile="scratch" role="group"
              aria-label="Interactive scratch-art card: drag to scratch through black wax and reveal a rainbow foil underneath">
+          <button type="button" class="tile-btn tile-btn-left" data-panel-open="scratch" aria-haspopup="dialog" aria-controls="panel-scratch" aria-label="Read more about Scratch Art">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg><span class="tile-btn-label">Read more</span>
+          </button>
           <div class="scratch-pill">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M4 20 L7 13 L17 3 L21 7 L11 17 Z" /><path d="M7 13 L11 17" />
@@ -193,22 +196,32 @@
           </div>
         </div>
 
-        <figure class="tile t-frida">
+        <!-- the whole card opens #panel-frida -->
+        <figure class="tile t-frida" data-panel-tile="frida" data-panel-click>
           <img src="images/playground/frida-litho.jpg" alt="A pencil lithograph of Frida Kahlo surrounded by flowers, drawn on a litho plate">
+          <button type="button" class="tile-btn tile-btn-left" data-panel-open="frida" aria-haspopup="dialog" aria-controls="panel-frida" aria-label="Read more about the Frida litho">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg><span class="tile-btn-label">Read more</span>
+          </button>
           <figcaption class="tile-cap">
             <h3>Frida Litho</h3>
             <p>A lithograph I made for my printmaking class</p>
           </figcaption>
         </figure>
 
-        <a class="tile t-froyo" href="https://froyo-shop.vercel.app/" target="_blank" rel="noopener">
+        <!-- the whole card opens #panel-froyo; the upper-right button goes straight to the shop -->
+        <div class="tile t-froyo" data-panel-tile="froyo" data-panel-click>
           <img src="images/playground/froyo-shop.jpg" alt="The Froyo Shop app: a soft-serve frozen yogurt in a polka-dot cup with flavor, cup, and topping pickers">
-          <span class="tile-arrow" aria-hidden="true">↗</span>
+          <button type="button" class="tile-btn tile-btn-left" data-panel-open="froyo" aria-haspopup="dialog" aria-controls="panel-froyo" aria-label="Read more about The Froyo Shop">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg><span class="tile-btn-label">Read more</span>
+          </button>
+          <a class="tile-btn tile-btn-right" href="https://froyo-shop.vercel.app/" target="_blank" rel="noopener" aria-label="Open The Froyo Shop in a new tab">
+            <span class="tile-btn-label">Visit</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>
+          </a>
           <div class="tile-cap">
             <h3>The Froyo Shop</h3>
             <p>Build and share your own frozen treat</p>
           </div>
-        </a>
+        </div>
 
         <figure class="tile t-paros">
           <img src="images/playground/paros.jpg" alt="A white Greek church with a blue dome and bell tower at golden hour, on the island of Paros">
@@ -218,21 +231,27 @@
           </figcaption>
         </figure>
 
-        <!-- the real 404 page, playing on a loop (?embed skips the redirect home) -->
-        <a class="tile t-404" href="/404" target="_blank" rel="noopener">
+        <!-- the real 404 page, playing on a loop (?embed skips the redirect home);
+             the whole card opens #panel-404, the upper-right button opens the real page -->
+        <div class="tile t-404" data-panel-tile="404" data-panel-click>
           <iframe src="404.html?embed" title="My 404 page: a UFO beams up a cow" loading="lazy" tabindex="-1" aria-hidden="true"></iframe>
-          <span class="tile-arrow" aria-hidden="true">↗</span>
+          <button type="button" class="tile-btn tile-btn-left" data-panel-open="404" aria-haspopup="dialog" aria-controls="panel-404" aria-label="Read more about the 404 page">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg><span class="tile-btn-label">Read more</span>
+          </button>
+          <a class="tile-btn tile-btn-right" href="/404" target="_blank" rel="noopener" aria-label="Open the 404 page in a new tab">
+            <span class="tile-btn-label">Visit</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>
+          </a>
           <div class="tile-cap">
             <h3>404 Page</h3>
             <p>A UFO abduction for lost visitors</p>
           </div>
-        </a>
+        </div>
 
-        <!-- the live puddle shader, playable right here; only the corner button spins it open into #puddle-panel (puddle-tile.js) -->
-        <div class="tile t-puddle">
+        <!-- the live puddle shader, playable right here; only the corner button spins it open into #panel-puddle (play-panels.js) -->
+        <div class="tile t-puddle" data-panel-tile="puddle">
           <iframe src="puddle.html?embed&amp;v=2" title="Puddle: click the water to jump in" loading="lazy"></iframe>
-          <button type="button" class="tile-arrow pp-expand" data-puddle-open aria-haspopup="dialog" aria-controls="puddle-panel" aria-label="Expand Puddle and read how it was made" title="Expand">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+          <button type="button" class="tile-btn tile-btn-left" data-panel-open="puddle" aria-haspopup="dialog" aria-controls="panel-puddle" aria-label="Read more about Puddle">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg><span class="tile-btn-label">Read more</span>
           </button>
           <div class="tile-cap">
             <h3>Puddle</h3>
@@ -371,25 +390,178 @@
     </div>
   </main>
 
-  <!-- Puddle panel: the tile spins up into this (puddle-tile.js) -->
-  <dialog id="puddle-panel" class="puddle-panel" aria-labelledby="pp-title">
+  <!-- Play panels: each interactive card spins up into its own panel (play-panels.js) -->
+  <dialog id="panel-scratch" class="play-panel" data-panel="scratch" aria-labelledby="pp-title-scratch">
     <div class="pp-card">
-      <div class="pp-back" aria-hidden="true"><span>Puddle</span></div>
+      <div class="pp-back" aria-hidden="true"><span>Scratch Art</span></div>
       <div class="pp-face">
-        <div class="pp-stage" data-pp-stage></div>
+        <div class="pp-stage pp-stage-scratch">
+          <div class="scratch-card" data-scratch-card role="group" aria-label="Scratch-art card: drag to scratch through black wax and reveal a rainbow foil underneath">
+            <div class="scratch-pill">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20 L7 13 L17 3 L21 7 L11 17 Z" /><path d="M7 13 L11 17" /></svg>
+              scratch me!
+            </div>
+            <div class="scratch-actions">
+              <button type="button" data-scratch-save aria-label="Save your drawing">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14" /></svg>
+              </button>
+              <button type="button" data-scratch-reset aria-label="Start over with a fresh black page">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7" /><path d="M3 4v5h5" /></svg>
+              </button>
+            </div>
+          </div>
+        </div>
         <article class="pp-story">
           <header class="pp-head">
             <p class="pp-meta">Personal Project · Fall 2026</p>
-            <h2 id="pp-title">Puddle</h2>
+            <h2 id="pp-title-scratch">Scratch Art</h2>
+            <p class="pp-lede">A digital take on scratch-art paper: black wax over rainbow foil, and a wooden stylus to draw through it.</p>
+            <p class="pp-hint">Drag across the black to draw.</p>
+          </header>
+
+          <section>
+            <h3>Design</h3>
+            <p>The foil underneath is a steady rainbow with a little glitter, so a single line changes color as it crosses the page. The rainbow never shifts, so a drawing keeps the colors you drew it in.</p>
+            <p>The cursor is a small wooden stylus, with its hotspot on the sharpened tip. Once you start, the &ldquo;scratch me!&rdquo; pill fades away and buttons to save or start over take its place.</p>
+          </section>
+
+          <section>
+            <h3>Development</h3>
+            <p>Two canvases are stacked: the foil underneath and a black coat on top. Drawing erases the coat along your path, and the line follows pen pressure on devices that report it.</p>
+            <p>The glitter comes from a small seeded random generator, so it lands in the same places every time the card resizes. Saving flattens both layers into a PNG of your drawing.</p>
+          </section>
+          <p class="pp-note">This is a fresh copy, separate from the one on the Play page.</p>
+        </article>
+      </div>
+      <button type="button" class="pp-close" data-panel-close aria-label="Close Scratch Art">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+  </dialog>
+
+  <dialog id="panel-frida" class="play-panel" data-panel="frida" aria-labelledby="pp-title-frida">
+    <div class="pp-card">
+      <div class="pp-back" aria-hidden="true"><span>Frida Litho</span></div>
+      <div class="pp-face">
+        <div class="pp-stage pp-stage-frida"><img src="images/playground/frida-litho.jpg" alt="A pencil lithograph of Frida Kahlo surrounded by flowers, drawn on a litho plate"></div>
+        <article class="pp-story">
+          <header class="pp-head">
+            <p class="pp-meta">Printmaking class</p>
+            <h2 id="pp-title-frida">Frida Litho</h2>
+            <p class="pp-lede">A lithograph of Frida Kahlo surrounded by flowers, drawn for my printmaking class.</p>
+          </header>
+
+          <section>
+            <h3>What lithography is</h3>
+            <p>Lithography was invented in 1796 by Alois Senefelder in Bavaria. It started on slabs of limestone, which is where the name comes from: <i>lithos</i> is Greek for stone. Today many printmakers draw on grained aluminum plates instead.</p>
+            <p>Unlike carving a woodcut or etching a line into metal, nothing is cut into the surface. The whole process runs on one simple fact: oil and water don&rsquo;t mix. You draw with something greasy, the blank areas are treated to hold water, and the oily ink sticks only to the drawing.</p>
+          </section>
+
+          <section>
+            <h3>How a print gets made</h3>
+            <p>First the drawing goes onto the plate with greasy materials, like litho crayons, pencils or tusche, a liquid drawing ink. Every mark counts, because the plate picks up the grease from your hand too.</p>
+            <p>Next the plate is etched with gum arabic. This locks the drawing in place and makes the bare areas hold water and refuse ink.</p>
+            <p>To print, the plate is kept damp with a sponge and rolled with oil-based ink. The ink sticks to the drawing and slides off the wet areas. Paper goes on top, and it all runs through the press under heavy pressure. Each print is inked by hand, so every pull is a little different.</p>
+          </section>
+
+          <section>
+            <h3>My Frida</h3>
+            <p>I drew Frida framed by a crown and collar of flowers, building her up from fine pencil-like lines so the plate would hold the soft shading in her face. The flowers needed the most patience: dozens of petals, each one outlined and shaded by hand.</p>
+            <p>Because the image prints in reverse, everything I drew on the plate comes out mirrored on the paper.</p>
+          </section>
+
+        </article>
+      </div>
+      <button type="button" class="pp-close" data-panel-close aria-label="Close Frida Litho">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+  </dialog>
+
+  <dialog id="panel-froyo" class="play-panel" data-panel="froyo" aria-labelledby="pp-title-froyo">
+    <div class="pp-card">
+      <div class="pp-back" aria-hidden="true"><span>The Froyo Shop</span></div>
+      <div class="pp-face">
+        <div class="pp-stage pp-stage-froyo" data-stage-src="https://froyo-shop.vercel.app/" data-stage-title="The Froyo Shop, playable"></div>
+        <article class="pp-story">
+          <header class="pp-head">
+            <p class="pp-meta">Personal Project</p>
+            <h2 id="pp-title-froyo">The Froyo Shop</h2>
+            <p class="pp-lede">Build a frozen yogurt, top it, and share it to a gallery everyone can see.</p>
+            <p class="pp-hint">Pick a flavor and a cup, then press and drag on the froyo.</p>
+          </header>
+
+          <section>
+            <h3>Design</h3>
+            <p>There are six flavors, from vanilla to Dole pineapple whip and matcha, and eight cups in solids, tapered stripes and polka dots.</p>
+            <p>Toppings land one at a time right where you press: sprinkles, gummy bears and worms, marshmallows, boba and more. Syrups pour as you drag. When you share, a little gummy-bear spoon dives in before your froyo joins the gallery.</p>
+          </section>
+
+          <section>
+            <h3>Development</h3>
+            <p>The whole app is a single HTML file served by a plain Node server with no dependencies. The shared gallery is saved as JSON.</p>
+            <p>The soft ASMR sounds are synthesized live with the Web Audio API, so there are no audio files at all.</p>
+          </section>
+          <p class="pp-link"><a href="https://froyo-shop.vercel.app/" target="_blank" rel="noopener">Open the shop in a new tab ↗</a></p>
+        </article>
+      </div>
+      <button type="button" class="pp-close" data-panel-close aria-label="Close The Froyo Shop">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+  </dialog>
+
+  <dialog id="panel-404" class="play-panel" data-panel="404" aria-labelledby="pp-title-404">
+    <div class="pp-card">
+      <div class="pp-back" aria-hidden="true"><span>404 Page</span></div>
+      <div class="pp-face">
+        <div class="pp-stage pp-stage-404" data-stage-src="404.html?embed" data-stage-title="My 404 page: a UFO beams up a cow"></div>
+        <article class="pp-story">
+          <header class="pp-head">
+            <p class="pp-meta">Personal Project</p>
+            <h2 id="pp-title-404">404 Page</h2>
+            <p class="pp-lede">Instead of a dead end, lost visitors watch a UFO beam up a cow, then get sent home.</p>
+            <p class="pp-hint">It loops here. The real page sends you home when it ends.</p>
+          </header>
+
+          <section>
+            <h3>Design</h3>
+            <p>It&rsquo;s a pixel-art night: a barn, two trees, a moon and stars over the hills, all drawn as crisp SVG pixels. The copy keeps it light: &ldquo;Uh oh, this page got abducted.&rdquo;</p>
+            <p>Visitors can skip the show with the link home, and anyone who has reduced motion turned on sees the still scene instead.</p>
+          </section>
+
+          <section>
+            <h3>Development</h3>
+            <p>The animation is one GSAP timeline. The saucer swoops in from the top-left corner, settles over the cow and turns on its beam. The cow floats up wiggling and shrinks into the saucer, which hops and flies off the top-right.</p>
+            <p>On the real 404 page, the visitor is sent home when the saucer leaves. Embedded here, it loops instead.</p>
+          </section>
+          <p class="pp-link"><a href="/404" target="_blank" rel="noopener">Open the real 404 page ↗</a></p>
+        </article>
+      </div>
+      <button type="button" class="pp-close" data-panel-close aria-label="Close 404 Page">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+  </dialog>
+
+  <dialog id="panel-puddle" class="play-panel" data-panel="puddle" aria-labelledby="pp-title-puddle">
+    <div class="pp-card">
+      <div class="pp-back" aria-hidden="true"><span>Puddle</span></div>
+      <div class="pp-face">
+        <div class="pp-stage pp-stage-puddle" data-stage-src="puddle.html?embed&amp;v=2" data-stage-title="Puddle: click the water to jump in"></div>
+        <article class="pp-story">
+          <header class="pp-head">
+            <p class="pp-meta">Personal Project · Fall 2026</p>
+            <h2 id="pp-title-puddle">Puddle</h2>
             <p class="pp-lede">Seattle in November. The sky lies flat on the pavement and every drop breaks it into rings.</p>
             <p class="pp-hint">Click or tap the puddle to jump in.</p>
           </header>
 
           <section>
             <h3>Design</h3>
-            <p>It started as a three-second video I shot of rain landing on brick pavers, and I wanted it to feel like that clip. The palette is the grey-taupe of wet pavers, and the red rubber boots are the one bright thing on the page.</p>
-            <p>Getting the water right took the most rounds. My first puddles read as a torn piece of paper, then as a cloud. What finally worked was treating the water as a mirror. The near side reflects a dark eave, so the pavers show through clearly. The far side mirrors a white ledge, and the crisp line between the two is what the ripples bend.</p>
-            <p>The edges matter as much as the middle. Real water fades out into wet pavement and collects in the grout first, and the far edge stays short so it doesn't haze over.</p>
+            <p>It started with a three-second video I took on a grey November day: rain tapping into a puddle on brick pavers, a yellow maple leaf resting at its edge. I wanted the piece to hold on to that feeling, the hush of a Seattle afternoon when the sky hangs low and everything smells like wet pavement.</p>
+            <p>The palette is the soft grey-taupe of pavers after a long rain. The puddle holds the sky like a mirror, bright where it catches the light and clear enough up close to see the bricks underneath, and every drop breaks it into rings.</p>
+            <p>The red rubber boots are the one bright thing on the page, a nod to the rainy days when the best thing to do with a puddle was jump in it.</p>
           </section>
 
           <section>
@@ -398,11 +570,10 @@
             <p>A click sends down a pair of legs in jeans and rainboots, drawn with signed distance fields. Each landing pushes the water out from under the boots and throws a crown of spray. Then it sends a heavy swell outward, and that swell only travels where there's water to carry it. The falling spray leaves its own small rings.</p>
             <p>A second pass softens it all with a shallow depth of field, a little bloom, film grain and frequency modulated halftones. The scene renders at 80% size and pauses when it's off screen.</p>
           </section>
-
           <p class="pp-link"><a href="puddle.html" target="_blank" rel="noopener">Open it on its own page ↗</a></p>
         </article>
       </div>
-      <button type="button" class="pp-close" data-puddle-close aria-label="Close Puddle">
+      <button type="button" class="pp-close" data-panel-close aria-label="Close Puddle">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
       </button>
     </div>
