@@ -551,10 +551,10 @@ void main(){
   float vein;
   float ld = leafSDF(lp, vein);
   // stem
-  vec2 sa = vec2(0.0, -0.16), sb = vec2(0.03, -0.62);
+  vec2 sa = vec2(0.0, -0.03), sb = vec2(0.03, -0.62);   // starts inside the blade, so the two always join
   vec2 pa = lp - sa, ba = sb - sa;
   float hst = clamp(dot(pa, ba)/dot(ba, ba), 0.0, 1.0);
-  float stem = length(pa - ba*hst) - 0.014*(1.0 - hst*0.5);
+  float stem = length(pa - ba*hst) - 0.019*(1.0 - hst*0.6);
   float leafMask = 1.0 - smoothstep(-aa*0.5, aa*0.5, min(ld, stem));
   float shadow = 1.0 - smoothstep(-0.02, 0.07, leafSDF(rot*(lq - vec2(0.03, -0.04))/1.15, vein));
   leafSDF(lp, vein);
