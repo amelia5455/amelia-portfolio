@@ -2,115 +2,33 @@
 <html lang="en">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Seattle Rain Puddle</title>
+<title>Puddle</title>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-<script>if (/[?&]embed\b/.test(location.search)) document.documentElement.classList.add('embed');</script>
-<meta name="claude:viewport-fit-sides" content="cover">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap">
+<meta name="robots" content="noindex">
+<!-- This file is only the canvas behind the Puddle card and panel on the Play page (loaded as puddle.html?embed).
+     It is not a page of its own: opened directly, it goes to the Play page. -->
+<script>
+  if (window.top === window.self && !/[?&]embed\b/.test(location.search)) {
+    location.replace(/^(localhost|127\.0\.0\.1)$/.test(location.hostname) ? '/index.html#gallery' : '/gallery');
+  }
+</script>
 <style>
-  /* Layout: a quiet project page. Breadcrumb top-left, centered title, one framed shader, a narrow notes column. */
-  :root {
-    --paper: #edecea;      /* overcast, faintly warm */
-    --ink: #1d1f22;
-    --muted: #8e9094;
-    --frame: #d9dcdf;      /* placeholder behind the canvas */
-    --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --paper: #131518; --ink: #e4e3df; --muted: #7c8086; --frame: #24282c; color-scheme: dark;
-    }
-  }
-  :root[data-theme="dark"] {
-    --paper: #131518; --ink: #e4e3df; --muted: #7c8086; --frame: #24282c; color-scheme: dark;
-  }
-
+  :root { --frame: #24282c; --muted: #8e9094; }
   [hidden] { display: none !important; }
-  body {
-    margin: 0;
-    background: var(--paper);
-    color: var(--ink);
-    font-family: var(--mono);
-    font-size: 12px;
-    line-height: 1.55;
-    -webkit-font-smoothing: antialiased;
-    padding-left: max(16px, env(safe-area-inset-left, 0px));
-    padding-right: max(16px, env(safe-area-inset-right, 0px));
-    padding-block: 40px 96px;
-  }
-
-  .crumbs { display: flex; gap: 6px; align-items: baseline; padding-left: 12px; }
-  .crumbs a { text-decoration: none; }
-  .crumbs a:focus-visible { outline: 1px solid var(--ink); outline-offset: 2px; }
-  .crumbs .here { color: var(--ink); }
-  .crumbs .sep, .crumbs .trail { color: var(--muted); }
-
-  main { display: grid; justify-items: center; gap: 40px; margin-top: 8px; }
-
-  header { text-align: center; display: grid; gap: 0; }
-  header h1 { font-size: 12px; font-weight: 500; margin: 0; letter-spacing: 0.01em; }
-  header time { color: var(--muted); }
-
-  .frame {
-    width: min(640px, 100%);
-    aspect-ratio: 1.44;
-    max-width: 100%;
-    background: var(--frame);
-    position: relative;
-    cursor: crosshair;
-    touch-action: manipulation;
-  }
+  html, body { height: 100%; overflow: hidden; }
+  body { margin: 0; background: var(--frame); font: 12px/1.55 ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+  .frame { width: 100%; height: 100%; position: relative; cursor: crosshair; touch-action: manipulation; }
   .frame canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
   .frame .fallback {
     position: absolute; inset: 0; display: grid; place-items: center;
     color: var(--muted); text-align: center; padding: 24px;
   }
-
-  .notes { width: min(500px, 100%); display: grid; gap: 20px; }
-  .notes p { margin: 0; max-width: 62ch; }
-  .notes h2 { font-size: 12px; font-weight: 500; margin: 0 0 2px; }
-  .notes .hint { color: var(--muted); }
-
-  /* ?embed: just the canvas, filling the frame it's placed in (the Play tile and panel) */
-  html.embed, html.embed body { height: 100%; overflow: hidden; }
-  html.embed body { padding: 0; background: var(--frame); }
-  html.embed .crumbs, html.embed header, html.embed .notes { display: none; }
-  html.embed main { display: block; margin: 0; height: 100%; }
-  html.embed .frame { width: 100%; height: 100%; aspect-ratio: auto; }
-
-  @media (max-width: 480px) {
-    body { padding-block: 24px 64px; }
-    .crumbs { padding-left: 0; }
-    main { gap: 28px; margin-top: 28px; }
-  }
 </style>
 
-<nav class="crumbs" aria-label="Breadcrumb">
-  <a class="here" href="/">&#8617; Home</a><span class="sep">/</span><a class="trail" href="/gallery">Play</a>
-</nav>
-
-<main>
-  <header>
-    <h1>Puddle</h1>
-    <time datetime="2026-11">Nov 2026</time>
-  </header>
-
-  <div class="frame" id="frame">
-    <canvas id="c" aria-label="Rain falling into a puddle on brick pavers, with a yellow maple leaf floating at its edge"></canvas>
-    <div class="fallback" id="fallback" hidden>This piece needs WebGL, which this browser has turned off.</div>
-  </div>
-
-  <section class="notes">
-    <p>Seattle in November. The sky lies flat on the pavers and every drop breaks it into rings.</p>
-    <div>
-      <h2>Dev Notes.</h2>
-      <p>Written as a fragment shader: running-bond pavers, a puddle shaped from layered noise, and raindrops as decaying ring waves that bend the reflected sky. A click sends a pair of legs in jeans and red rainboots down from the top of the frame, drawn with signed distance fields and reflected in the water. Each landing pushes the water away, throws a crown and streaking spray, and sends out a heavy swell; the spray leaves its own small rings where it falls. Post processed with a shallow depth of field, a little bloom, film grain, and frequency modulated halftones.</p>
-    </div>
-    <p class="hint">Click or tap the puddle to jump in.</p>
-  </section>
-</main>
+<div class="frame" id="frame">
+  <canvas id="c" aria-label="Rain falling into a puddle on brick pavers, with a yellow maple leaf floating at its edge"></canvas>
+  <div class="fallback" id="fallback" hidden>This piece needs WebGL, which this browser has turned off.</div>
+</div>
 
 <script id="vs" type="x-shader/x-vertex">
 attribute vec2 aPos;
